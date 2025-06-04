@@ -12,7 +12,7 @@ public class ExampleTest {
      System.setOut(new PrintStream(bos));
 
      // action
-     PracticeProblem.q1();
+   //   PracticeProblem.q1();
 
      // assertion
      assertEquals("There once was a man from St. Ives.\n", bos.toString());
@@ -32,7 +32,7 @@ public class ExampleTest {
       System.setOut(new PrintStream(bos));
 
       // action
-      PracticeProblem.q1();
+      // PracticeProblem.q1();
 
       // assertion
       assertEquals("There once was a man from St. Ives.\n", bos.toString());

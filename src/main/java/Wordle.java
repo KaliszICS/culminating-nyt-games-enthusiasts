@@ -14,7 +14,8 @@ import java.util.ArrayList;
 
 public class Wordle {
 
-    private char[] word, guessData, overallGuessData; // guessData: g for green, y for yellow, 0 for grey
+    private char[] word;
+    private String[] guessData, overallGuessData;
     private ArrayList<Character> currentGuess;
     private int wordLength, guessCount;
     private boolean win;
@@ -30,8 +31,8 @@ public class Wordle {
         this.word = word;
         this.wordLength = this.word.length;
         this.guessCount = 0;
-        this.guessData = new char[this.wordLength];
-        this.overallGuessData = new char[26];
+        this.guessData = new String[this.wordLength];
+        this.overallGuessData = new String[26];
         this.currentGuess = new ArrayList<Character>();
         this.win = false;
         this.wordLetterCount = new int[26];
@@ -47,12 +48,12 @@ public class Wordle {
      * @param guessCount
      */
 
-    public Wordle(char[] word, int guessCount, char[] guessData) {
+    public Wordle(char[] word, int guessCount, String[] overallGuessData) {
         this.word = word;
         this.wordLength = this.word.length;
         this.guessCount = guessCount;
-        this.guessData = guessData;
-        this.overallGuessData = new char[26];
+        this.guessData = new String[this.wordLength];
+        this.overallGuessData = overallGuessData;
         this.currentGuess = new ArrayList<Character>();
         this.win = false;
         for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
@@ -68,11 +69,11 @@ public class Wordle {
         return this.guessCount;
     }
 
-    public char[] getGuessData() {
+    public String[] getGuessData() {
         return this.guessData;
     }
 
-    public char[] getOverallGuessData() {
+    public String[] getOverallGuessData() {
         return this.overallGuessData;
     }
 
@@ -122,18 +123,18 @@ public class Wordle {
         for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
             if (this.word[letterIndex] == this.currentGuess.get(letterIndex)) { // green case
                 --lettersUsed[this.currentGuess.get(letterIndex)];
-                this.guessData[letterIndex] = 'g'; // nth letter marked green
-                this.overallGuessData[this.currentGuess.get(letterIndex) - 97] = 'g'; // letter green on keyboard
+                this.guessData[letterIndex] = "green"; // nth letter marked green
+                this.overallGuessData[this.currentGuess.get(letterIndex) - 97] = "green"; // letter green on keyboard
             }
             else if (--lettersUsed[this.currentGuess.get(letterIndex)] >= 0) { // yellow case (the -- decrements the repeated letters left until grey, i.e., if there are two Es in the word and this iteration assesses a third, this clause will not run)
                 this.win = false; // the player has not won
-                this.guessData[letterIndex] = 'y'; // nth letter marked yellow
-                if (this.overallGuessData[this.currentGuess.get(letterIndex) - 97] != 'g') this.overallGuessData[this.currentGuess.get(letterIndex) - 97] = 'y'; // if it's not already green on that character, mark it yellow
+                this.guessData[letterIndex] = "yellow"; // nth letter marked yellow
+                if (this.overallGuessData[this.currentGuess.get(letterIndex) - 97] != "green") this.overallGuessData[this.currentGuess.get(letterIndex) - 97] = "yellow"; // if it's not already green on that character, mark it yellow
             }
             else { // grey case
                 this.win = false; // the player has not won
-                this.guessData[letterIndex] = '0';
-                if (this.overallGuessData[this.currentGuess.get(letterIndex) - 97] == '\0') this.overallGuessData[this.currentGuess.get(letterIndex) - 97] = '0'; // if there's no colour on that character (NULL CHAR IN ARRAY), mark it grey
+                this.guessData[letterIndex] = "grey";
+                if (this.overallGuessData[this.currentGuess.get(letterIndex) - 97] == "") this.overallGuessData[this.currentGuess.get(letterIndex) - 97] = "grey"; // if there's no colour on that character (EMPTY STRING IN ARRAY), mark it grey
             }
         }
         ++guessCount; // one more guess was made

@@ -10,21 +10,20 @@ import java.util.HashMap;
 
 public class Connections {
 
-    private ArrayList<String> board;
-    private ArrayList<Character> categoriesCompleted;
+    private ArrayList<String> board, categoriesCompleted;
     private ArrayList<Integer> currentGuess; // takes indexes from the board array
     private String[] yellowWords, greenWords, blueWords, purpleWords;
     private int guessesLeft;
     private String yellowCategory, greenCategory, blueCategory, purpleCategory;
-    private HashMap<String, Character> wordToCategory;
+    private HashMap<String, String> wordToCategory;
     private HashMap<String, Boolean> revealed;
 
     /**
      * constructor for new game
      * 
-     * @param yellowWords
-     * @param yellowCategory
-     * @param greenWords
+     * @param yellowWords // array of yellow words
+     * @param yellowCategory // category ("answer") for yellow
+     * @param greenWords // etc.
      * @param greenCategory
      * @param blueWords
      * @param blueCategory
@@ -42,18 +41,18 @@ public class Connections {
         this.purpleWords = purpleWords;
         this.purpleCategory = purpleCategory;
         for (int index = 0; index < 4; ++index) {
-            this.wordToCategory.put(yellowWords[index], 'y'); // assigns each word to their colour's character
-            this.wordToCategory.put(greenWords[index], 'g');
-            this.wordToCategory.put(blueWords[index], 'b');
-            this.wordToCategory.put(purpleWords[index], 'p');
+            this.wordToCategory.put(yellowWords[index], "yellow"); // assigns each word to their colour's character
+            this.wordToCategory.put(greenWords[index], "green");
+            this.wordToCategory.put(blueWords[index], "blue");
+            this.wordToCategory.put(purpleWords[index], "purple");
             this.revealed.put(yellowWords[index], false); // assigns each word as unrevealed
             this.revealed.put(greenWords[index], false);
             this.revealed.put(blueWords[index], false);
             this.revealed.put(purpleWords[index], false);
         }
         this.board = new ArrayList<String>();
+        this.categoriesCompleted = new ArrayList<String>();
         this.guessesLeft = 4;
-        this.categoriesCompleted = new ArrayList<Character>();
         this.currentGuess = new ArrayList<Integer>();
     }
 
@@ -68,25 +67,30 @@ public class Connections {
      * @param blueCategory
      * @param purpleWords
      * @param purpleCategory
+     * @param guessesLeft // guesses that the player has left
+     * @param revealed
      */
 
-    public Connections(String[] yellowWords, String yellowCategory, String[] greenWords, String greenCategory, String[] blueWords, String blueCategory, String[] purpleWords, String purpleCategory, int guessesLeft, int categoriesLeft, char[] categoriesCompleted) {
+    public Connections(String[] yellowWords, String yellowCategory, String[] greenWords, String greenCategory, String[] blueWords, String blueCategory, String[] purpleWords, String purpleCategory, int guessesLeft, HashMap<String, Boolean> revealed) {
         this.yellowWords = yellowWords;
-        for (int index = 0; index < 4; ++index) this.wordToCategory.put(yellowWords[index], 'y');
         this.yellowCategory = yellowCategory;
         this.greenWords = greenWords;
-        for (int index = 0; index < 4; ++index) this.wordToCategory.put(greenWords[index], 'g');
         this.greenCategory = greenCategory;
         this.blueWords = blueWords;
-        for (int index = 0; index < 4; ++index) this.wordToCategory.put(blueWords[index], 'b');
         this.blueCategory = blueCategory;
         this.purpleWords = purpleWords;
-        for (int index = 0; index < 4; ++index) this.wordToCategory.put(purpleWords[index], 'p');
         this.purpleCategory = purpleCategory;
+        for (int index = 0; index < 4; ++index) {
+            this.wordToCategory.put(yellowWords[index], "yellow"); // assigns each word to their colour's character
+            this.wordToCategory.put(greenWords[index], "green");
+            this.wordToCategory.put(blueWords[index], "blue");
+            this.wordToCategory.put(purpleWords[index], "purple");
+        }
         this.board = new ArrayList<String>();
+        this.categoriesCompleted = new ArrayList<String>();
         this.guessesLeft = guessesLeft;
-        this.categoriesCompleted = new ArrayList<Character>();
         this.currentGuess = new ArrayList<Integer>();
+        this.revealed = revealed;
     }
 
     public String[] getYellowWords() {
@@ -170,23 +174,23 @@ public class Connections {
     /**
      * submits a guess
      * 
-     * @return '-' if not enough words in guess, '0' if wrong and game-ending (no guesses left), '1' if wrong but not game-ending, 'y'/'g'/'b'/'p' if category matched
+     * @return "not enough words" if not enough words in guess, "game over" if wrong and game-ending (no guesses left), "wrong" if wrong but not game-ending, name of category matched otherwise
      */
 
-    public char submitGuess() {
-        if (this.currentGuess.size() < 4) return '-';
+    public String submitGuess() {
+        if (this.currentGuess.size() < 4) return "not enough words";
         this.currentGuess.sort(null); // so that the indexes of the guess are in order to remove properly
         if (this.wordToCategory.get(this.board.get(this.currentGuess.get(0))) == this.wordToCategory.get(this.board.get(this.currentGuess.get(1))) && this.wordToCategory.get(this.board.get(this.currentGuess.get(1))) == this.wordToCategory.get(this.board.get(this.currentGuess.get(2))) && this.wordToCategory.get(this.board.get(this.currentGuess.get(2))) == this.wordToCategory.get(this.board.get(this.currentGuess.get(3)))) { // if a category is completed
             this.board.remove((int) this.currentGuess.get(3)); // remove all the words from the board
             this.board.remove((int) this.currentGuess.get(2));
             this.board.remove((int) this.currentGuess.get(1));
             this.board.remove((int) this.currentGuess.get(0));
-            char categoryCompleted = this.wordToCategory.get(this.board.get(this.currentGuess.get(0))); // category successfully guessed
+            String categoryCompleted = this.wordToCategory.get(this.board.get(this.currentGuess.get(0))); // category successfully guessed
             this.categoriesCompleted.add(categoryCompleted);
             return categoryCompleted;
         }
-        if (--this.guessesLeft == 0) return '0'; // if the player has no guesses left and fails the game (-- decrements the amount of guesses left)
-        return '1'; // player didn't fail the game since the above line didn't run
+        if (--this.guessesLeft == 0) return "game over"; // if the player has no guesses left and fails the game (-- decrements the amount of guesses left)
+        return "wrong"; // player didn't fail the game since the above line didn't run
     }
     
 }

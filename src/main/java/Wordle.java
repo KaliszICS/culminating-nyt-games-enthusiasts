@@ -90,6 +90,18 @@ public class Wordle {
     }
 
     /**
+     * deletes a letter
+     * 
+     * @return false if the guess is already empty, true otherwise
+     */
+
+    public boolean deleteLetter() {
+        if (this.currentGuess.size() == 0) return false;
+        this.currentGuess.remove(this.currentGuess.size() - 1);
+        return true;
+    }
+
+    /**
      * submits the current guess. modifies board as needed
      * MODIFIES this.win, getWin() SHOULD ALWAYS BE RAN AFTER USING THIS METHOD
      * 

@@ -128,14 +128,15 @@ public class Connections {
     }
 
     /**
-     * selects a word for the current guess
+     * selects or deselects a word for the current guess
      * 
      * @param index
      */
 
     public void selectWord(int index) {
         if (this.currentGuess.size() == 4) return;
-        this.currentGuess.add(index);
+        if (this.currentGuess.contains(index)) this.currentGuess.remove(index); // deselects index if already in guess
+        else this.currentGuess.add(index);
     }
 
     /**

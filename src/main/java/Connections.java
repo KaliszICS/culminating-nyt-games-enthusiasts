@@ -17,6 +17,7 @@ public class Connections {
     private int guessesLeft;
     private String yellowCategory, greenCategory, blueCategory, purpleCategory;
     private HashMap<String, Character> wordToCategory;
+    private HashMap<String, Boolean> revealed;
 
     /**
      * constructor for new game
@@ -33,17 +34,23 @@ public class Connections {
 
     public Connections(String[] yellowWords, String yellowCategory, String[] greenWords, String greenCategory, String[] blueWords, String blueCategory, String[] purpleWords, String purpleCategory) {
         this.yellowWords = yellowWords;
-        for (int index = 0; index < 4; ++index) this.wordToCategory.put(yellowWords[index], 'y'); // assigns each word to their colour's character
         this.yellowCategory = yellowCategory;
         this.greenWords = greenWords;
-        for (int index = 0; index < 4; ++index) this.wordToCategory.put(greenWords[index], 'g');
         this.greenCategory = greenCategory;
         this.blueWords = blueWords;
-        for (int index = 0; index < 4; ++index) this.wordToCategory.put(blueWords[index], 'b');
         this.blueCategory = blueCategory;
         this.purpleWords = purpleWords;
-        for (int index = 0; index < 4; ++index) this.wordToCategory.put(purpleWords[index], 'p');
         this.purpleCategory = purpleCategory;
+        for (int index = 0; index < 4; ++index) {
+            this.wordToCategory.put(yellowWords[index], 'y'); // assigns each word to their colour's character
+            this.wordToCategory.put(greenWords[index], 'g');
+            this.wordToCategory.put(blueWords[index], 'b');
+            this.wordToCategory.put(purpleWords[index], 'p');
+            this.revealed.put(yellowWords[index], false); // assigns each word as unrevealed
+            this.revealed.put(greenWords[index], false);
+            this.revealed.put(blueWords[index], false);
+            this.revealed.put(purpleWords[index], false);
+        }
         this.board = new ArrayList<String>();
         this.guessesLeft = 4;
         this.categoriesCompleted = new ArrayList<Character>();
@@ -129,14 +136,27 @@ public class Connections {
 
     /**
      * selects or deselects a word for the current guess
+     * returns the word itself if it hasn't been revealed yet so that it can be wordled/spelling beed
      * 
-     * @param index
+     * @param index index of word to be selected
+     * @return the word to be wordled/spelling beed, null if already revealed (if selected/deselected normally)
      */
 
-    public void selectWord(int index) {
+    public String selectWord(int index) {
+        if (!this.revealed.get(this.board.get(index))) return this.board.get(index); // if not revealed, return the word to be wordled/spelling beed
         if (this.currentGuess.contains(index)) this.currentGuess.remove(index); // deselects index if already in guess
-        else if (this.currentGuess.size() == 4) return;
-        else this.currentGuess.add(index);
+        else if (this.currentGuess.size() < 4) this.currentGuess.add(index);
+        return null;
+    }
+
+    /**
+     * update the revealed hashmap to reveal a word that was successfully wordled/spelling beed
+     * 
+     * @param word word to be revealed
+     */
+
+    public void revealWord(String word) {
+        this.revealed.replace(word, true);
     }
 
     /**

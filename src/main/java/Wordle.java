@@ -1,6 +1,3 @@
-import java.util.Arrays;
-import java.util.ArrayList;
-
 /**
  * this is a class for wordle
  * it includes methods to play the game like putting in guesses
@@ -11,6 +8,9 @@ import java.util.ArrayList;
  * 
  * author @FranklinZhu1
  */
+
+import java.util.Arrays;
+import java.util.ArrayList;
 
 public class Wordle {
 

@@ -121,10 +121,10 @@ public class Connections {
      */
 
     public void shuffle() {
-        ArrayList<String> shuffledBoard = new ArrayList<String>(); // copy this.board to a new board, initialize empty shuffled board
+        ArrayList<String> shuffledBoard = new ArrayList<String>(); // initialize empty shuffled board
         Random random = new Random();
-        while (this.board.size() > 0) shuffledBoard.add(this.board.remove(random.nextInt(this.board.size()))); // keep adding elements from newBoard to shuffledBoard at random indexes, removing from newBoard each time
-        this.board = shuffledBoard; // cast shuffledBoard to this.board
+        while (this.board.size() > 0) shuffledBoard.add(this.board.remove(random.nextInt(this.board.size()))); // keep adding elements from this.board to shuffledBoard at random indexes, removing from this.board each time
+        this.board = shuffledBoard; // assign shuffledBoard to this.board
     }
 
     /**
@@ -134,8 +134,8 @@ public class Connections {
      */
 
     public void selectWord(int index) {
-        if (this.currentGuess.size() == 4) return;
         if (this.currentGuess.contains(index)) this.currentGuess.remove(index); // deselects index if already in guess
+        else if (this.currentGuess.size() == 4) return;
         else this.currentGuess.add(index);
     }
 

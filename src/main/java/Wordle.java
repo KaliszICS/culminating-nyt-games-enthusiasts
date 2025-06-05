@@ -72,6 +72,14 @@ public class Wordle {
         return this.guessData;
     }
 
+    public char[] getOverallGuessData() {
+        return this.overallGuessData;
+    }
+
+    public ArrayList<Character> getCurrentGuess() {
+        return this.currentGuess;
+    }
+
     public boolean getWin() {
         return this.win;
     }
@@ -91,14 +99,11 @@ public class Wordle {
 
     /**
      * deletes a letter
-     * 
-     * @return false if the guess is already empty, true otherwise
      */
 
-    public boolean deleteLetter() {
-        if (this.currentGuess.size() == 0) return false;
+    public void deleteLetter() {
+        if (this.currentGuess.size() == 0) return;
         this.currentGuess.remove(this.currentGuess.size() - 1);
-        return true;
     }
 
     /**

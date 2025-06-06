@@ -1,12 +1,15 @@
+/**
+ * Class for the Connections game.
+ * Contains getters for some variables and methods to help run the game (selecting words, submitting guesses, etc.).
+ * All words to set up the game are hidden by default. Whether or not they have been revealed is tracked using the "revealed" HashMap.
+ * Does not currently have a this.win boolean. Wins should be tracked based on the return value of submitGuess and the number of categories completed.
+ * 
+ * @author @FranklinZhu1
+ */
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.HashMap;
-
-/**
- * connections class
- * 
- * i might need to add a win boolean since at the moment it relies on seeing if submitGuess returns a character AND there are no categories left (or if categoriesCompleted is filled with characters)
- */
 
 public class Connections {
 
@@ -19,7 +22,7 @@ public class Connections {
     private HashMap<String, Boolean> revealed;
 
     /**
-     * constructor for new game
+     * Constructor for new game. Takes in data about each category.
      * 
      * @param yellowWords // array of yellow words
      * @param yellowCategory // category ("answer") for yellow
@@ -57,7 +60,7 @@ public class Connections {
     }
 
     /**
-     * constructor for game in progress
+     * Constructor for game in progress.
      * 
      * @param yellowWords
      * @param yellowCategory
@@ -68,7 +71,7 @@ public class Connections {
      * @param purpleWords
      * @param purpleCategory
      * @param guessesLeft // guesses that the player has left
-     * @param revealed
+     * @param revealed // HashMap to track which words have already been revealed through Wordle or Spelling Bee
      */
 
     public Connections(String[] yellowWords, String yellowCategory, String[] greenWords, String greenCategory, String[] blueWords, String blueCategory, String[] purpleWords, String purpleCategory, int guessesLeft, HashMap<String, Boolean> revealed) {
@@ -126,9 +129,7 @@ public class Connections {
     }
 
     /**
-     * shuffles the board
-     * uses arraylists to do it
-     * might not work cuz it didn't work in my unit 4 problem set?????
+     * Shuffles the board.
      */
 
     public void shuffle() {
@@ -139,11 +140,11 @@ public class Connections {
     }
 
     /**
-     * selects or deselects a word for the current guess
-     * returns the word itself if it hasn't been revealed yet so that it can be wordled/spelling beed
+     * Selects or deselects a word for the current guess.
+     * Returns the word itself if it hasn't been revealed yet.
      * 
      * @param index index of word to be selected
-     * @return the word to be wordled/spelling beed, null if already revealed (if selected/deselected normally)
+     * @return the word to be revealed through Wordle or Spelling Bee, null if already revealed
      */
 
     public String selectWord(int index) {
@@ -154,7 +155,7 @@ public class Connections {
     }
 
     /**
-     * update the revealed hashmap to reveal a word that was successfully wordled/spelling beed
+     * Update the revealed hashmap to reveal a word that was successfully revealed through Wordle or Spelling Bee.
      * 
      * @param word word to be revealed
      */
@@ -164,7 +165,7 @@ public class Connections {
     }
 
     /**
-     * deselects all words for the current guess
+     * Deselects all words for the current guess.
      */
 
     public void deselectAll() {
@@ -172,7 +173,8 @@ public class Connections {
     }
 
     /**
-     * submits a guess
+     * Submits a guess.
+     * Checks if the guess is valid.
      * 
      * @return "not enough words" if not enough words in guess, "game over" if wrong and game-ending (no guesses left), "wrong" if wrong but not game-ending, name of category matched otherwise
      */

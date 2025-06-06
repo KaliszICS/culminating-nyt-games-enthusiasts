@@ -1,8 +1,10 @@
 /**
- * a class for spelling bee
+ * Class for the Spelling Bee game.
+ * Contains getters for most variables and methods to run the game (e.g., adding letters to the guess, submitting the guesses).
+ * Currently takes in a keyword of any length to be used on the board, as long as it is at LEAST 4 letters long. (Below that breaks the scoring system.)
+ * Does not currently make use of a dictionary API to validate guesses (to be added).
  * 
- * should we add the points ranking? it would need to be hard-coded prob (or we could grab from api and make it based on # of words)
- * 19 letters is the max
+ * @author @FranklinZhu1
  */
 
 import java.util.ArrayList;
@@ -59,7 +61,7 @@ public class SpellingBee {
     }
 
     /**
-     * input a letter into the current word
+     * Input a letter into the current word.
      * 
      * @param letter letter to be inputted
      * @return -1 if not a letter, 0 if too long (>19 characters), 1 if successful
@@ -73,7 +75,7 @@ public class SpellingBee {
     }
 
     /**
-     * deletes a letter from the current word
+     * Deletes the last letter from the current word. Doesn't do anything if the word is empty.
      */
 
     public void deleteLetter() {
@@ -81,9 +83,7 @@ public class SpellingBee {
     }
 
     /**
-     * shuffles the letters
-     * uses arraylists to do it
-     * might not work cuz it didn't work in my unit 4 problem set?????
+     * Shuffles the letters.
      */
 
     public void shuffle() {
@@ -94,9 +94,10 @@ public class SpellingBee {
     }
 
     /**
-     * submits the current word
+     * Submits the current word.
+     * Calculates the points value if the word is valid and adds it to this.score.
      * 
-     * @return -2 IF TOO SHORT, -1 IF MISSING CENTER LETTER, 0 IF NOT A WORD, POINTS VALUE IF SUCCESSFUL
+     * @return -2 if too short, -1 if missing center letter, 0 if not a word, points value if otherwise valid
      */
 
     public int submitWord() {

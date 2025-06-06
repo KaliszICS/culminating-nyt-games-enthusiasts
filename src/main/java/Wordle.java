@@ -1,12 +1,10 @@
 /**
- * this is a class for wordle
- * it includes methods to play the game like putting in guesses
- * ALL LETTERS ARE IN LOWERCASE!
- * we need a dictionary api
+ * Class for the Wordle game.
+ * The class includes getters for some variables and methods to run the game (adding letters, submitting guesses, etc.).
+ * Currently takes in a word of any length to be guessed. Always gives the user 6 guesses (words of length 3 or below not recommended).
+ * Does not currently make use of a dictionary API to validate guesses (to be added).
  * 
- * guessData is local to each guess, overallGuessData is a 26 length array for each character to track overall (think of the on-screen keyboard)
- * 
- * author @FranklinZhu1
+ * @author @FranklinZhu1
  */
 
 import java.util.Arrays;
@@ -15,16 +13,16 @@ import java.util.ArrayList;
 public class Wordle {
 
     private char[] word;
-    private String[] guessData, overallGuessData;
+    private String[] guessData, overallGuessData; // guessData is local to each guess, overallGuessData is a 26 length array for each character to track overall (think of the on-screen keyboard)
     private ArrayList<Character> currentGuess;
     private int wordLength, guessCount;
     private boolean win;
     private int[] wordLetterCount; // will have size 26
 
     /**
-     * default constructor to make new wordle game with every stat at default
+     * Default constructor to make new wordle game with every stat at default.
      * 
-     * @param wordLength
+     * @param word solution word
      */
 
     public Wordle(char[] word) {
@@ -42,10 +40,11 @@ public class Wordle {
     }
 
     /**
-     * constructor to initialize an already-started game, assigns each variable
+     * Constructor to initialize an already-started game, assigns each variable
      * 
-     * @param wordLength
-     * @param guessCount
+     * @param word solution word
+     * @param guessCount the number of guesses already made
+     * @param overallGuessData the data for each letter already discovered
      */
 
     public Wordle(char[] word, int guessCount, String[] overallGuessData) {
@@ -86,10 +85,10 @@ public class Wordle {
     }
 
     /**
-     * types a letter into the guess
+     * Types a letter into the current guess.
      * 
      * @param letter
-     * @return FALSE IF TOO MANY LETTERS
+     * @return false if too many letters
      */
 
     public boolean inputLetter(char letter) {
@@ -99,7 +98,7 @@ public class Wordle {
     }
 
     /**
-     * deletes a letter
+     * Deletes the last letter from the current guess. Doesn't do anything if the guess is empty.
      */
 
     public void deleteLetter() {
@@ -108,10 +107,10 @@ public class Wordle {
     }
 
     /**
-     * submits the current guess. modifies board as needed
-     * MODIFIES this.win, getWin() SHOULD ALWAYS BE RAN AFTER USING THIS METHOD
+     * Submits the current guess and tracks the guess data.
+     * CAN CHANGE this.win, getWin() SHOULD ALWAYS BE RAN AFTER USING THIS METHOD.
      * 
-     * @return -1 IF NOT ENOUGH LETTERS, 0 IF NOT A WORD, 1 IF GOOD
+     * @return -1 if not enough letters to guess, 0 if guess is not a word, 1 if the guess went through
      */
 
     public int submitGuess() {

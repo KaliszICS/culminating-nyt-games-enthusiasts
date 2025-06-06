@@ -1,3 +1,4 @@
+package logic;
 /**
  * Class for the Connections game.
  * Contains getters for some variables and methods to help run the game (selecting words, submitting guesses, etc.).

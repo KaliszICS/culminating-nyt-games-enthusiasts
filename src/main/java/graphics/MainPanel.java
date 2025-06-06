@@ -27,3 +27,4 @@ public class MainPanel extends JPanel {
 			e.printStackTrace();
 		}
 }
+}

@@ -1,3 +1,4 @@
+package logic;
 /**
  * Class for the Spelling Bee game.
  * Contains getters for most variables and methods to run the game (e.g., adding letters to the guess, submitting the guesses).

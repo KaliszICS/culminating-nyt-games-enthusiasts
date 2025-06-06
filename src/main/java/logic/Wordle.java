@@ -1,3 +1,4 @@
+package logic;
 /**
  * Class for the Wordle game.
  * The class includes getters for some variables and methods to run the game (adding letters, submitting guesses, etc.).

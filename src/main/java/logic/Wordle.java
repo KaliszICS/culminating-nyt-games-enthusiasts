@@ -1,4 +1,5 @@
 package logic;
+
 /**
  * Class for the Wordle game.
  * The class includes getters for some variables and methods to run the game (adding letters, submitting guesses, etc.).
@@ -9,6 +10,7 @@ package logic;
  */
 
 import java.util.Arrays;
+import java.util.Dictionary;
 import java.util.ArrayList;
 
 public class Wordle {
@@ -116,7 +118,7 @@ public class Wordle {
 
     public int submitGuess() {
         if (this.currentGuess.size() < this.wordLength) return -1;
-        // if it ain't a word return 0 WE NEED A DICTIONARY API
+        if (!DictionaryChecker.checkWord(this.currentGuess)) return 0;
         // Below here logs the word as a guess and tracks the stats
         this.win = true; // assume the player wins first
         int[] lettersUsed = Arrays.copyOf(this.wordLetterCount, 26); // copy of word letter count to track how many letters have been used (e.g., what if letters repeat?)

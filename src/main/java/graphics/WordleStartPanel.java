@@ -32,7 +32,7 @@ public class WordleStartPanel extends JPanel implements PanelAttributes {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					System.out.println("Back button pressed");
-					KaliszTimes.getHandler().previousPanel();
+					KaliszTimes.getGraphicsHandler().previousPanel();
 				}
 
 				@Override
@@ -60,7 +60,7 @@ public class WordleStartPanel extends JPanel implements PanelAttributes {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					System.out.println("Play button pressed");
-					KaliszTimes.getHandler().nextPanel();
+					KaliszTimes.getGraphicsHandler().nextPanel();
 				}
 
 				@Override

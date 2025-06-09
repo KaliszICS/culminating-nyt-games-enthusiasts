@@ -45,7 +45,7 @@ public class TitleScreenPanel extends JPanel implements PanelAttributes, MouseLi
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		System.out.println("Next panel");
-		KaliszTimes.getHandler().nextPanel();
+		KaliszTimes.getGraphicsHandler().nextPanel();
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {

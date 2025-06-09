@@ -14,10 +14,12 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import javafx.scene.text.Font;
 import kalisz.KaliszTimes;
 
 public class WordleGamePanel extends JPanel implements PanelAttributes {
-	BufferedImage background, backButtonImage, playButtonImage;
+	BufferedImage background, backButtonImage, playButtonImage, keyboardButtonImage;
+	ArrayList<KeyboardButton> keyboardButtons = new ArrayList<KeyboardButton>();
 	
 	public WordleGamePanel() {
 		this.setPreferredSize(new Dimension(GraphicsHandler.WINDOW_WIDTH, GraphicsHandler.WINDOW_HEIGHT));
@@ -39,7 +41,7 @@ public class WordleGamePanel extends JPanel implements PanelAttributes {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("Back button pressed");
-				KaliszTimes.getHandler().previousPanel();
+				KaliszTimes.getGraphicsHandler().previousPanel();
 			}
 
 			@Override
@@ -56,39 +58,11 @@ public class WordleGamePanel extends JPanel implements PanelAttributes {
 		 
 		 add(backButton);
 		 
+		 //Loads keyboard
+		 loadKeyboard();
+		
 		 
-		 
-		 
-		 addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				KaliszTimes.getHandler().nextPanel();
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				
-			}
-			 
-		 });
-		 
-		 repaint();
+		repaint();
 	}
 	public void paintComponent(Graphics g) {
 		Graphics2D graphics = (Graphics2D) g;
@@ -98,8 +72,9 @@ public class WordleGamePanel extends JPanel implements PanelAttributes {
 		
 		int SHIFT_UP = 25;
 		graphics.drawImage(background, 0, 0, GraphicsHandler.WINDOW_WIDTH, GraphicsHandler.WINDOW_HEIGHT - SHIFT_UP, this);
-		
-
+	
+    
+       
 	}
 	@Override
 	public void loadImages() {
@@ -107,10 +82,24 @@ public class WordleGamePanel extends JPanel implements PanelAttributes {
 			background = ImageIO.read(getClass().getResourceAsStream("resources/WordleGameBackground.png"));
 			backButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/Back Button.jpg"));
 			playButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/Play Button.png"));
+			keyboardButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/keyboard_letter.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
     
-	
+	private void loadKeyboard() {
+		//Create top keyboard buttons
+		for(int topRow = 0; topRow < 10; topRow++) {
+			KeyboardButton button = new KeyboardButton(keyboardButtonImage, 'A', 464 + (topRow * 99), 652);
+			keyboardButtons.add(button);
+		}
+
+		//Add all keyboard buttons to panel.
+		for(KeyboardButton button : keyboardButtons) {
+			add(button);
+		}
+
+
+	}
 }

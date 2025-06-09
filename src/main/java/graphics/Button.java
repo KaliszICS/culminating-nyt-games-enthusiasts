@@ -11,13 +11,15 @@ import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import kalisz.KaliszTimes;
+
 
 public class Button extends JLabel implements MouseListener {
 	private BufferedImage image;
 	
 	public Button(BufferedImage image) {
 		this.image = image;
-		this.setIcon(new ImageIcon(image));
+		this.setIcon(new StretchIcon(image, true));
 		this.addMouseListener(this);
 	}
 
@@ -27,12 +29,13 @@ public class Button extends JLabel implements MouseListener {
 	}
 	public void setImage(BufferedImage image) {
 		this.image = image;
-		this.setIcon(new ImageIcon(image));
+		this.setIcon(new StretchIcon(image, true));
 	}
 
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+	//	KaliszTimes.getAudioHandler().playSound("resources/button_sound.wav");
 	}
 
 

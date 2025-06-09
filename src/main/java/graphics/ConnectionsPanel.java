@@ -17,7 +17,8 @@ import javax.swing.JPanel;
 import kalisz.KaliszTimes;
 
 public class ConnectionsPanel extends JPanel implements PanelAttributes {
-	BufferedImage background, backButtonImage, playButtonImage;
+	BufferedImage background, backButtonImage, playButtonImage, wordleButtonImage;
+	ArrayList<Button> wordleButtons = new ArrayList<Button>();
 	
 	public ConnectionsPanel() {
 		this.setPreferredSize(new Dimension(GraphicsHandler.WINDOW_WIDTH, GraphicsHandler.WINDOW_HEIGHT));
@@ -31,7 +32,7 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 		
 
 
-		 
+
 		 
 		 
 		 backButton.addMouseListener(new MouseListener() {
@@ -39,7 +40,7 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("Back button pressed");
-				KaliszTimes.getHandler().previousPanel();
+				KaliszTimes.getGraphicsHandler().previousPanel();
 			}
 
 			@Override
@@ -58,37 +59,28 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 		 add(backButton);
 		 
 		 
+		 //Add wordle icons and make them all clickable. Store all of these new buttons in a list.
+		 //8 tiles
+
+		 for(int i = 0; i < 8; i++) {
+			Button wordleButton = new WordleButton(wordleButtonImage);
+			wordleButton.setSize(100, 100);
+
+
+			wordleButton.setLocation(695 + ( (i / 2) < 2 ? i * 153 : (i - 4) * 153), 250 + ( (i / 2) >= 2 ? 153 : 0)); //center of box
+
+			
+
+			wordleButtons.add(wordleButton);
+		 }
 		 
+		
 		 
-		 addMouseListener(new MouseListener() {
+		 //Add the wordle buttons using the stored buttons in the arraylist
+		 for(Button b : wordleButtons) {
+			add(b);
+		 }
 
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				KaliszTimes.getHandler().nextPanel();
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				
-			}
-			 
-		 });
-		 
 		 repaint();
 	}
 	public void paintComponent(Graphics g) {
@@ -108,6 +100,7 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 			background = ImageIO.read(getClass().getResourceAsStream("resources/ConnectionsBackground.png"));
 			backButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/Back Button.jpg"));
 			playButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/Play Button.png"));
+			wordleButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/wordle_button.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

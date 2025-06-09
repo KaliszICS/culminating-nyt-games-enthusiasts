@@ -35,7 +35,7 @@ public class SpellingBeeGamePanel extends JPanel implements PanelAttributes {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.out.println("Back button pressed");
-				KaliszTimes.getHandler().previousPanel();
+				KaliszTimes.getGraphicsHandler().previousPanel();
 			}
 
 			@Override
@@ -59,7 +59,7 @@ public class SpellingBeeGamePanel extends JPanel implements PanelAttributes {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				KaliszTimes.getHandler().nextPanel();
+				KaliszTimes.getGraphicsHandler().nextPanel();
 			}
 
 			@Override

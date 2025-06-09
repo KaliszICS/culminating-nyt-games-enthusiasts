@@ -28,27 +28,27 @@ public class GraphicsHandler {
         
         ConnectionsPanel connectionsPanel = new ConnectionsPanel();
         
-        WordleStartPanel wordleStartPanel = new WordleStartPanel();
+      //  WordleStartPanel wordleStartPanel = new WordleStartPanel();
         
-        WordleGamePanel wordleGamePanel = new WordleGamePanel();
+      //  WordleGamePanel wordleGamePanel = new WordleGamePanel();
         
-        WordleWinPanel wordleWinPanel = new WordleWinPanel();
+      //  WordleWinPanel wordleWinPanel = new WordleWinPanel();
         
-        SpellingBeeStartPanel sbStartPanel = new SpellingBeeStartPanel();
+       // SpellingBeeStartPanel sbStartPanel = new SpellingBeeStartPanel();
         
-        SpellingBeeGamePanel sbGamePanel = new  SpellingBeeGamePanel();
+       // SpellingBeeGamePanel sbGamePanel = new  SpellingBeeGamePanel();
         
-        SpellingBeeWinPanel sbWinPanel = new  SpellingBeeWinPanel();
+       // SpellingBeeWinPanel sbWinPanel = new  SpellingBeeWinPanel();
         
-        mainPanel.add(titlePanel);
-        mainPanel.add(selectionPanel);
+       //temp mainPanel.add(titlePanel);
+       //temp mainPanel.add(selectionPanel);
         mainPanel.add(connectionsPanel);
-        mainPanel.add(wordleStartPanel);
-        mainPanel.add(wordleGamePanel);
-        mainPanel.add(wordleWinPanel);
-        mainPanel.add(sbStartPanel);
-        mainPanel.add(sbGamePanel);
-        mainPanel.add(sbWinPanel);
+      //  mainPanel.add(wordleStartPanel);
+      //  mainPanel.add(wordleGamePanel);
+      //  mainPanel.add(wordleWinPanel);
+      //  mainPanel.add(sbStartPanel);
+     //   mainPanel.add(sbGamePanel);
+      //  mainPanel.add(sbWinPanel);
         
         
         
@@ -73,5 +73,15 @@ public class GraphicsHandler {
     }
     public void previousPanel() {
     	layout.previous(getPanel());
+    }
+    public void jumpToRecentlyAdded() {
+        layout.last(getPanel());
+    }
+    public void reloadFrame() {
+        frame.add(getPanel());
+        frame.revalidate(); //reload frame??
+    }
+    public void addToPanel(JComponent newItem) {
+        getPanel().add(newItem);
     }
 }

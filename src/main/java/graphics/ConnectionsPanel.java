@@ -48,6 +48,7 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 			public void mouseReleased(MouseEvent e) {}
 			@Override
 			public void mouseEntered(MouseEvent e) {}
+
 			@Override
 			public void mouseExited(MouseEvent e) {	}
 			 
@@ -104,9 +105,9 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 	@Override
 	public void loadImages() {
 		try {
-			background = ImageIO.read(getClass().getResourceAsStream("ConnectionsBackground.png"));
-			backButtonImage = ImageIO.read(getClass().getResourceAsStream("Back Button.jpg"));
-			playButtonImage = ImageIO.read(getClass().getResourceAsStream("Play Button.png"));
+			background = ImageIO.read(getClass().getResourceAsStream("resources/ConnectionsBackground.png"));
+			backButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/Back Button.jpg"));
+			playButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/Play Button.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

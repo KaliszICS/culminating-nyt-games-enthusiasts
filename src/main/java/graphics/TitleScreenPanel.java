@@ -36,7 +36,7 @@ public class TitleScreenPanel extends JPanel implements PanelAttributes, MouseLi
 	@Override
 	public void loadImages() {
 		try {
-			background = ImageIO.read(getClass().getResourceAsStream("TitleScreenBackground.png"));
+			background = ImageIO.read(getClass().getResourceAsStream("resources/TitleScreenBackground.png"));
 			
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -100,9 +100,9 @@ public class WordleWinPanel extends JPanel implements PanelAttributes {
 	@Override
 	public void loadImages() {
 		try {
-			background = ImageIO.read(getClass().getResourceAsStream("WordleWinScreen.png"));
-			backButtonImage = ImageIO.read(getClass().getResourceAsStream("Back Button.jpg"));
-			playButtonImage = ImageIO.read(getClass().getResourceAsStream("Play Button.png"));
+			background = ImageIO.read(getClass().getResourceAsStream("resources/WordleWinScreen.png"));
+			backButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/Back Button.jpg"));
+			playButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/Play Button.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

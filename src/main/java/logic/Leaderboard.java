@@ -1,11 +1,11 @@
-package logic;
+// package logic;
 
-/**
- * A class to store local scores for players.
- * Writes local scores for each user to their own text file. Stores usernames/passwords in a text file as well (I don't know how to encrypt text files).
- * 
- * @author @FranklinZhu1
- */
+// /**
+//  * A class to store local scores for players.
+//  * Writes local scores for each user to their own text file. Stores usernames/passwords in a text file as well (I don't know how to encrypt text files).
+//  * 
+//  * @author @FranklinZhu1
+//  */
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,14 +14,14 @@ import java.io.*; // scanner and filewriter
 import java.io.File; // file i/o
 import java.io.IOException;
 
-public class Leaderboard {
+// public class Leaderboard {
 
-    private String username, password; // user username to store data
-    private HashMap<String, String> passwords; // to let users log into local accounts
-    // all instance variables below map the user username to the appropriate stat
-    private int[] wordleStats, connectionsStats; // wordleStats: indexes 0 to 5 store number of games won with index + 1 guesses, connectionsStats: indexes 0 to 3 store number of games won with index mistakes
-    private ArrayList<Integer> spellingBeeStats; // each integer is the number of total points earned on some unique spelling bee board. note that spellingBeeAttempts is just this.spellingBeeStats.size()
-    private int wordleAttempts, connectionsAttempts; // total games played for both
+//     private String username, password; // user username to store data
+//     private HashMap<String, String> passwords; // to let users log into local accounts
+//     // all instance variables below map the user username to the appropriate stat
+//     private int[] wordleStats, connectionsStats; // wordleStats: indexes 0 to 5 store number of games won with index + 1 guesses, connectionsStats: indexes 0 to 3 store number of games won with index mistakes
+//     private ArrayList<Integer> spellingBeeStats; // each integer is the number of total points earned on some unique spelling bee board. note that spellingBeeAttempts is just this.spellingBeeStats.size()
+//     private int wordleAttempts, connectionsAttempts; // total games played for both
 
     /**
      * Default constructor to be ran upon launching the program.
@@ -29,26 +29,26 @@ public class Leaderboard {
      * Doesn't assign any instance variables (they are all assigned under login).
      */
 
-    public Leaderboard() {
-        Scanner scanner = null;
-        this.passwords = new HashMap<String, String>();
-        try {
-            scanner = new Scanner(new BufferedReader(new FileReader("passwords.txt")));
-            while (scanner.hasNext()) this.passwords.put(scanner.next(), scanner.next()); // read "username password" over and over again
-        } catch (FileNotFoundException e) {
-            System.out.println("Error while reading the file.");
-        } finally {
-            if (scanner != null) scanner.close();
-        }
-    }
+//     public Leaderboard() {
+//         Scanner scanner = null;
+//         this.passwords = new HashMap<String, String>();
+//         try {
+//             scanner = new Scanner(new BufferedReader(new FileReader("passwords.txt")));
+//             while (scanner.hasNext()) this.passwords.put(scanner.next(), scanner.next()); // read "username password" over and over again
+//         } catch (FileNotFoundException e) {
+//             System.out.println("Error while reading the file.");
+//         } finally {
+//             if (scanner != null) scanner.close();
+//         }
+//     }
 
-    public String getUsername() {
-        return this.username;
-    }
+//     public String getUsername() {
+//         return this.username;
+//     }
 
-    public String getPassword() {
-        return this.password;
-    }
+//     public String getPassword() {
+//         return this.password;
+//     }
 
     /**
      * Returns this.wordleStats if the user is logged in.
@@ -57,32 +57,32 @@ public class Leaderboard {
      * @return null if the user is logged out, this.wordleStats if user is logged in
      */
 
-    public int[] getWordleStats() {
-        if (username == null) return null;
-        return this.wordleStats;
-    }
+//     public int[] getWordleStats() {
+//         if (username == null) return null;
+//         return this.wordleStats;
+//     }
 
-    public int[] getConnectionsStats() {
-        if (username == null) return null;
-        return this.connectionsStats;
-    }
+//     public int[] getConnectionsStats() {
+//         if (username == null) return null;
+//         return this.connectionsStats;
+//     }
 
-    public ArrayList<Integer> getSpellingBeeStats() {
-        if (username == null) return null;
-        return this.spellingBeeStats;
-    }
+//     public ArrayList<Integer> getSpellingBeeStats() {
+//         if (username == null) return null;
+//         return this.spellingBeeStats;
+//     }
 
     // Next two getters return -1 instead of null if the user is logged out.
 
-    public int getWordleAttempts() {
-        if (username == null) return -1;
-        return this.wordleAttempts;
-    }
+//     public int getWordleAttempts() {
+//         if (username == null) return -1;
+//         return this.wordleAttempts;
+//     }
 
-    public int getConnectionsAttempts() {
-        if (username == null) return -1;
-        return this.connectionsAttempts;
-    }
+//     public int getConnectionsAttempts() {
+//         if (username == null) return -1;
+//         return this.connectionsAttempts;
+//     }
 
     /**
      * Saves the login info for a user to both passwords.txt and this.passwords.
@@ -181,21 +181,21 @@ public class Leaderboard {
      * @return false if the player isn't logged in. True otherwise
      */
 
-    public boolean addWordleAttempt(int score) {
-        if (username == null) return false;
-        ++this.wordleAttempts; // increase user's wordle attempts by 1
-        if (score != -1) ++this.wordleStats[score - 1]; // if user passed wordle, grab the array from the hashmap and increment it at the appropriate index
-        return true;
-    }
+//     public boolean addWordleAttempt(int score) {
+//         if (username == null) return false;
+//         ++this.wordleAttempts; // increase user's wordle attempts by 1
+//         if (score != -1) ++this.wordleStats[score - 1]; // if user passed wordle, grab the array from the hashmap and increment it at the appropriate index
+//         return true;
+//     }
 
     // score is number of MISTAKES - if user failed, this should be -1
 
-    public boolean addConnectionsAttempt(int score) {
-        if (username == null) return false;
-        ++this.connectionsAttempts; // increase user's connections attempts by 1
-        if (score != -1) ++this.connectionsStats[score]; // if user passed connections, grab the array from the hashmap and increment it at the appropriate index
-        return true;
-    }
+//     public boolean addConnectionsAttempt(int score) {
+//         if (username == null) return false;
+//         ++this.connectionsAttempts; // increase user's connections attempts by 1
+//         if (score != -1) ++this.connectionsStats[score]; // if user passed connections, grab the array from the hashmap and increment it at the appropriate index
+//         return true;
+//     }
 
     // score is NUMBER OF POINTS OBTAINED PER BOARD. there is no fail condition; the lowest score is 0
 
@@ -217,11 +217,11 @@ public class Leaderboard {
      * @return null if user is not signed in. Otherwise, an Object[] array of the objects above, in that order
      */
 
-    public Object[] getUserData() {
-        if (this.username == null) return null;
-        Object[] userData = {this.wordleStats, this.connectionsStats, this.spellingBeeStats, this.wordleAttempts, this.connectionsAttempts};
-        return userData;
-    }
+//     public Object[] getUserData() {
+//         if (this.username == null) return null;
+//         Object[] userData = {this.wordleStats, this.connectionsStats, this.spellingBeeStats, this.wordleAttempts, this.connectionsAttempts};
+//         return userData;
+//     }
 
     /**
      * Writes all user data to the user file.
@@ -248,4 +248,4 @@ public class Leaderboard {
         }
     }
 
-}
+// }

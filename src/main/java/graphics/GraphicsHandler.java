@@ -57,7 +57,6 @@ public class GraphicsHandler {
         
         
         
-        
         frame.setVisible(true);
     }
     

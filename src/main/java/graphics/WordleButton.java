@@ -4,7 +4,7 @@ package graphics;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-import javafx.scene.Cursor;
+//import javafx.scene.Cursor;
 import kalisz.KaliszTimes;
 
 public class WordleButton extends Button {

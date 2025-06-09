@@ -14,7 +14,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import javafx.scene.text.Font;
+//import javafx.scene.text.Font;
 import kalisz.KaliszTimes;
 
 public class WordleGamePanel extends JPanel implements PanelAttributes {
@@ -90,8 +90,15 @@ public class WordleGamePanel extends JPanel implements PanelAttributes {
     
 	private void loadKeyboard() {
 		//Create top keyboard buttons
-		for(int topRow = 0; topRow < 10; topRow++) {
-			KeyboardButton button = new KeyboardButton(keyboardButtonImage, 'A', 464 + (topRow * 99), 652);
+		char[] topRow= new char[] {'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'};
+		for(int i = 0; i < 10; i++) {
+			KeyboardButton button = new KeyboardButton(keyboardButtonImage, topRow[i], 464 + (i * 99), 652);
+			keyboardButtons.add(button);
+		}
+		
+		char[] middleRow = new char[] {'A', 'S', 'D', 'F', 'G', 'H', 'I', 'K', 'L'};
+		for(int i = 0; i < 9; i++) {
+			KeyboardButton button = new KeyboardButton(keyboardButtonImage, topRow[i], 481 + (i * 99), 692);
 			keyboardButtons.add(button);
 		}
 

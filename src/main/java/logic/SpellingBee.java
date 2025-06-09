@@ -1,18 +1,18 @@
-package logic;
+// package logic;
 
-/**
- * Class for the Spelling Bee game.
- * Contains getters for most variables and methods to run the game (e.g., adding letters to the guess, submitting the guesses).
- * Currently takes in a keyword of any length to be used on the board, as long as it is at LEAST 4 letters long. (Below that breaks the scoring system.)
- * Does not currently make use of a dictionary API to validate guesses (to be added).
- * 
- * @author @FranklinZhu1
- */
+// /**
+//  * Class for the Spelling Bee game.
+//  * Contains getters for most variables and methods to run the game (e.g., adding letters to the guess, submitting the guesses).
+//  * Currently takes in a keyword of any length to be used on the board, as long as it is at LEAST 4 letters long. (Below that breaks the scoring system.)
+//  * Does not currently make use of a dictionary API to validate guesses (to be added).
+//  * 
+//  * @author @FranklinZhu1
+//  */
 
-import java.util.ArrayList;
-import java.util.Random;
+// import java.util.ArrayList;
+// import java.util.Random;
 
-public class SpellingBee {
+// public class SpellingBee {
     
     private String keyword, currentWord; // keyword is the pangram that the user needs to get to progress the connections board
     private ArrayList<Character> letters;
@@ -45,21 +45,21 @@ public class SpellingBee {
         this.win = false;
     }
 
-    public String getKeyword() {
-        return this.keyword;
-    }
+//     public String getKeyword() {
+//         return this.keyword;
+//     }
 
-    public ArrayList<Character> getLetters() {
-        return this.letters;
-    }
+//     public ArrayList<Character> getLetters() {
+//         return this.letters;
+//     }
 
-    public String getCurrentWord() {
-        return this.currentWord;
-    }
+//     public String getCurrentWord() {
+//         return this.currentWord;
+//     }
 
-    public int getScore() {
-        return this.score;
-    }
+//     public int getScore() {
+//         return this.score;
+//     }
 
     public ArrayList<String> getWordsFound() {
         return this.wordsFound;
@@ -83,24 +83,24 @@ public class SpellingBee {
         return 1;
     }
 
-    /**
-     * Deletes the last letter from the current word. Doesn't do anything if the word is empty.
-     */
+//     /**
+//      * Deletes the last letter from the current word. Doesn't do anything if the word is empty.
+//      */
 
-    public void deleteLetter() {
-        if (this.currentWord.length() > 0) this.currentWord = this.currentWord.substring(0, this.currentWord.length() - 1);
-    }
+//     public void deleteLetter() {
+//         if (this.currentWord.length() > 0) this.currentWord = this.currentWord.substring(0, this.currentWord.length() - 1);
+//     }
 
-    /**
-     * Shuffles the letters.
-     */
+//     /**
+//      * Shuffles the letters.
+//      */
 
-    public void shuffle() {
-        ArrayList<Character> shuffledLetters = new ArrayList<Character>(); // initialize empty shuffled letters
-        Random random = new Random();
-        while (this.letters.size() > 0) shuffledLetters.add(this.letters.remove(random.nextInt(this.letters.size()))); // keep adding elements from newLetters to shuffledLetters at random indexes, removing from newLetters each time
-        this.letters = shuffledLetters; // assign shuffledLetters to this.letters
-    }
+//     public void shuffle() {
+//         ArrayList<Character> shuffledLetters = new ArrayList<Character>(); // initialize empty shuffled letters
+//         Random random = new Random();
+//         while (this.letters.size() > 0) shuffledLetters.add(this.letters.remove(random.nextInt(this.letters.size()))); // keep adding elements from newLetters to shuffledLetters at random indexes, removing from newLetters each time
+//         this.letters = shuffledLetters; // assign shuffledLetters to this.letters
+//     }
 
     /**
      * Submits the current word.
@@ -126,4 +126,4 @@ public class SpellingBee {
         return pointValue;
     }
 
-}
+// }

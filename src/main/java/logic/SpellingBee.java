@@ -19,6 +19,7 @@ public class SpellingBee {
     private char goldenLetter;
     private int score;
     private ArrayList<String> wordsFound;
+    private boolean win;
 
     public SpellingBee(String keyword, char goldenLetter) {
         this.keyword = keyword;
@@ -29,6 +30,7 @@ public class SpellingBee {
         this.currentWord = "";
         this.score = 0;
         this.wordsFound = new ArrayList<String>();
+        this.win = false;
     }
 
     public SpellingBee(String keyword, char goldenLetter, String currentWord, int score, ArrayList<String> wordsFound) {
@@ -40,6 +42,7 @@ public class SpellingBee {
         this.currentWord = currentWord;
         this.score = score;
         this.wordsFound = wordsFound;
+        this.win = false;
     }
 
     public String getKeyword() {
@@ -62,15 +65,19 @@ public class SpellingBee {
         return this.wordsFound;
     }
 
+    public boolean getWin() {
+        return this.win;
+    }
+
     /**
      * Input a letter into the current word.
      * 
      * @param letter letter to be inputted
-     * @return -1 if not a letter, 0 if too long (>19 characters), 1 if successful
+     * @return -1 if not a valid letter/not a letter at all, 0 if too long (>19 characters), 1 if successful
      */
 
     public int inputLetter(char letter) {
-        if (!Character.isLetter(letter)) return -1;
+        if (!this.letters.contains(letter) || !Character.isLetter(letter)) return -1;
         if (this.currentWord.length() == 19) return 0;
         this.currentWord += letter;
         return 1;
@@ -98,14 +105,17 @@ public class SpellingBee {
     /**
      * Submits the current word.
      * Calculates the points value if the word is valid and adds it to this.score.
+     * If keyword is reached, this.win is set to true.
      * 
      * @return -2 if too short, -1 if missing center letter, 0 if not a word, points value if otherwise valid
      */
 
     public int submitWord() {
+        DictionaryChecker dictionaryChecker = new DictionaryChecker();
         if (this.currentWord.length() < 4) return -2;
         if (!this.currentWord.contains(String.valueOf(this.goldenLetter))) return -1;
-        if (!DictionaryChecker.checkWord(this.currentWord)) return 0;
+        if (!dictionaryChecker.checkWord(this.currentWord)) return 0;
+        if (this.currentWord.equals(keyword)) this.win = true; // set this.win to true if current word is the keyword
         int pointValue = (this.currentWord.length() == 4) ? 1 : this.currentWord.length(); // if the word has 4 letters, the point value is 1, otherwise it's the number of the word's letters
         ArrayList<Character> uniqueLetters = new ArrayList<Character>();
         for (int letterIndex = 0; letterIndex < this.currentWord.length(); ++letterIndex) {

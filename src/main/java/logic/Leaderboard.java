@@ -10,7 +10,7 @@ package logic;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.*; // scanner and filewriter
+import java.io.*; // scanner and filewriter
 import java.io.File; // file i/o
 import java.io.IOException;
 
@@ -94,14 +94,14 @@ public class Leaderboard {
      */
 
     public void saveLoginInfo(String username, String password) {
-        PrinterWriter writer = null;
+        PrintWriter pw = null;
         try {
-            writer = new PrintWriter("passwords.txt");
-            writer.println("%s %s", username, password); // write username and password onto passwords.txt
+            pw = new PrintWriter("passwords.txt");
+            pw.printf("%s %s\n", username, password); // write username and password onto passwords.txt
         } catch (FileNotFoundException e) {
             System.out.println("Error while reading the file.");
         } finally {
-            if (scanner != null) scanner.close();
+            if (pw != null) pw.close();
         }
 
         this.passwords.put(username, password); // store user username and password in hashmap
@@ -128,15 +128,18 @@ public class Leaderboard {
                     this.wordleAttempts = 0;
                     this.connectionsAttempts = 0;
                 } else {
+                    Scanner scanner = null;
                     try {
-                        FileReader reader = new FileReader(new BufferedReader(new Scanner(this.username + ".txt")));
-                        this.wordleStats = new int[]{reader.nextInt(), reader.nextInt(), reader.nextInt(), reader.nextInt(), reader.nextInt(), reader.nextInt()}; // first 6 integers of user file should be the wordle stats
-                        this.connectionsStats = new int[]{reader.nextInt(), reader.nextInt(), reader.nextInt(), reader.nextInt()}; // next 4 integers should be connections stats
-                        this.wordleAttempts = reader.nextInt(); // next integer should be wordle attempts
-                        this.connectionsAttempts = reader.nextInt(); // next integer should be connections attempts
-                        while (reader.hasNext()) this.spellingBeeStats.add(reader.nextInt()); // since spelling bee scores can vary, remaining integers should all be added to spelling bee stats
+                        scanner = new Scanner(new BufferedReader(new FileReader(this.username + ".txt")));
+                        this.wordleStats = new int[]{scanner.nextInt(), scanner.nextInt(), scanner.nextInt(), scanner.nextInt(), scanner.nextInt(), scanner.nextInt()}; // first 6 integers of user file should be the wordle stats
+                        this.connectionsStats = new int[]{scanner.nextInt(), scanner.nextInt(), scanner.nextInt(), scanner.nextInt()}; // next 4 integers should be connections stats
+                        this.wordleAttempts = scanner.nextInt(); // next integer should be wordle attempts
+                        this.connectionsAttempts = scanner.nextInt(); // next integer should be connections attempts
+                        while (scanner.hasNext()) this.spellingBeeStats.add(scanner.nextInt()); // since spelling bee scores can vary, remaining integers should all be added to spelling bee stats
                     } catch (IOException e) {
                         e.printStackTrace();
+                    } finally {
+                        scanner.close();
                     }
                 }
             } catch (IOException e) {
@@ -159,8 +162,8 @@ public class Leaderboard {
         this.wordleStats = null;
         this.connectionsStats = null;
         this.spellingBeeStats = null;
-        this.wordleAttempts = null;
-        this.connectionsAttempts = null;
+        this.wordleAttempts = 0;
+        this.connectionsAttempts = 0;
     }
 
     /**
@@ -203,7 +206,7 @@ public class Leaderboard {
     public boolean addSpellingBeeAttempt(int score) {
         if (username == null) return false;
         this.spellingBeeStats.add(score); // grab the hashmap from the hashmap and add the score to it
-        this.spellingBeeStats.sort(); // sort the hashmap
+        this.spellingBeeStats.sort(null); // sort the hashmap
         return true;
     }
 
@@ -230,19 +233,22 @@ public class Leaderboard {
      */
 
     public void saveUserData() {
+        PrintWriter pw = null;
         try {
             File userFile = new File(this.username + ".txt"), tempUserFile = new File("temp.txt");
-            FileWriter fw = new FileWriter(tempUserFile);
-            fw.println("%d %d %d %d %d %d", this.wordleStats[0], this.wordleStats[1], this.wordleStats[2], this.wordleStats[3], this.wordleStats[4], this.wordleStats[5]);
-            fw.println("%d %d %d %d", this.connectionsStats[0], this.connectionsStats[1], this.connectionsStats[2], this.connectionsStats[3]);
-            fw.println("%d", this.wordleAttempts);
-            fw.println("%d", this.connectionsAttempts);
-            for (int index = 0; index < this.spellingBeeStats.size(); ++index) fw.print(this.spellingBeeStats.get(index));
-            fw.println();
+            pw = new PrintWriter(tempUserFile);
+            pw.printf("%d %d %d %d %d %d\n", this.wordleStats[0], this.wordleStats[1], this.wordleStats[2], this.wordleStats[3], this.wordleStats[4], this.wordleStats[5]);
+            pw.printf("%d %d %d %d\n", this.connectionsStats[0], this.connectionsStats[1], this.connectionsStats[2], this.connectionsStats[3]);
+            pw.printf("%d\n", this.wordleAttempts);
+            pw.printf("%d\n", this.connectionsAttempts);
+            for (int index = 0; index < this.spellingBeeStats.size(); ++index) pw.print(this.spellingBeeStats.get(index));
+            pw.println();
             userFile.delete(); // delete original user file, if it existed
             tempUserFile.renameTo(userFile); // rename temp file to original user file's name
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            pw.close();
         }
     }
 

@@ -1,4 +1,5 @@
 package logic;
+
 /**
  * Class for the Spelling Bee game.
  * Contains getters for most variables and methods to run the game (e.g., adding letters to the guess, submitting the guesses).
@@ -104,7 +105,7 @@ public class SpellingBee {
     public int submitWord() {
         if (this.currentWord.length() < 4) return -2;
         if (!this.currentWord.contains(String.valueOf(this.goldenLetter))) return -1;
-        // if it's not a word WE NEED A DICTIONARY API return 0
+        if (!DictionaryChecker.checkWord(this.currentWord)) return 0;
         int pointValue = (this.currentWord.length() == 4) ? 1 : this.currentWord.length(); // if the word has 4 letters, the point value is 1, otherwise it's the number of the word's letters
         ArrayList<Character> uniqueLetters = new ArrayList<Character>();
         for (int letterIndex = 0; letterIndex < this.currentWord.length(); ++letterIndex) {

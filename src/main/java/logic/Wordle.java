@@ -1,17 +1,17 @@
-// package logic;
+package logic;
 
-// /**
-//  * Class for the Wordle game.
-//  * The class includes getters for some variables and methods to run the game (adding letters, submitting guesses, etc.).
-//  * Currently takes in a word of any length to be guessed. Always gives the user 6 guesses (words of length 3 or below not recommended).
-//  * Does not currently make use of a dictionary API to validate guesses (to be added).
-//  * 
-//  * @author @FranklinZhu1
-//  */
+/**
+ * Class for the Wordle game.
+ * The class includes getters for some variables and methods to run the game (adding letters, submitting guesses, etc.).
+ * Currently takes in a word of any length to be guessed. Always gives the user 6 guesses (words of length 3 or below not recommended).
+ * Does not currently make use of a dictionary API to validate guesses (to be added).
+ * 
+ * @author @FranklinZhu1
+ */
 
 import java.util.Arrays;
 
-// public class Wordle {
+public class Wordle {
 
     private char[] word;
     private String[] guessData, overallGuessData; // guessData is local to each guess, overallGuessData is a 26 length array for each character to track overall (think of the on-screen keyboard)
@@ -20,11 +20,11 @@ import java.util.Arrays;
     private boolean win;
     private int[] wordLetterCount; // will have size 26
 
-//     /**
-//      * Default constructor to make new wordle game with every stat at default.
-//      * 
-//      * @param word solution word
-//      */
+    /**
+     * Default constructor to make new wordle game with every stat at default.
+     * 
+     * @param word solution word
+     */
 
     public Wordle(char[] word) {
         this.word = word;
@@ -39,13 +39,13 @@ import java.util.Arrays;
         }
     }
 
-//     /**
-//      * Constructor to initialize an already-started game, assigns each variable
-//      * 
-//      * @param word solution word
-//      * @param guessCount the number of guesses already made
-//      * @param overallGuessData the data for each letter already discovered
-//      */
+    /**
+     * Constructor to initialize an already-started game, assigns each variable
+     * 
+     * @param word solution word
+     * @param guessCount the number of guesses already made
+     * @param overallGuessData the data for each letter already discovered
+     */
 
     public Wordle(char[] word, int guessCount, String[] overallGuessData) {
         this.word = word;
@@ -63,32 +63,32 @@ import java.util.Arrays;
         return this.word.length;
     }
 
-//     public int getGuessCount() {
-//         return this.guessCount;
-//     }
+    public int getGuessCount() {
+        return this.guessCount;
+    }
 
-//     public String[] getGuessData() {
-//         return this.guessData;
-//     }
+    public String[] getGuessData() {
+        return this.guessData;
+    }
 
-//     public String[] getOverallGuessData() {
-//         return this.overallGuessData;
-//     }
+    public String[] getOverallGuessData() {
+        return this.overallGuessData;
+    }
 
     public String getCurrentGuess() {
         return this.currentGuess;
     }
 
-//     public boolean getWin() {
-//         return this.win;
-//     }
+    public boolean getWin() {
+        return this.win;
+    }
 
-//     /**
-//      * Types a letter into the current guess.
-//      * 
-//      * @param letter
-//      * @return false if too many letters
-//      */
+    /**
+     * Types a letter into the current guess.
+     * 
+     * @param letter
+     * @return false if too many letters
+     */
 
     public boolean inputLetter(char letter) {
         if (this.currentGuess.length() >= this.word.length || !Character.isLetter(letter)) return false;
@@ -96,9 +96,9 @@ import java.util.Arrays;
         return true;
     }
 
-//     /**
-//      * Deletes the last letter from the current guess. Doesn't do anything if the guess is empty.
-//      */
+    /**
+     * Deletes the last letter from the current guess. Doesn't do anything if the guess is empty.
+     */
 
     public void deleteLetter() {
         if (this.currentGuess.length() > 0) this.currentGuess = this.currentGuess.substring(0, this.currentGuess.length() - 1);
@@ -139,4 +139,4 @@ import java.util.Arrays;
         return 1;
     }
 
-// }
+}

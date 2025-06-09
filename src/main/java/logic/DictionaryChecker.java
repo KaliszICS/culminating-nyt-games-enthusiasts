@@ -1,4 +1,3 @@
-package logic;
 /**
  * A class with a checkWord method to check if a word is in the English dictionary.
  * There is no explicit constructor/instance variables.

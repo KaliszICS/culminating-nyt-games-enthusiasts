@@ -137,7 +137,7 @@ public class Leaderboard {
                     } catch (IOException e) {
                         e.printStackTrace();
                     } finally {
-                        scanner.close();
+                        if (scanner != null) scanner.close();
                     }
                 }
             } catch (IOException e) {
@@ -244,7 +244,7 @@ public class Leaderboard {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            pw.close();
+            if (pw != null) pw.close();
         }
     }
 

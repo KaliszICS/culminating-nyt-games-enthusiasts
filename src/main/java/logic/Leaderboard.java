@@ -20,8 +20,8 @@ public class Leaderboard {
     private HashMap<String, String> passwords; // to let users log into local accounts
     // all instance variables below map the user username to the appropriate stat
     private int[] wordleStats, connectionsStats; // wordleStats: indexes 0 to 5 store number of games won with index + 1 guesses, connectionsStats: indexes 0 to 3 store number of games won with index mistakes
-    private ArrayList<Integer> spellingBeeStats; // each integer is the number of total points earned on some unique spelling bee board
-    private int wordleAttempts, connectionsAttempts, spellingBeeAttempts; // total games played for both
+    private ArrayList<Integer> spellingBeeStats; // each integer is the number of total points earned on some unique spelling bee board. note that spellingBeeAttempts is just this.spellingBeeStats.size()
+    private int wordleAttempts, connectionsAttempts; // total games played for both
 
     /**
      * default constructor to be ran upon launching the program, sets all HashMaps to empty HashMaps
@@ -86,11 +86,6 @@ public class Leaderboard {
         return this.connectionsAttempts;
     }
 
-    public int getSpellingBeeAttempts() {
-        if (username == null) return -1;
-        return this.spellingBeeAttempts;
-    }
-
     /**
      * save login info for a user (should be ran if user wishes to create an account)
      * 
@@ -132,7 +127,6 @@ public class Leaderboard {
                     this.spellingBeeStats = new ArrayList<Integer>();
                     this.wordleAttempts = 0;
                     this.connectionsAttempts = 0;
-                    this.spellingBeeAttempts = 0;
                 } else {
                     try {
                         FileReader reader = new FileReader(new BufferedReader(new Scanner(this.username + ".txt")));
@@ -140,7 +134,6 @@ public class Leaderboard {
                         this.connectionsStats = new int[]{reader.nextInt(), reader.nextInt(), reader.nextInt(), reader.nextInt()}; // next 4 integers should be connections stats
                         this.wordleAttempts = reader.nextInt(); // next integer should be wordle attempts
                         this.connectionsAttempts = reader.nextInt(); // next integer should be connections attempts
-                        this.spellingBeeAttempts = reader.nextInt(); // next integer should be spelling bee attempts
                         while (reader.hasNext()) this.spellingBeeStats.add(reader.nextInt()); // since spelling bee scores can vary, remaining integers should all be added to spelling bee stats
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -168,7 +161,6 @@ public class Leaderboard {
         this.spellingBeeStats = null;
         this.wordleAttempts = null;
         this.connectionsAttempts = null;
-        this.spellingBeeAttempts = null;
     }
 
     /**
@@ -210,7 +202,6 @@ public class Leaderboard {
 
     public boolean addSpellingBeeAttempt(int score) {
         if (username == null) return false;
-        ++this.spellingBeeAttempts; // increase user's spelling bee attempts by 1
         this.spellingBeeStats.add(score); // grab the hashmap from the hashmap and add the score to it
         this.spellingBeeStats.sort(); // sort the hashmap
         return true;
@@ -223,14 +214,13 @@ public class Leaderboard {
      * spellingBeeStats - int[]
      * wordleAttempts - int
      * connectionsAttempts - int
-     * spellingBeeAttempts - int
      * 
      * @return null if user is not signed in. otherwise, an Object[] array of the objects above, in that order
      */
 
     public Object[] getUserData() {
         if (this.username == null) return null;
-        Object[] userData = {this.wordleStats, this.connectionsStats, this.spellingBeeStats, this.wordleAttempts, this.connectionsAttempts, this.spellingBeeAttempts};
+        Object[] userData = {this.wordleStats, this.connectionsStats, this.spellingBeeStats, this.wordleAttempts, this.connectionsAttempts};
         return userData;
     }
 
@@ -247,7 +237,6 @@ public class Leaderboard {
             fw.println("%d %d %d %d", this.connectionsStats[0], this.connectionsStats[1], this.connectionsStats[2], this.connectionsStats[3]);
             fw.println("%d", this.wordleAttempts);
             fw.println("%d", this.connectionsAttempts);
-            fw.println("%d", this.spellingBeeAttempts);
             for (int index = 0; index < this.spellingBeeStats.size(); ++index) fw.print(this.spellingBeeStats.get(index));
             fw.println();
             userFile.delete(); // delete original user file, if it existed

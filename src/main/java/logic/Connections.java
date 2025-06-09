@@ -3,8 +3,8 @@ package logic;
 /**
  * Class for the Connections game.
  * Contains getters for some variables and methods to help run the game (selecting words, submitting guesses, etc.).
- * All words to set up the game are hidden by default. Whether or not they have been revealed is tracked using the "revealed" HashMap.
- * Does not currently have a this.win boolean. Wins should be tracked based on the return value of submitGuess and the number of categories completed.
+ * All words to set up the game are hidden by default. Whether or not they have been revealed is tracked using the "revealed" hashmap.
+ * Does not currently have a win boolean. Wins should be tracked based on the return value of submitGuess and the number of categories completed.
  * 
  * @author @FranklinZhu1
  */
@@ -73,7 +73,7 @@ public class Connections {
      * @param purpleWords
      * @param purpleCategory
      * @param guessesLeft // guesses that the player has left
-     * @param revealed // HashMap to track which words have already been revealed through Wordle or Spelling Bee
+     * @param revealed // hashmap to track which words have already been revealed through Wordle or Spelling Bee
      */
 
     public Connections(String[] yellowWords, String yellowCategory, String[] greenWords, String greenCategory, String[] blueWords, String blueCategory, String[] purpleWords, String purpleCategory, int guessesLeft, HashMap<String, Boolean> revealed) {

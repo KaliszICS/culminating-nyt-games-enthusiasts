@@ -24,7 +24,9 @@ public class Leaderboard {
     private int wordleAttempts, connectionsAttempts; // total games played for both
 
     /**
-     * default constructor to be ran upon launching the program, sets all HashMaps to empty HashMaps
+     * Default constructor to be ran upon launching the program.
+     * Attempts to copy all username/password pairs from passwords.txt to the passwords hashmap.
+     * Doesn't assign any instance variables (they are all assigned under login).
      */
 
     public Leaderboard() {
@@ -49,10 +51,10 @@ public class Leaderboard {
     }
 
     /**
-     * returns wordle stats integer array if the user is logged in
-     * OTHER GETTERS BELOW THIS ONE ARE CODED LIKEWISE
+     * Returns this.wordleStats if the user is logged in.
+     * OTHER GETTERS BELOW THIS ONE ARE CODED LIKEWISE.
      * 
-     * @return null if the user is logged out, wordle stats array if user is logged in
+     * @return null if the user is logged out, this.wordleStats if user is logged in
      */
 
     public int[] getWordleStats() {
@@ -70,11 +72,7 @@ public class Leaderboard {
         return this.spellingBeeStats;
     }
 
-    /**
-     * the next few getters all return -1 if the user is logged out
-     * 
-     * @return -1 if logged out, number of attempts otherwise
-     */
+    // Next two getters return -1 instead of null if the user is logged out.
 
     public int getWordleAttempts() {
         if (username == null) return -1;
@@ -87,7 +85,8 @@ public class Leaderboard {
     }
 
     /**
-     * save login info for a user (should be ran if user wishes to create an account)
+     * Saves the login info for a user to both passwords.txt and this.passwords.
+     * Should be ran if the user wishes to create an account.
      * 
      * @param username username
      * @param password password for the user
@@ -103,16 +102,15 @@ public class Leaderboard {
         } finally {
             if (pw != null) pw.close();
         }
-
         this.passwords.put(username, password); // store user username and password in hashmap
     }
 
     /**
-     * let user log into existent account
+     * Lets the user log into an existent account.
      * 
      * @param username username
      * @param password password for the username
-     * @return true if password matches username, false otherwise
+     * @return true if password matches username, false if not or if the username isn't registered
      */
 
     public boolean login(String username, String password) {
@@ -151,9 +149,8 @@ public class Leaderboard {
     }
 
     /**
-     * lets user log out of current account
-     * sets all instance variables to null
-     * note that this.password actually holds no relevance since all other methods checks if this.username is null or not to see if the user is signed in or not
+     * Lets the user log out of their current account.
+     * Sets all instance variables to null or -1.
      */
 
     public void logout() {
@@ -162,27 +159,26 @@ public class Leaderboard {
         this.wordleStats = null;
         this.connectionsStats = null;
         this.spellingBeeStats = null;
-        this.wordleAttempts = 0;
-        this.connectionsAttempts = 0;
+        this.wordleAttempts = -1;
+        this.connectionsAttempts = -1;
     }
 
     /**
-     * checks if user is logged in or not
+     * Checks if the user is logged in or not.
      * 
      * @return true if the user is logged in, false otherwise (if the username is null)
      */
 
     public boolean isLoggedIn() {
-        if (this.username == null) return false;
-        return true;
+        return !(this.username == null);
     }
 
     /**
-     * adds a wordle attempt to the wordle stats
-     * OTHER ADD METHODS ARE CODED LIKEWISE
+     * Adds a wordle attempt to this.wordleStats.
+     * OTHER ADD METHODS BELOW THIS ONE ARE CODED LIKEWISE.
      * 
-     * @param score wordle score to be recorded. if the player failed out, this should be -1
-     * @return false if the player isn't logged in. true otherwise
+     * @param score wordle score to be recorded. If the player failed out, this should be -1
+     * @return false if the player isn't logged in. True otherwise
      */
 
     public boolean addWordleAttempt(int score) {
@@ -192,7 +188,7 @@ public class Leaderboard {
         return true;
     }
 
-    // param score is number of MISTAKES. if failed, -1
+    // score is number of MISTAKES - if user failed, this should be -1
 
     public boolean addConnectionsAttempt(int score) {
         if (username == null) return false;
@@ -201,24 +197,24 @@ public class Leaderboard {
         return true;
     }
 
-    // param score is NUMBER OF POINTS OBTAINED PER BOARD. there is no fail condition; the lowest score is 0
+    // score is NUMBER OF POINTS OBTAINED PER BOARD. there is no fail condition; the lowest score is 0
 
     public boolean addSpellingBeeAttempt(int score) {
         if (username == null) return false;
-        this.spellingBeeStats.add(score); // grab the hashmap from the hashmap and add the score to it
+        this.spellingBeeStats.add(score); // add the score to the spelling bee hashmap
         this.spellingBeeStats.sort(null); // sort the hashmap
         return true;
     }
 
     /**
-     * returns ALL user data in the form of an object array, in order of:
+     * Returns ALL user data in the form of an object array, in order of:
      * wordleStats - int[]
      * connectionsStats - int[]
      * spellingBeeStats - int[]
      * wordleAttempts - int
      * connectionsAttempts - int
      * 
-     * @return null if user is not signed in. otherwise, an Object[] array of the objects above, in that order
+     * @return null if user is not signed in. Otherwise, an Object[] array of the objects above, in that order
      */
 
     public Object[] getUserData() {
@@ -228,8 +224,8 @@ public class Leaderboard {
     }
 
     /**
-     * writes all user data to the user file. should probably be ran when the application exits.
-     * writes user data by creating a temporary file, writing it there, then renaming that temp file to the user file.
+     * Writes all user data to the user file.
+     * Writes user data by creating a temporary file, writing it there, then renaming that temp file to the user file.
      */
 
     public void saveUserData() {

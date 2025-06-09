@@ -2,7 +2,7 @@ package logic;
 
 /**
  * Class for the Wordle game.
- * The class includes charAtters for some variables and methods to run the game (adding letters, submitting guesses, etc.).
+ * The class includes getters for some variables and methods to run the game (adding letters, submitting guesses, etc.).
  * Currently takes in a word of any length to be guessed. Always gives the user 6 guesses (words of length 3 or below not recommended).
  * Does not currently make use of a dictionary API to validate guesses (to be added).
  * 
@@ -59,27 +59,27 @@ public class Wordle {
         }
     }
 
-    public int charAtWordLength() {
+    public int getWordLength() {
         return this.word.length;
     }
 
-    public int charAtGuessCount() {
+    public int getGuessCount() {
         return this.guessCount;
     }
 
-    public String[] charAtGuessData() {
+    public String[] getGuessData() {
         return this.guessData;
     }
 
-    public String[] charAtOverallGuessData() {
+    public String[] getOverallGuessData() {
         return this.overallGuessData;
     }
 
-    public String charAtCurrentGuess() {
+    public String getCurrentGuess() {
         return this.currentGuess;
     }
 
-    public boolean charAtWin() {
+    public boolean getWin() {
         return this.win;
     }
 

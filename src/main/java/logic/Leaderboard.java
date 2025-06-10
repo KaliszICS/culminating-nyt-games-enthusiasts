@@ -22,6 +22,8 @@ public class Leaderboard {
     private int[] wordleStats, connectionsStats; // wordleStats: indexes 0 to 5 store number of games won with index + 1 guesses, connectionsStats: indexes 0 to 3 store number of games won with index mistakes
     private ArrayList<Integer> spellingBeeStats; // each integer is the number of total points earned on some unique spelling bee board. note that spellingBeeAttempts is just this.spellingBeeStats.size()
     private int wordleAttempts, connectionsAttempts; // total games played for both
+    private Scanner sc; // scanner to scan from passwords and user files
+    private PrintWriter pw; // printwriter to write onto passwords and user files
 
     /**
      * Default constructor to be ran upon launching the program.
@@ -30,15 +32,12 @@ public class Leaderboard {
      */
 
     public Leaderboard() {
-        Scanner scanner = null;
         this.passwords = new HashMap<String, String>();
         try {
-            scanner = new Scanner(new BufferedReader(new FileReader("passwords.txt")));
-            while (scanner.hasNext()) this.passwords.put(scanner.next(), scanner.next()); // read "username password" over and over again
+            this.sc = new Scanner(new BufferedReader(new FileReader("src/main/java/logic/passwords.txt")));
+            while (this.sc.hasNext()) this.passwords.put(this.sc.next(), this.sc.next()); // read "username password" over and over again
         } catch (FileNotFoundException e) {
-            System.out.println("Error while reading the file.");
-        } finally {
-            if (scanner != null) scanner.close();
+            e.printStackTrace();
         }
     }
 
@@ -93,16 +92,15 @@ public class Leaderboard {
      */
 
     public void saveLoginInfo(String username, String password) {
-        PrintWriter pw = null;
         try {
-            pw = new PrintWriter("passwords.txt");
-            pw.printf("%s %s\n", username, password); // write username and password onto passwords.txt
-        } catch (FileNotFoundException e) {
-            System.out.println("Error while reading the file.");
+            this.pw = new PrintWriter(new FileWriter("src/main/java/logic/passwords.txt", true));
+            this.pw.printf("%s %s\n", username, password); // write username and password onto passwords.txt
+            this.passwords.put(username, password); // store user username and password in hashmap
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
-            if (pw != null) pw.close();
+            if (this.pw != null) this.pw.close();
         }
-        this.passwords.put(username, password); // store user username and password in hashmap
     }
 
     /**
@@ -110,42 +108,41 @@ public class Leaderboard {
      * 
      * @param username username
      * @param password password for the username
-     * @return true if password matches username, false if not or if the username isn't registered
+     * @return -1 if the username isn't registered, 0 if the password is incorrect, 1 if the login is successful
      */
 
-    public boolean login(String username, String password) {
+    public int login(String username, String password) {
+        if (this.passwords.get(username) == null) return -1; // if the username doesn't exist
         if (this.passwords.get(username).equals(password)) {
             this.username = username; // user is now logged in (instance variables set equal to whatever the user provided here)
             this.password = password;
             try {
-                File userFile = new File(this.username + ".txt");
+                File userFile = new File("src/main/java/logic/" + this.username + ".txt");
                 if (userFile.createNewFile()) { // if user file didn't already exist (one was just created), initialize all instance variables (like a default constructor)
                     this.wordleStats = new int[6];
                     this.connectionsStats = new int[4];
                     this.spellingBeeStats = new ArrayList<Integer>();
                     this.wordleAttempts = 0;
                     this.connectionsAttempts = 0;
+                    saveUserData(); // initialize empty user file
                 } else {
-                    Scanner scanner = null;
                     try {
-                        scanner = new Scanner(new BufferedReader(new FileReader(this.username + ".txt")));
-                        this.wordleStats = new int[]{scanner.nextInt(), scanner.nextInt(), scanner.nextInt(), scanner.nextInt(), scanner.nextInt(), scanner.nextInt()}; // first 6 integers of user file should be the wordle stats
-                        this.connectionsStats = new int[]{scanner.nextInt(), scanner.nextInt(), scanner.nextInt(), scanner.nextInt()}; // next 4 integers should be connections stats
-                        this.wordleAttempts = scanner.nextInt(); // next integer should be wordle attempts
-                        this.connectionsAttempts = scanner.nextInt(); // next integer should be connections attempts
-                        while (scanner.hasNext()) this.spellingBeeStats.add(scanner.nextInt()); // since spelling bee scores can vary, remaining integers should all be added to spelling bee stats
-                    } catch (IOException e) {
+                        this.sc = new Scanner(new BufferedReader(new FileReader("src/main/java/logic/" + this.username + ".txt")));
+                        this.wordleStats = new int[]{this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt()}; // first 6 integers of user file should be the wordle stats
+                        this.connectionsStats = new int[]{this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt()}; // next 4 integers should be connections stats
+                        this.wordleAttempts = this.sc.nextInt(); // next integer should be wordle attempts
+                        this.connectionsAttempts = this.sc.nextInt(); // next integer should be connections attempts
+                        while (this.sc.hasNext()) this.spellingBeeStats.add(this.sc.nextInt()); // since spelling bee scores can vary, remaining integers should all be added to spelling bee stats
+                    } catch (Exception e) {
                         e.printStackTrace();
-                    } finally {
-                        if (scanner != null) scanner.close();
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return true;
+            return 1;
         }
-        return false;
+        return 0;
     }
 
     /**
@@ -229,22 +226,21 @@ public class Leaderboard {
      */
 
     public void saveUserData() {
-        PrintWriter pw = null;
         try {
-            File userFile = new File(this.username + ".txt"), tempUserFile = new File("temp.txt");
-            pw = new PrintWriter(tempUserFile);
-            pw.printf("%d %d %d %d %d %d\n", this.wordleStats[0], this.wordleStats[1], this.wordleStats[2], this.wordleStats[3], this.wordleStats[4], this.wordleStats[5]);
-            pw.printf("%d %d %d %d\n", this.connectionsStats[0], this.connectionsStats[1], this.connectionsStats[2], this.connectionsStats[3]);
-            pw.printf("%d\n", this.wordleAttempts);
-            pw.printf("%d\n", this.connectionsAttempts);
-            for (int index = 0; index < this.spellingBeeStats.size(); ++index) pw.print(this.spellingBeeStats.get(index));
-            pw.println();
+            File userFile = new File("src/main/java/logic/" + this.username + ".txt"), tempUserFile = new File("src/main/java/logic/temp.txt");
+            this.pw = new PrintWriter(new FileWriter(tempUserFile, true));
+            this.pw.printf("%d %d %d %d %d %d\n", this.wordleStats[0], this.wordleStats[1], this.wordleStats[2], this.wordleStats[3], this.wordleStats[4], this.wordleStats[5]);
+            this.pw.printf("%d %d %d %d\n", this.connectionsStats[0], this.connectionsStats[1], this.connectionsStats[2], this.connectionsStats[3]);
+            this.pw.printf("%d\n", this.wordleAttempts);
+            this.pw.printf("%d\n", this.connectionsAttempts);
+            for (int index = 0; index < this.spellingBeeStats.size(); ++index) this.pw.print(this.spellingBeeStats.get(index) + " "); // yes it will end in a space (shouldn't matter)
+            this.pw.println();
             userFile.delete(); // delete original user file, if it existed
             tempUserFile.renameTo(userFile); // rename temp file to original user file's name
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (pw != null) pw.close();
+            if (this.pw != null) this.pw.close();
         }
     }
 

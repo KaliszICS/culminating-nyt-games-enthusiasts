@@ -105,6 +105,14 @@ public class Wordle {
     }
 
     /**
+     * Clears the current guess, removing all its letters.
+     */
+
+    public void clearGuess() {
+        this.currentGuess = "";
+    }
+
+    /**
      * Submits the current guess and tracks the guess data.
      * CAN CHANGE this.win, charAtWin() SHOULD ALWAYS BE RAN AFTER USING THIS METHOD.
      * 

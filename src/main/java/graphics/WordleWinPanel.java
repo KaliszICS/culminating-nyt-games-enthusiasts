@@ -10,13 +10,16 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import graphics.buttons.Button;
+import graphics.utils.GUIConstants;
+import graphics.utils.PanelAttributes;
 import kalisz.KaliszTimes;
 
 public class WordleWinPanel extends JPanel implements PanelAttributes {
 	BufferedImage background, backButtonImage, playButtonImage;
 	
 	public WordleWinPanel() {
-		this.setPreferredSize(new Dimension(GraphicsHandler.WINDOW_WIDTH, GraphicsHandler.WINDOW_HEIGHT));
+		this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));
 		 loadImages();
 		 setLayout(null);
 		 
@@ -93,7 +96,7 @@ public class WordleWinPanel extends JPanel implements PanelAttributes {
 		
 		
 		int SHIFT_UP = 25;
-		graphics.drawImage(background, 0, 0, GraphicsHandler.WINDOW_WIDTH, GraphicsHandler.WINDOW_HEIGHT - SHIFT_UP, this);
+		graphics.drawImage(background, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT - SHIFT_UP, this);
 		
 
 	}

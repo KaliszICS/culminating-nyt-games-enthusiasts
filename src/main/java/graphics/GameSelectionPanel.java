@@ -11,43 +11,23 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import graphics.buttons.BackButton;
+import graphics.buttons.Button;
+import graphics.utils.GUIConstants;
+import graphics.utils.PanelAttributes;
 import kalisz.KaliszTimes;
 
 public class GameSelectionPanel extends JPanel implements PanelAttributes {
 	BufferedImage background, backButtonImage, playButtonImage;
 	
 	public GameSelectionPanel() {
-		this.setPreferredSize(new Dimension(GraphicsHandler.WINDOW_WIDTH, GraphicsHandler.WINDOW_HEIGHT));
+		this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));
 		 loadImages();
 		 setLayout(null);
 		 
 		 
-		 Button backButton = new Button(backButtonImage);
-		 backButton.setLocation(41, 35);
-		 backButton.setSize(74, 59);
-		 System.out.println(backButtonImage.getHeight() + backButtonImage.getWidth());
-		 backButton.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				System.out.println("Back button pressed");
-				KaliszTimes.getGraphicsHandler().previousPanel();
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {}
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-			}
-			@Override
-			public void mouseExited(MouseEvent e) {}
-			 
-		 });
-		 
-		 
-		 add(backButton);
+		
+		 add(new BackButton(backButtonImage));
 		 
 		 
 		 //Play button
@@ -85,7 +65,7 @@ public class GameSelectionPanel extends JPanel implements PanelAttributes {
 		Graphics2D graphics = (Graphics2D) g;
 		super.paintComponent(g);
 		
-		graphics.drawImage(background, 0, 0, GraphicsHandler.WINDOW_WIDTH, GraphicsHandler.WINDOW_HEIGHT, this);
+		graphics.drawImage(background, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT, this);
 		
 
 	}

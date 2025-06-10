@@ -1,27 +1,48 @@
-package graphics;
+package graphics.buttons;
 
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 
+import logic.events.EventHandler;
+import logic.events.KeyboardClickEvent;
+import logic.events.KeyboardClickEventListener;
+
 public class KeyboardButton extends Button {
     BufferedImage image;
     char character;
     int x, y;
+    int clickType;
     
-    public KeyboardButton(BufferedImage image, char character, int x, int y) {
+    public KeyboardButton(BufferedImage image, char character, int x, int y, int clickType) {
         super(image);
         this.setSize(100, 118);
         this.x = x;
         this.y = y;
+        this.clickType = clickType;
 
         this.setLocation(x, y);
         this.character = character;
+
+        
+
+    }
+    //Enter / backspace buttons
+     public KeyboardButton(BufferedImage image, int x, int y, int clickType) {
+        super(image);
+        this.setSize(image.getWidth(), image.getHeight());
+        this.x = x;
+        this.y = y;
+        this.character = ' ';
+        this.clickType = clickType;
+
+        this.setLocation(x, y);
 
         
 
@@ -41,10 +62,12 @@ public class KeyboardButton extends Button {
 
         graphics.drawString("" + character, textX, textY);
     }
-    public int getX() {
-        return x;
-    }
-    public int getY() {
-        return y;
-    }
+    //Sends character as an event
+
+    @Override
+	public void mousePressed(MouseEvent e) {
+		 EventHandler.fireWordleClickEvent(this, this.character, this.clickType);
+	}
+
+    
 }

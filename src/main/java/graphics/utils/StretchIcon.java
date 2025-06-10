@@ -1,4 +1,4 @@
-package graphics;
+package graphics.utils;
 /**
  * @(#)StretchIcon.java	1.0 03/27/12
  */

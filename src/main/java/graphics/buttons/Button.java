@@ -1,4 +1,4 @@
-package graphics;
+package graphics.buttons;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -11,14 +11,32 @@ import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import graphics.utils.StretchIcon;
 import kalisz.KaliszTimes;
 
 
 public class Button extends JLabel implements MouseListener {
 	private BufferedImage image;
+	private int x, y;
 	
 	public Button(BufferedImage image) {
 		this.image = image;
+		this.setSize(image.getWidth(), image.getHeight());
+		this.setIcon(new StretchIcon(image, true));
+		this.addMouseListener(this);
+	}
+	public Button(BufferedImage image, int x, int y) {
+		this.image = image;
+		this.setSize(image.getWidth(), image.getHeight());
+		this.x = x;
+		this.y = y;
+		this.setLocation(x, y);
+		this.setIcon(new StretchIcon(image, true));
+		this.addMouseListener(this);
+	}
+	public Button(BufferedImage image, String actionCommand) {
+		this.image = image;
+		this.setSize(image.getWidth(), image.getHeight());
 		this.setIcon(new StretchIcon(image, true));
 		this.addMouseListener(this);
 	}

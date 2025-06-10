@@ -3,18 +3,18 @@ import java.awt.CardLayout;
 
 import javax.swing.*;
 
+import graphics.utils.GUIConstants;
+
 public class GraphicsHandler {
-	public static final int WINDOW_WIDTH = 1920;
-	public static final int WINDOW_HEIGHT = 1080;
-	public static final String gameName = "The Kalisz Times Games";
-	public static final String gameVersion = "1.0";
+	
+	
 	private static JFrame frame = null;
 	private static CardLayout layout = null;
 	private static JPanel mainPanel = null;
 
     public void initiate() {
-        frame = new JFrame(gameName + " " + gameVersion);
-        frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        frame = new JFrame(GUIConstants.gameName + " " + GUIConstants.gameVersion);
+        frame.setSize(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         

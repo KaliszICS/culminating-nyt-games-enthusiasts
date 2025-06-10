@@ -12,13 +12,15 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import graphics.utils.GUIConstants;
+import graphics.utils.PanelAttributes;
 import kalisz.KaliszTimes;
 
 public class TitleScreenPanel extends JPanel implements PanelAttributes, MouseListener {
 	BufferedImage background;
 	
 	public TitleScreenPanel() {
-		this.setPreferredSize(new Dimension(GraphicsHandler.WINDOW_WIDTH, GraphicsHandler.WINDOW_HEIGHT));
+		this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));
 		 loadImages();
 		 
 		 
@@ -29,7 +31,7 @@ public class TitleScreenPanel extends JPanel implements PanelAttributes, MouseLi
 		Graphics2D graphics = (Graphics2D) g;
 		super.paintComponent(g);
 		
-		graphics.drawImage(background, 0, 0, GraphicsHandler.WINDOW_WIDTH, GraphicsHandler.WINDOW_HEIGHT, this);
+		graphics.drawImage(background, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT, this);
 		
 
 	}

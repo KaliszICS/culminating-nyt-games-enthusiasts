@@ -1,4 +1,4 @@
 Main.class
-GraphicsHandler.class
+GUIConstants.class
 Connections.class
 Wordle.class

@@ -1,8 +1,11 @@
 package kalisz;
 
+import graphics.GUIConstants;
 import graphics.GraphicsHandler;
 import logic.AIHandler;
 import logic.AudioHandler;
+import java.awt.Toolkit;
+import java.awt.Dimension;
 
 public class KaliszTimes {
 	
@@ -11,12 +14,16 @@ public class KaliszTimes {
 
 	public static void main(String args[]) {
 		audioHandler = new AudioHandler();
+
+		//Initialize constants
+		GUIConstants constants = new GUIConstants();
+		System.out.println(GUIConstants.WINDOW_WIDTH + " " + GUIConstants.WINDOW_HEIGHT);
+
 		//KaliszTimes.getAudioHandler().playSound("/button_sound.wav"); //work on this
 		handler = new GraphicsHandler();
 		handler.initiate();
 
 		
-
 		
 		//System.out.println(AIHandler.chatGPT("Generate me a list of words for wordle, without any other text. Just the raw words with a space in between").split(" "));
 	}

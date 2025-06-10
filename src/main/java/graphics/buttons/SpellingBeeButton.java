@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
+import graphics.GUIConstants;
 import logic.events.EventHandler;
 import logic.events.KeyboardClickEvent;
 
@@ -13,9 +14,10 @@ import logic.events.KeyboardClickEvent;
 
 public class SpellingBeeButton extends Button {
     char letter;
-    public SpellingBeeButton(BufferedImage image, char letter) {
+    public SpellingBeeButton(BufferedImage image, char letter, int x, int y) {
         super(image);
         this.letter = letter;
+        this.setBounds(x, y, GUIConstants.scaleX(image.getWidth()), GUIConstants.scaleY(image.getHeight()));
         
     }
     

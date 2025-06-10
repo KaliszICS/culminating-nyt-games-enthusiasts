@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import graphics.GUIConstants;
 import graphics.utils.StretchIcon;
 import kalisz.KaliszTimes;
 
@@ -27,10 +28,12 @@ public class Button extends JLabel implements MouseListener {
 	}
 	public Button(BufferedImage image, int x, int y) {
 		this.image = image;
-		this.setSize(image.getWidth(), image.getHeight());
+		
 		this.x = x;
 		this.y = y;
-		this.setLocation(x, y);
+		
+
+		this.setBounds(x, y, GUIConstants.scaleX(image.getWidth()), GUIConstants.scaleY(image.getHeight()));
 		this.setIcon(new StretchIcon(image, true));
 		this.addMouseListener(this);
 	}

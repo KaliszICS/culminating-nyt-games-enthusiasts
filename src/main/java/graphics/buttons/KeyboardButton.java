@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 
+import graphics.GUIConstants;
 import logic.events.EventHandler;
 import logic.events.KeyboardClickEvent;
 import logic.events.KeyboardClickEventListener;
@@ -22,12 +23,15 @@ public class KeyboardButton extends Button {
     
     public KeyboardButton(BufferedImage image, char character, int x, int y, int clickType) {
         super(image);
-        this.setSize(100, 118);
+       
         this.x = x;
         this.y = y;
         this.clickType = clickType;
 
-        this.setLocation(x, y);
+        int HEIGHT_OFFSET = 25;
+     
+
+        this.setBounds(GUIConstants.scaleX(x), GUIConstants.scaleY(y), GUIConstants.scaleX(image.getWidth()), GUIConstants.scaleY(image.getHeight() - HEIGHT_OFFSET));
         this.character = character;
 
         
@@ -36,13 +40,16 @@ public class KeyboardButton extends Button {
     //Enter / backspace buttons
      public KeyboardButton(BufferedImage image, int x, int y, int clickType) {
         super(image);
-        this.setSize(image.getWidth(), image.getHeight());
         this.x = x;
         this.y = y;
         this.character = ' ';
         this.clickType = clickType;
 
-        this.setLocation(x, y);
+         int HEIGHT_OFFSET = 25;
+         
+
+    
+        this.setBounds(GUIConstants.scaleX(x), GUIConstants.scaleY(y), GUIConstants.scaleX(image.getWidth()), GUIConstants.scaleY(image.getHeight() - HEIGHT_OFFSET));
 
         
 

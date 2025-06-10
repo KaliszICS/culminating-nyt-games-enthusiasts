@@ -3,14 +3,21 @@ package graphics.buttons;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
+import graphics.GUIConstants;
 import kalisz.KaliszTimes;
 
 public class BackButton extends Button  {
 
     public BackButton(BufferedImage image) {
         super(image);
-        setLocation(41, 35);
-		 setSize(74, 59);
+
+		int refX = 41;
+		int refY = 35;
+		int refWidth = 74;
+		int refHeight = 59;
+
+		setBounds(GUIConstants.scaleX(refX), GUIConstants.scaleY(refY), GUIConstants.scaleX(refWidth), GUIConstants.scaleY(refHeight));
+
 		addMouseListener(this);
 
 

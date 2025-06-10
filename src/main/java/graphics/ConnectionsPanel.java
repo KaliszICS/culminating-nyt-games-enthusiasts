@@ -14,14 +14,13 @@ import javax.swing.JPanel;
 
 import graphics.buttons.BackButton;
 import graphics.buttons.Button;
+import graphics.buttons.Image;
 import graphics.buttons.SpellingBeeEnterButton;
 import graphics.buttons.WordleButton;
-import graphics.utils.GUIConstants;
 import graphics.utils.PanelAttributes;
 import kalisz.KaliszTimes;
 
 public class ConnectionsPanel extends JPanel implements PanelAttributes {
-	BufferedImage background, backButtonImage, playButtonImage, wordleButtonImage, spellingBeeButtonImage;
 	ArrayList<Button> wordleButtons = new ArrayList<Button>();
 	ArrayList<Button> spellingBeeButtons = new ArrayList<Button>();
 	
@@ -31,20 +30,47 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 		 setLayout(null);
 		 
 		 
+		 //Add back button
+		 add(new BackButton(GUIConstants.backButtonImage));
+
+		 //Add KaliszGames Logo
+		 int refKaliszX = 1920 / 2 - 250;
+		 int refKaliszY = 10;
+		 add(new Image(GUIConstants.kaliszGamesLogoImage, GUIConstants.scaleX(refKaliszX), GUIConstants.scaleY(refKaliszY)));
+
+		 //Add View Stats Button
+		 int refStatsX = 1600;
+		 int refStatsY = 20;
+		 add(new Button(GUIConstants.viewStatsButtonImage, GUIConstants.scaleX(refStatsX), GUIConstants.scaleY(refStatsY)));
+
+		 //Add Shuffle Button
+		 int refShuffleX = 720;
+		 int refShuffleY = 925;
+		 add(new Button(GUIConstants.shuffleButtonImage, GUIConstants.scaleX(refShuffleX), GUIConstants.scaleY(refShuffleY)));
 		 
-		 add(new BackButton(backButtonImage));
-		 
-		 
+		 //Add Deselect All Button
+		int refDeselectX = 878;
+		int refDeselectY = 925;
+		add(new Button(GUIConstants.deselectAllButtonImage, GUIConstants.scaleX(refDeselectX), GUIConstants.scaleY(refDeselectY)));
+
+		//Add Submit Button
+		int refSubmitX = 1088;
+		int refSubmitY = 925;
+		add(new Button(GUIConstants.submitButtonImage, GUIConstants.scaleX(refSubmitX), GUIConstants.scaleY(refSubmitY)));
+
 		 //Add wordle icons and make them all clickable. Store all of these new buttons in a list.
 		 //8 tiles
 
 		 for(int i = 0; i < 8; i++) {
-			Button wordleButton = new WordleButton(wordleButtonImage);
-			wordleButton.setSize(GUIConstants.DEFAULT_BUTTON_WIDTH, GUIConstants.DEFAULT_BUTTON_HEIGHT);
+			Button wordleButton = new WordleButton(GUIConstants.wordleButtonImage);
 
+			int refX = 695 + ( (i / 2) < 2 ? i * 153 : (i - 4) * 153);
+			int refY = 250 + ( (i / 2) >= 2 ? 153 : 0);
 
-			wordleButton.setLocation(695 + ( (i / 2) < 2 ? i * 153 : (i - 4) * 153), 250 + ( (i / 2) >= 2 ? 153 : 0)); //center of box
+			int refWidth = GUIConstants.DEFAULT_BUTTON_WIDTH;
+			int refHeight = GUIConstants.DEFAULT_BUTTON_HEIGHT; 
 
+			wordleButton.setBounds(GUIConstants.scaleX(refX), GUIConstants.scaleY(refY), GUIConstants.scaleX(refWidth), GUIConstants.scaleY(refHeight));
 			
 
 			wordleButtons.add(wordleButton);
@@ -59,13 +85,14 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 
 		 //Add Spelling Bee Buttons
 		  for(int i = 0; i < 8; i++) {
-			Button spellingBeeButton = new SpellingBeeEnterButton(spellingBeeButtonImage);
-			spellingBeeButton.setSize(GUIConstants.DEFAULT_BUTTON_WIDTH, GUIConstants.DEFAULT_BUTTON_HEIGHT);
+			Button spellingBeeButton = new SpellingBeeEnterButton(GUIConstants.spellingBeeButtonImage);
+			int refX = 695 + ( (i / 2) < 2 ? i * 153 : (i - 4) * 153);
+			int refY = 550 + ( (i / 2) >= 2 ? 153 : 0);
+			int refWidth = GUIConstants.DEFAULT_BUTTON_WIDTH;
+			int refHeight = GUIConstants.DEFAULT_BUTTON_HEIGHT;
 
 
-			spellingBeeButton.setLocation(695 + ( (i / 2) < 2 ? i * 153 : (i - 4) * 153), 550 + ( (i / 2) >= 2 ? 153 : 0)); //center of box
-
-			
+			spellingBeeButton.setBounds(GUIConstants.scaleX(refX), GUIConstants.scaleY(refY), GUIConstants.scaleX(refWidth), GUIConstants.scaleY(refHeight));
 
 			spellingBeeButtons.add(spellingBeeButton);
 		 }
@@ -84,21 +111,13 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 		
 		
 		int SHIFT_UP = 25;
-		graphics.drawImage(background, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT - SHIFT_UP, this);
+		graphics.drawImage(GUIConstants.connections_game_panel_background, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT - SHIFT_UP, this);
 		
 
 	}
 	@Override
 	public void loadImages() {
-		try {
-			background = ImageIO.read(getClass().getResourceAsStream("resources/ConnectionsBackground.png"));
-			backButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/Back Button.jpg"));
-			playButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/Play Button.png"));
-			wordleButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/wordle_button.png"));
-			spellingBeeButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/spelling_bee_button.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
 	}
     
 	

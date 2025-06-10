@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -14,63 +15,98 @@ import javax.swing.JPanel;
 
 import graphics.buttons.BackButton;
 import graphics.buttons.Button;
+import graphics.buttons.Image;
 import graphics.buttons.SpellingBeeButton;
-import graphics.utils.GUIConstants;
 import graphics.utils.PanelAttributes;
 import kalisz.KaliszTimes;
+import logic.events.EventHandler;
 import logic.events.KeyboardClickEvent;
 import logic.events.KeyboardClickEventListener;
 
-public class SpellingBeeGamePanel extends JPanel implements PanelAttributes {
-	BufferedImage background, backButtonImage, playButtonImage, normalLetterImage, goldenLetterImage;
+public class SpellingBeeGamePanel extends JPanel {
 	private static final ArrayList<KeyboardClickEventListener> listeners = new ArrayList<KeyboardClickEventListener>();
 	private ArrayList<Button> letterButtons = new ArrayList<Button>();
 	private String currentTextString = "";
 	
 	public SpellingBeeGamePanel() {
 		this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));
-		 loadImages();
-		 setLayout(null);
+		setLayout(null);
 		 
 		 
 		 
-		 add(new BackButton(backButtonImage));
+		 add(new BackButton(GUIConstants.backButtonImage));
 		 
-		 
+		  //Add KaliszGames Logo
+		 int refKaliszX = 1920 / 2 - 250;
+		 int refKaliszY = 10;
+		 add(new Image(GUIConstants.kaliszGamesLogoImage, GUIConstants.scaleX(refKaliszX), GUIConstants.scaleY(refKaliszY)));
+
+		 //Add View Stats Button
+		 int refStatsX = 1600;
+		 int refStatsY = 20;
+		 add(new Button(GUIConstants.viewStatsButtonImage, GUIConstants.scaleX(refStatsX), GUIConstants.scaleY(refStatsY)));
+
+		 //Add Delete Button
+		int refDeleteX = 337;
+		int refDeleteY = 753;
+		Button deleteButton = new Button(GUIConstants.spelling_bee_delete_button_image, GUIConstants.scaleX(refDeleteX), GUIConstants.scaleY(refDeleteY));
+		deleteButton.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				EventHandler.fireSpellingBeeClickEvent(this, ' ', KeyboardClickEvent.BACKSPACE);
+			}
+		});
+		add(deleteButton);
+
+		 //Add Shuffle Button
+		int refShuffleX = 485;
+		int refShuffleY = 753;
+		add(new Button(GUIConstants.spelling_bee_shuffle_button_image, GUIConstants.scaleX(refShuffleX), GUIConstants.scaleY(refShuffleY)));
+
+		 //Add Enter Button
+		int refEnterX = 586;
+		int refEnterY = 753;
+		add(new Button(GUIConstants.spelling_bee_enter_button_image, GUIConstants.scaleX(refEnterX), GUIConstants.scaleY(refEnterY)));
 		 
 		 //Golden letter
-		 Button goldenLetter = new SpellingBeeButton(goldenLetterImage, 'A');
-		 goldenLetter.setLocation(455, 465);
+		 int refX1 = 455;
+		 int refY1 = 465;
+		 Button goldenLetter = new SpellingBeeButton(GUIConstants.golden_letter_image, 'A', GUIConstants.scaleX(refX1), GUIConstants.scaleY(refY1));
+		
 		 letterButtons.add(goldenLetter);
 		 add(goldenLetter);
 
 
-		 Button leftTopLetter = new SpellingBeeButton(normalLetterImage, 'B');
-		 leftTopLetter.setLocation(340, 400);
-		  letterButtons.add(leftTopLetter);
+		 int refX2 = 340;
+		 int refY2 = 400;
+		 Button leftTopLetter = new SpellingBeeButton(GUIConstants.normal_letter_image, 'B', GUIConstants.scaleX(refX2), GUIConstants.scaleY(refY2));
+		letterButtons.add(leftTopLetter);
 
 		 
-		Button rightTopLetter = new SpellingBeeButton(normalLetterImage, 'C');
-		 rightTopLetter.setLocation(575, 400);
-		  letterButtons.add(rightTopLetter);
+		 int refX3 = 575;
+		 int refY3 = 400;
+		 Button rightTopLetter = new SpellingBeeButton(GUIConstants.normal_letter_image, 'C', GUIConstants.scaleX(refX3), GUIConstants.scaleY(refY3));
+		
+		letterButtons.add(rightTopLetter);
+		
+		int refX4 = 340;
+		int refY4 = 532;
+		Button leftBottomLetter = new SpellingBeeButton(GUIConstants.normal_letter_image, 'D', GUIConstants.scaleX(refX4), GUIConstants.scaleY(refY4));
+		letterButtons.add(leftBottomLetter);
+		
+		int refX5 = 575;
+		int refY5 = 532;
+		Button rightBottomLetter = new SpellingBeeButton(GUIConstants.normal_letter_image, 'E', GUIConstants.scaleX(refX5), GUIConstants.scaleY(refY5));
+		letterButtons.add(rightBottomLetter);
 		
 
-		  Button leftBottomLetter = new SpellingBeeButton(normalLetterImage, 'D');
-		 leftBottomLetter.setLocation(340, 532);
-		  letterButtons.add(leftBottomLetter);
-		
+		int refX6 = 455;
+		int refY6 = 330;
+		Button middleTopLetter = new SpellingBeeButton(GUIConstants.normal_letter_image, 'F', GUIConstants.scaleX(refX6), GUIConstants.scaleY(refY6));
+		letterButtons.add(middleTopLetter);
 		 
-		Button rightBottomLetter = new SpellingBeeButton(normalLetterImage, 'E');
-		 rightBottomLetter.setLocation(575, 532);
-		  letterButtons.add(rightBottomLetter);
-		
-
-		Button middleTopLetter = new SpellingBeeButton(normalLetterImage, 'F');
-		 middleTopLetter.setLocation(455, 330);
-		 letterButtons.add(middleTopLetter);
-		 
-		Button middleBottomLetter = new SpellingBeeButton(normalLetterImage, 'G');
-		 middleBottomLetter.setLocation(455, 598);
+		int refX7 = 455;
+		int refY7 = 598;
+		Button middleBottomLetter = new SpellingBeeButton(GUIConstants.normal_letter_image, 'G', GUIConstants.scaleX(refX7), GUIConstants.scaleY(refY7));
 		letterButtons.add(middleBottomLetter);
 		 
 
@@ -79,8 +115,14 @@ public class SpellingBeeGamePanel extends JPanel implements PanelAttributes {
 			@Override
 			public void handleClick(KeyboardClickEvent e) {
 				System.out.println("Clicked");
+				if(e.getClickType() == KeyboardClickEvent.NORMAL_KEY) {
 				currentTextString+=e.getKeyClicked();
 				repaint();
+				}
+				if(e.getClickType() == KeyboardClickEvent.BACKSPACE && currentTextString.length() > 0) {
+					currentTextString = currentTextString.substring(0, currentTextString.length() - 1);
+					repaint();
+				}
 			}
 		  });
 
@@ -90,6 +132,8 @@ public class SpellingBeeGamePanel extends JPanel implements PanelAttributes {
 		  for(Button b : letterButtons) {
 			add(b);
 		  }
+
+
 		 repaint();
 	}
 	public void paintComponent(Graphics g) {
@@ -99,25 +143,17 @@ public class SpellingBeeGamePanel extends JPanel implements PanelAttributes {
 		
 		
 		int SHIFT_UP = 25;
-		graphics.drawImage(background, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT - SHIFT_UP, this);
+		graphics.drawImage(GUIConstants.spellingbee_game_panel_background, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT - SHIFT_UP, this);
 		graphics.setFont(new Font("Arial", Font.BOLD, 30));
-		graphics.drawString(currentTextString, 455, 200);
+
+		int refX = 1920 / 4 - 150;
+		int refY = 200;
+
+		graphics.drawString(currentTextString, GUIConstants.scaleX(refX), GUIConstants.scaleY(refY));
 		
 
 	}
-	@Override
-	public void loadImages() {
-		try {
-			background = ImageIO.read(getClass().getResourceAsStream("resources/SpellingBeeGameScreen.png"));
-			backButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/Back Button.jpg"));
-			playButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/Play Button.png"));
-			normalLetterImage = ImageIO.read(getClass().getResourceAsStream("resources/normal_letter.png"));
-			goldenLetterImage = ImageIO.read(getClass().getResourceAsStream("resources/golden_letter.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-    
+	
 	  public void addKeyboardListener(KeyboardClickEventListener listener) {
         listeners.add(listener);
     }

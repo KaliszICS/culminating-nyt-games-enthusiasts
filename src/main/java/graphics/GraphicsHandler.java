@@ -3,8 +3,6 @@ import java.awt.CardLayout;
 
 import javax.swing.*;
 
-import graphics.utils.GUIConstants;
-
 public class GraphicsHandler {
 	
 	
@@ -16,7 +14,7 @@ public class GraphicsHandler {
         frame = new JFrame(GUIConstants.gameName + " " + GUIConstants.gameVersion);
         frame.setSize(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+     //   frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
         mainPanel = new JPanel();
         layout = new CardLayout();
@@ -36,18 +34,18 @@ public class GraphicsHandler {
         
        // SpellingBeeStartPanel sbStartPanel = new SpellingBeeStartPanel();
         
-       // SpellingBeeGamePanel sbGamePanel = new  SpellingBeeGamePanel();
+        SpellingBeeGamePanel sbGamePanel = new  SpellingBeeGamePanel();
         
        // SpellingBeeWinPanel sbWinPanel = new  SpellingBeeWinPanel();
         
        //temp mainPanel.add(titlePanel);
        //temp mainPanel.add(selectionPanel);
-        mainPanel.add(connectionsPanel);
+       // mainPanel.add(connectionsPanel);
       //  mainPanel.add(wordleStartPanel);
       //  mainPanel.add(wordleGamePanel);
       //  mainPanel.add(wordleWinPanel);
       //  mainPanel.add(sbStartPanel);
-     //   mainPanel.add(sbGamePanel);
+        mainPanel.add(sbGamePanel);
       //  mainPanel.add(sbWinPanel);
         
         

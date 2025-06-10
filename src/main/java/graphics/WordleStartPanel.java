@@ -12,7 +12,6 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import graphics.buttons.Button;
-import graphics.utils.GUIConstants;
 import graphics.utils.PanelAttributes;
 import kalisz.KaliszTimes;
 

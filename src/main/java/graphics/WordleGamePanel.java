@@ -15,10 +15,12 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import graphics.buttons.BackButton;
+import graphics.buttons.Button;
+import graphics.buttons.Image;
 import graphics.buttons.KeyboardButton;
-import graphics.utils.GUIConstants;
 import graphics.utils.PanelAttributes;
 //import javafx.scene.text.Font;
 import kalisz.KaliszTimes;
@@ -27,8 +29,8 @@ import logic.events.EventHandler;
 import logic.events.KeyboardClickEvent;
 import logic.events.KeyboardClickEventListener;
 
-public class WordleGamePanel extends JPanel implements PanelAttributes, KeyListener {
-	BufferedImage background, backButtonImage, playButtonImage, keyboardButtonImage, keyboard_backspace_button_image, keyboard_enter_button_image;
+public class WordleGamePanel extends JPanel implements KeyListener {
+	
 	ArrayList<KeyboardButton> keyboardButtons = new ArrayList<KeyboardButton>();
 	private static final ArrayList<KeyboardClickEventListener> listeners = new ArrayList<KeyboardClickEventListener>();
 
@@ -40,20 +42,32 @@ public class WordleGamePanel extends JPanel implements PanelAttributes, KeyListe
 	
 	public WordleGamePanel() {
 		this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));
-		 loadImages();
 		 
 		 setLayout(null);
 		
 		 
 		 
 		
-		 add(new BackButton(backButtonImage));
+		 add(new BackButton(GUIConstants.backButtonImage));
 
+		  //Add KaliszGames Logo
+		 int refKaliszX = 1920 / 2 - 250;
+		 int refKaliszY = 10;
+		 add(new Image(GUIConstants.kaliszGamesLogoImage, GUIConstants.scaleX(refKaliszX), GUIConstants.scaleY(refKaliszY)));
+
+		 //Add View Stats Button
+		 int refStatsX = 1600;
+		 int refStatsY = 20;
+		 add(new Button(GUIConstants.viewStatsButtonImage, GUIConstants.scaleX(refStatsX), GUIConstants.scaleY(refStatsY)));
 
 		
 		 //Loads keyboard
 		 loadKeyboard();
 		
+		 //Adds physical keyboard compatibility 
+		addKeyListener(this);
+		setFocusable(true);
+    	SwingUtilities.invokeLater(() -> requestFocusInWindow());
 
 		 
 		 //Adds digital keyboard listener (ours) that will listen for special KeyboardClickEvent
@@ -95,7 +109,7 @@ public class WordleGamePanel extends JPanel implements PanelAttributes, KeyListe
 		 
 		repaint();
 	}
-	
+	@Override
 	public void paintComponent(Graphics g) {
 		Graphics2D graphics = (Graphics2D) g;
 		super.paintComponent(g);
@@ -103,59 +117,71 @@ public class WordleGamePanel extends JPanel implements PanelAttributes, KeyListe
 		
 		
 		int SHIFT_UP = 25;
-		graphics.drawImage(background, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT - SHIFT_UP, this);
+		graphics.drawImage(GUIConstants.wordle_game_panel_background, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT - SHIFT_UP, this);
 		
-		graphics.setFont(new Font("Arial", Font.BOLD, 40));
+		graphics.setFont(new Font("Arial", Font.BOLD, GUIConstants.scaleY(40)));
 
 		//Draw preset strings in set positions that can be modified of the wordle grid
 		for(int row = 0; row < GUIConstants.WORDLE_NUM_OF_ROWS; row++) {
 			for(int column = 0; column < GUIConstants.WORDLE_NUM_OF_COLUMNS; column++) {
-				if(grid[row][column] != null)
-					graphics.drawString(grid[row][column], GUIConstants.WINDOW_WIDTH / 2 - 180 + (column * 82), GUIConstants.WINDOW_HEIGHT / 5 - 10 + (row * 82)); 
+				if(grid[row][column] != null) {
+					int HORIZONTAL_OFFSET = GUIConstants.scaleX(-190 + (column * 82));
+				
+					int VERTICAL_OFFSET = GUIConstants.scaleY(-10 + row * 82);
+
+					int refX = GUIConstants.WINDOW_WIDTH / 2 + HORIZONTAL_OFFSET;
+					int refY = GUIConstants.WINDOW_HEIGHT / 5 + VERTICAL_OFFSET;
+
+					
+					graphics.drawString(grid[row][column], refX, refY); 
+
+				}
 			}
 		}
        
 	}
-	@Override
-	public void loadImages() {
-		try {
-			background = ImageIO.read(getClass().getResourceAsStream("resources/WordleGameBackground.png"));
-			backButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/Back Button.jpg"));
-			playButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/Play Button.png"));
-			keyboardButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/keyboard_letter.png"));
-			keyboard_backspace_button_image = ImageIO.read(getClass().getResourceAsStream("resources/backspace_button.png"));
-			keyboard_enter_button_image = ImageIO.read(getClass().getResourceAsStream("resources/enter_button.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+	
 
 	//Magic number galore!!!
     
 	private void loadKeyboard() {
 		//Create top keyboard buttons
+		
+
 		char[] topRow= new char[] {'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'};
 		for(int i = 0; i < 10; i++) {
-			KeyboardButton button = new KeyboardButton(keyboardButtonImage, topRow[i], 464 + (i * 99), 652, KeyboardClickEvent.NORMAL_KEY);
+
+			int refX =  466 + (i * 99);
+			int refY = 639;
+			KeyboardButton button = new KeyboardButton(GUIConstants.keyboardButtonImage, topRow[i], refX, refY, KeyboardClickEvent.NORMAL_KEY);
 			keyboardButtons.add(button);
 		}
 		
 		char[] middleRow = new char[] {'A', 'S', 'D', 'F', 'G', 'H', 'I', 'K', 'L'};
 		for(int i = 0; i < 9; i++) {// i * 99
-			KeyboardButton button = new KeyboardButton(keyboardButtonImage, middleRow[i], 510 + (i * 100), 785, KeyboardClickEvent.NORMAL_KEY);
+			
+			int refX = 512 + (i * 100);
+			int refY = 772;
+			KeyboardButton button = new KeyboardButton(GUIConstants.keyboardButtonImage, middleRow[i], refX, refY, KeyboardClickEvent.NORMAL_KEY);
 			keyboardButtons.add(button);
 		}
 
 		char[] bottomRow = new char[] {'Z', 'X', 'C', 'V', 'B', 'N', 'M'};
 		for(int i = 0; i < 7; i++) {// i * 99
-			KeyboardButton button = new KeyboardButton(keyboardButtonImage, bottomRow[i], 608 + (i * 100), 913, KeyboardClickEvent.NORMAL_KEY); 
+			int refX = 610 + (i * 100);
+			int refY = 900;
+			KeyboardButton button = new KeyboardButton(GUIConstants.keyboardButtonImage, bottomRow[i], refX, refY, KeyboardClickEvent.NORMAL_KEY); 
 			keyboardButtons.add(button);
 		}
 		//Enter and backwards buttons
-		KeyboardButton enterButton = new KeyboardButton(keyboard_enter_button_image, 467, 913, KeyboardClickEvent.ENTER); 
+		int refX = 467;
+		int refY = 900;
+		KeyboardButton enterButton = new KeyboardButton(GUIConstants.keyboard_enter_button_image, refX, refY, KeyboardClickEvent.ENTER); 
 			keyboardButtons.add(enterButton);
 
-		KeyboardButton backspaceButton = new KeyboardButton(keyboard_backspace_button_image, 1318, 913, KeyboardClickEvent.BACKSPACE); 
+		int refX2 = 1318;
+		int refY2 = 900;
+		KeyboardButton backspaceButton = new KeyboardButton(GUIConstants.keyboard_backspace_button_image, refX2, refY2, KeyboardClickEvent.BACKSPACE); 
 			keyboardButtons.add(backspaceButton);
 
 		//Add all keyboard buttons to panel.
@@ -186,7 +212,7 @@ public class WordleGamePanel extends JPanel implements PanelAttributes, KeyListe
 		System.out.println("Hi");
 		//This will simulate pressing the buttons, sending events for the panel to read.
 		if(Character.isLetter(e.getKeyChar())) {
-			EventHandler.fireWordleClickEvent(this, e.getKeyChar(), KeyboardClickEvent.NORMAL_KEY);
+			EventHandler.fireWordleClickEvent(this, Character.toUpperCase(e.getKeyChar()), KeyboardClickEvent.NORMAL_KEY);
 		}else if(e.getKeyChar() == KeyEvent.VK_ENTER) {
 			EventHandler.fireWordleClickEvent(this, ' ', KeyboardClickEvent.ENTER);
 		}else if(e.getKeyChar() == KeyEvent.VK_BACK_SPACE) {

@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 
 import graphics.buttons.BackButton;
 import graphics.buttons.Button;
-import graphics.utils.GUIConstants;
 import graphics.utils.PanelAttributes;
 import kalisz.KaliszTimes;
 

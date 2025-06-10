@@ -105,6 +105,14 @@ public class Wordle {
     }
 
     /**
+     * Clears the current guess, removing all its letters.
+     */
+
+    public void clearGuess() {
+        this.currentGuess = "";
+    }
+
+    /**
      * Submits the current guess and tracks the guess data.
      * CAN CHANGE this.win, charAtWin() SHOULD ALWAYS BE RAN AFTER USING THIS METHOD.
      * 
@@ -120,11 +128,11 @@ public class Wordle {
         int[] lettersUsed = Arrays.copyOf(this.wordLetterCount, 26); // copy of word letter count to track how many letters have been used (e.g., what if letters repeat?)
         for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
             if (this.word[letterIndex] == this.currentGuess.charAt(letterIndex)) { // green case
-                --lettersUsed[this.currentGuess.charAt(letterIndex)];
+                --lettersUsed[this.currentGuess.charAt(letterIndex) - 97];
                 this.guessData[letterIndex] = "green"; // nth letter marked green
                 this.overallGuessData[this.currentGuess.charAt(letterIndex) - 97] = "green"; // letter green on keyboard
             }
-            else if (--lettersUsed[this.currentGuess.charAt(letterIndex)] >= 0) { // yellow case (the -- decrements the repeated letters left until grey, i.e., if there are two Es in the word and this iteration assesses a third, this clause will not run)
+            else if (--lettersUsed[this.currentGuess.charAt(letterIndex) - 97] >= 0) { // yellow case (the -- decrements the repeated letters left until grey, i.e., if there are two Es in the word and this iteration assesses a third, this clause will not run)
                 this.win = false; // the player has not won
                 this.guessData[letterIndex] = "yellow"; // nth letter marked yellow
                 if (this.overallGuessData[this.currentGuess.charAt(letterIndex) - 97] != "green") this.overallGuessData[this.currentGuess.charAt(letterIndex) - 97] = "yellow"; // if it's not already green on that character, mark it yellow

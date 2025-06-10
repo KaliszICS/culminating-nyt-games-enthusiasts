@@ -1,5 +1,6 @@
 package graphics;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -36,8 +37,9 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 	private static final ArrayList<KeyboardClickEventListener> listeners = new ArrayList<KeyboardClickEventListener>();
 
 	private String[][] grid = new String[GUIConstants.WORDLE_NUM_OF_ROWS][GUIConstants.WORDLE_NUM_OF_COLUMNS];
+	private String[][] gridColours = new String[GUIConstants.WORDLE_NUM_OF_ROWS][GUIConstants.WORDLE_NUM_OF_COLUMNS];
 
-	private ArrayList<Character> lettersGuessed = new ArrayList<Character>();
+
 	private ArrayList<Character> lettersInQueue = new ArrayList<Character>();
 	private int rowNumber = 0; //Will change every time user clicks enter.
 	
@@ -131,10 +133,15 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 								// Apply coloring to your GUI (this depends on how you want to show feedback: background color, etc.)
 								// You could store this color in a parallel 2D array like String[][] gridColors;
 								// and draw it in your paintComponent() with colored rectangles.
+								gridColours[rowNumber][i] = color;
+
+
 								System.out.println(color);
+								repaint();
         	}
 			//Clear queue, go to next row number.
 						lettersInQueue.clear();
+						wordleGame.clearGuess();
 						rowNumber++;
 
 
@@ -162,20 +169,58 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 		int SHIFT_UP = 25;
 		graphics.drawImage(GUIConstants.wordle_game_panel_background, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT - SHIFT_UP, this);
 		
-		graphics.setFont(new Font("Arial", Font.BOLD, GUIConstants.scaleY(40)));
+		//Set colours in wordle grid
+		
+		for(int row = 0; row < GUIConstants.WORDLE_NUM_OF_ROWS; row++) {
+			for(int column = 0; column < GUIConstants.WORDLE_NUM_OF_COLUMNS; column++) {
+				if(gridColours[row][column] != null) {
+					String colour = gridColours[row][column];
+					
+					if(colour.equals("green")) {
+						graphics.setColor(Color.green);
 
+					}else if(colour.equals("yellow")) {
+						graphics.setColor(new Color(176, 170, 4)); //RGB for gold
+					}else if(colour.equals("grey")) {
+						graphics.setColor(Color.gray);
+					}
+					int HORIZONTAL_OFFSET = GUIConstants.scaleX(-200 + (column * 82));
+				
+					int VERTICAL_OFFSET = GUIConstants.scaleY(-63 + row * 82);
+
+					int refX = GUIConstants.WINDOW_WIDTH / 2 + HORIZONTAL_OFFSET;
+					int refY = GUIConstants.WINDOW_HEIGHT / 5 + VERTICAL_OFFSET;
+
+					int squareWidth = 68;
+					
+					
+					graphics.fillRect(refX, refY, GUIConstants.scaleX(squareWidth), GUIConstants.scaleY(squareWidth));
+
+					//Draw border
+					graphics.setColor(Color.black);
+					graphics.drawRect(refX, refY, GUIConstants.scaleX(squareWidth), GUIConstants.scaleY(squareWidth));
+				}
+			}
+		}
+
+
+		graphics.setFont(new Font("Arial", Font.BOLD, GUIConstants.scaleY(40)));
 		//Draw preset strings in set positions that can be modified of the wordle grid
 		for(int row = 0; row < GUIConstants.WORDLE_NUM_OF_ROWS; row++) {
 			for(int column = 0; column < GUIConstants.WORDLE_NUM_OF_COLUMNS; column++) {
 				if(grid[row][column] != null) {
-					int HORIZONTAL_OFFSET = GUIConstants.scaleX(-190 + (column * 82));
+					int HORIZONTAL_OFFSET = GUIConstants.scaleX(-180 + (column * 82));
 				
 					int VERTICAL_OFFSET = GUIConstants.scaleY(-10 + row * 82);
 
 					int refX = GUIConstants.WINDOW_WIDTH / 2 + HORIZONTAL_OFFSET;
 					int refY = GUIConstants.WINDOW_HEIGHT / 5 + VERTICAL_OFFSET;
 
-					
+					if(gridColours[row][column] != null) //Set text to white if there is a colour in that space
+						graphics.setColor(Color.white);
+					else
+						graphics.setColor(Color.black); //otherwise set to black
+
 					graphics.drawString(grid[row][column], refX, refY); 
 
 				}
@@ -266,6 +311,47 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {}
 
+	//Use selection sort to sort the keyboard
+	private void sortKeyboard() {
+		    // Only sort normal letter buttons (exclude ENTER and BACKSPACE)
+    int n = keyboardButtons.size();
+
+    // First, find the portion of the list that contains normal keys
+    int normalKeyCount = 0;
+    for (KeyboardButton button : keyboardButtons) {
+        if (button.getCharacter() != ' ') {
+            normalKeyCount++;
+        } else {
+            break; // Assume special keys are at the end, last two indexes
+        }
+    }
+
+    // Apply selection sort to the first normalKeyCount elements
+    for (int i = 0; i < normalKeyCount - 1; i++) {
+        int minIndex = i;
+        for (int j = i + 1; j < normalKeyCount; j++) {
+            if (keyboardButtons.get(j).getCharacter() < keyboardButtons.get(minIndex).getCharacter()) {
+                minIndex = j;
+            }
+        }
+
+        // Swap buttons at i and minIndex
+        KeyboardButton temp = keyboardButtons.get(i);
+        keyboardButtons.set(i, keyboardButtons.get(minIndex));
+        keyboardButtons.set(minIndex, temp);
+    }
+		
+	}
+
+
+	private void modifyKeyboard(Graphics2D graphics) {
+		for(int i = 0; i < wordleGame.getOverallGuessData().length; i++) {
+
+			int refX = 0;
+			int refY = 0;
+			//graphics.fillRect(, i, i, i);
+		}
+	}
 }
 	/* 
 	//Return an int array of length 5, with values that correspond to the similarity of letter to the answer

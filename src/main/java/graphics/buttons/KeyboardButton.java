@@ -17,7 +17,7 @@ import logic.events.KeyboardClickEventListener;
 
 public class KeyboardButton extends Button {
     BufferedImage image;
-    char character;
+   private char character;
     int x, y;
     int clickType;
     
@@ -75,6 +75,8 @@ public class KeyboardButton extends Button {
 	public void mousePressed(MouseEvent e) {
 		 EventHandler.fireWordleClickEvent(this, this.character, this.clickType);
 	}
-
+    public char getCharacter() {
+        return this.character;
+    }
     
 }

@@ -35,7 +35,7 @@ public class Wordle {
         this.win = false;
         this.wordLetterCount = new int[26];
         for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
-            ++wordLetterCount[this.word[letterIndex] - 97];
+            ++wordLetterCount[this.word[letterIndex] - 'A'];
         }
     }
 
@@ -55,7 +55,7 @@ public class Wordle {
         this.currentGuess = "";
         this.win = false;
         for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
-            ++wordLetterCount[this.word[letterIndex] - 97];
+            ++wordLetterCount[this.word[letterIndex] - 'A'];
         }
     }
 
@@ -92,7 +92,7 @@ public class Wordle {
 
     public boolean inputLetter(char letter) {
         if (this.currentGuess.length() >= this.word.length || !Character.isLetter(letter)) return false;
-        this.currentGuess += (letter < 97) ? (char) (letter + 32) : letter; // convert to lowercase (there is no toLowercase() for characters)
+        this.currentGuess += Character.toUpperCase(letter);
         return true;
     }
 
@@ -111,32 +111,38 @@ public class Wordle {
      * @return -1 if not enough letters to guess, 0 if guess is not a word, 1 if the guess went through
      */
 
-    public int submitGuess() {
+     public int submitGuess() {
         DictionaryChecker dictionaryChecker = new DictionaryChecker();
         if (this.currentGuess.length() < this.word.length) return -1;
-        if (!dictionaryChecker.checkWord(this.currentGuess)) return 0;
-        // Below here logs the word as a guess and tracks the stats
-        this.win = true; // assume the player wins first
-        int[] lettersUsed = Arrays.copyOf(this.wordLetterCount, 26); // copy of word letter count to track how many letters have been used (e.g., what if letters repeat?)
-        for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
-            if (this.word[letterIndex] == this.currentGuess.charAt(letterIndex)) { // green case
-                --lettersUsed[this.currentGuess.charAt(letterIndex)];
-                this.guessData[letterIndex] = "green"; // nth letter marked green
-                this.overallGuessData[this.currentGuess.charAt(letterIndex) - 97] = "green"; // letter green on keyboard
-            }
-            else if (--lettersUsed[this.currentGuess.charAt(letterIndex)] >= 0) { // yellow case (the -- decrements the repeated letters left until grey, i.e., if there are two Es in the word and this iteration assesses a third, this clause will not run)
-                this.win = false; // the player has not won
-                this.guessData[letterIndex] = "yellow"; // nth letter marked yellow
-                if (this.overallGuessData[this.currentGuess.charAt(letterIndex) - 97] != "green") this.overallGuessData[this.currentGuess.charAt(letterIndex) - 97] = "yellow"; // if it's not already green on that character, mark it yellow
-            }
-            else { // grey case
-                this.win = false; // the player has not won
-                this.guessData[letterIndex] = "grey";
-                if (this.overallGuessData[this.currentGuess.charAt(letterIndex) - 97] == "") this.overallGuessData[this.currentGuess.charAt(letterIndex) - 97] = "grey"; // if there's no colour on that character (EMPTY STRING IN ARRAY), mark it grey
+        if (!dictionaryChecker.checkWordExists(this.currentGuess)) return 0;
+
+        this.win = true;
+        int[] lettersUsed = Arrays.copyOf(this.wordLetterCount, 26);
+
+        for (int i = 0; i < word.length; ++i) {
+            char answerLetter = this.word[i];
+            char guessLetter = this.currentGuess.charAt(i);
+
+            if (answerLetter == guessLetter) {
+                --lettersUsed[guessLetter - 'A'];
+                this.guessData[i] = "green";
+                this.overallGuessData[guessLetter - 'A'] = "green";
+            } else if (--lettersUsed[guessLetter - 'A'] >= 0) {
+                this.win = false;
+                this.guessData[i] = "yellow";
+                if (!"green".equals(this.overallGuessData[guessLetter - 'A'])) {
+                    this.overallGuessData[guessLetter - 'A'] = "yellow";
+                }
+            } else {
+                this.win = false;
+                this.guessData[i] = "grey";
+                if (this.overallGuessData[guessLetter - 'A'] == null || this.overallGuessData[guessLetter - 'A'].isEmpty()) {
+                    this.overallGuessData[guessLetter - 'A'] = "grey";
+                }
             }
         }
-        ++guessCount; // one more guess was made
+
+        ++guessCount;
         return 1;
     }
-
 }

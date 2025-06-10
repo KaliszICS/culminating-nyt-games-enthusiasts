@@ -114,7 +114,7 @@ public class SpellingBee {
         DictionaryChecker dictionaryChecker = new DictionaryChecker();
         if (this.currentWord.length() < 4) return -2;
         if (!this.currentWord.contains(String.valueOf(this.goldenLetter))) return -1;
-        if (!dictionaryChecker.checkWord(this.currentWord)) return 0;
+        if (!dictionaryChecker.checkWordExists(this.currentWord)) return 0;
         if (this.currentWord.equals(keyword)) this.win = true; // set this.win to true if current word is the keyword
         int pointValue = (this.currentWord.length() == 4) ? 1 : this.currentWord.length(); // if the word has 4 letters, the point value is 1, otherwise it's the number of the word's letters
         ArrayList<Character> uniqueLetters = new ArrayList<Character>();

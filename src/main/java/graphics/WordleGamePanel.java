@@ -25,6 +25,7 @@ import graphics.utils.PanelAttributes;
 //import javafx.scene.text.Font;
 import kalisz.KaliszTimes;
 import logic.DictionaryChecker;
+import logic.Wordle;
 import logic.events.EventHandler;
 import logic.events.KeyboardClickEvent;
 import logic.events.KeyboardClickEventListener;
@@ -38,7 +39,10 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 
 	private ArrayList<Character> lettersGuessed = new ArrayList<Character>();
 	private ArrayList<Character> lettersInQueue = new ArrayList<Character>();
-	private int rowNumber = 0;
+	private int rowNumber = 0; //Will change every time user clicks enter.
+	
+
+	private Wordle wordleGame;
 	
 	public WordleGamePanel() {
 		this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));
@@ -69,37 +73,76 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 		setFocusable(true);
     	SwingUtilities.invokeLater(() -> requestFocusInWindow());
 
-		 
+		//Implement Franklin's Wordle Game 
+		this.wordleGame = new Wordle(new char[] {'P', 'A', 'N', 'I', 'C'});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		 //Adds digital keyboard listener (ours) that will listen for special KeyboardClickEvent
 		 addKeyboardListener(new KeyboardClickEventListener() {
 
 			
 			@Override
 			public void handleClick(KeyboardClickEvent e) {
-				if(rowNumber <= 5) {
+				if(rowNumber <= 5) { //If max rows is not exceeded
+					char letter = e.getKeyClicked();
 
 					System.out.println(lettersInQueue.size());
+
+					//If letters in queue is not full, and user presses a "normal" key, add that key to the current row.
 					if(lettersInQueue.size() < 5 && e.getClickType() == KeyboardClickEvent.NORMAL_KEY) { //ADD LETTER TO GRID
-						grid[rowNumber][lettersInQueue.size()] = "" + e.getKeyClicked(); //Set letter in appropriate grid position to keyboard click.
+						grid[rowNumber][lettersInQueue.size()] = "" + letter; //Set letter in appropriate grid position to keyboard click.
 						repaint();
-						lettersInQueue.add(e.getKeyClicked());
+
+						lettersInQueue.add(letter);
+						wordleGame.inputLetter(letter);
 					}
+					//If letters in queue is not empty, give user the ability to backspace.
 					if(lettersInQueue.size() > 0 && e.getClickType() == KeyboardClickEvent.BACKSPACE) {
 						grid[rowNumber][lettersInQueue.size() - 1] = null;
 						lettersInQueue.remove(lettersInQueue.size() - 1);
 						repaint();
+
+						wordleGame.deleteLetter();
 					}
-
+					//If queue is full, give user the ability to submit their word to verify each individual letter.
 					if(lettersInQueue.size() == 5 && e.getClickType() == KeyboardClickEvent.ENTER) {
-						String submittedString = "";
-						for(char c : lettersInQueue)
-							submittedString+=c;
 						
+						int result = wordleGame.submitGuess();
+						if (result == 1) { // guess submitted successfully
+							String[] guessResult = wordleGame.getGuessData(); // e.g., ["green", "grey", "yellow", ...]
 
-						System.out.println(submittedString);
+							for (int i = 0; i < 5; i++) {
+								String color = guessResult[i];
+								// Apply coloring to your GUI (this depends on how you want to show feedback: background color, etc.)
+								// You could store this color in a parallel 2D array like String[][] gridColors;
+								// and draw it in your paintComponent() with colored rectangles.
+								System.out.println(color);
+        	}
+			//Clear queue, go to next row number.
 						lettersInQueue.clear();
 						rowNumber++;
 
+
+			}else {
+				System.out.println("Guess invalid!");
+				}
+
+						
 					}
 
 				}
@@ -142,7 +185,6 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 	}
 	
 
-	//Magic number galore!!!
     
 	private void loadKeyboard() {
 		//Create top keyboard buttons
@@ -158,7 +200,7 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 		}
 		
 		char[] middleRow = new char[] {'A', 'S', 'D', 'F', 'G', 'H', 'I', 'K', 'L'};
-		for(int i = 0; i < 9; i++) {// i * 99
+		for(int i = 0; i < 9; i++) {
 			
 			int refX = 512 + (i * 100);
 			int refY = 772;
@@ -167,7 +209,7 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 		}
 
 		char[] bottomRow = new char[] {'Z', 'X', 'C', 'V', 'B', 'N', 'M'};
-		for(int i = 0; i < 7; i++) {// i * 99
+		for(int i = 0; i < 7; i++) {
 			int refX = 610 + (i * 100);
 			int refY = 900;
 			KeyboardButton button = new KeyboardButton(GUIConstants.keyboardButtonImage, bottomRow[i], refX, refY, KeyboardClickEvent.NORMAL_KEY); 
@@ -223,4 +265,29 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {}
+
 }
+	/* 
+	//Return an int array of length 5, with values that correspond to the similarity of letter to the answer
+	//Eg: 0 = letter not present in word. 1 = letter present in word, but not at that current position. 2 = letter present, in that current position.
+	//char[] submittedString and char[] answer should be parallel.
+	private int[] compareSubmittedWordToAnswer(char[] submittedString, char[] answer) {
+		int[] similarityData = new int[5];
+
+		for(int i = 0; i < submittedString.length; i++) {
+			//For each position, it will check if it matches.
+			for(int x = 0; x < answer.length; x++) {
+				if(submittedString[i] == answer[i]) { //If letter present in that current position
+					similarityData[i] = 2;
+				}else if(submittedString[i] == answer[x]) { //If letter is present, but not in that current position.
+					similarityData[i] = 1;
+				}else{
+					similarityData[i] = 0; //If letter is not present in the word.
+				}
+			}
+		}
+		return similarityData;
+
+	}
+}
+*/

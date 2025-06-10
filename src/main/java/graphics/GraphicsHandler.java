@@ -28,13 +28,13 @@ public class GraphicsHandler {
         
       //  WordleStartPanel wordleStartPanel = new WordleStartPanel();
         
-      //  WordleGamePanel wordleGamePanel = new WordleGamePanel();
+        WordleGamePanel wordleGamePanel = new WordleGamePanel();
         
       //  WordleWinPanel wordleWinPanel = new WordleWinPanel();
         
        // SpellingBeeStartPanel sbStartPanel = new SpellingBeeStartPanel();
         
-        SpellingBeeGamePanel sbGamePanel = new  SpellingBeeGamePanel();
+       // SpellingBeeGamePanel sbGamePanel = new  SpellingBeeGamePanel();
         
        // SpellingBeeWinPanel sbWinPanel = new  SpellingBeeWinPanel();
         
@@ -42,10 +42,10 @@ public class GraphicsHandler {
        //temp mainPanel.add(selectionPanel);
        // mainPanel.add(connectionsPanel);
       //  mainPanel.add(wordleStartPanel);
-      //  mainPanel.add(wordleGamePanel);
+        mainPanel.add(wordleGamePanel);
       //  mainPanel.add(wordleWinPanel);
       //  mainPanel.add(sbStartPanel);
-        mainPanel.add(sbGamePanel);
+      //  mainPanel.add(sbGamePanel);
       //  mainPanel.add(sbWinPanel);
         
         

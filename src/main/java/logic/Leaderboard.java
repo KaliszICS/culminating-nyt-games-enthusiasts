@@ -10,7 +10,7 @@ package logic;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.io.*; // scanner and filewriter
+import java.io.*;
 import java.io.File; // file i/o
 import java.io.IOException;
 

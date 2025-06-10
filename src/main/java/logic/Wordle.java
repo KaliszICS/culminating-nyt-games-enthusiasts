@@ -34,6 +34,7 @@ public class Wordle {
         this.guessCount = 0;
         this.guessData = new String[this.word.length];
         this.overallGuessData = new String[26];
+        Arrays.fill(this.overallGuessData, "");
         this.currentGuess = "";
         this.win = false;
         this.wordLetterCount = new int[26];
@@ -56,6 +57,7 @@ public class Wordle {
         this.guessCount = guessCount;
         this.guessData = new String[this.word.length];
         this.overallGuessData = overallGuessData;
+        Arrays.fill(this.overallGuessData, "");
         this.currentGuess = "";
         this.win = false;
         for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
@@ -132,6 +134,7 @@ public class Wordle {
         DictionaryChecker dictionaryChecker = new DictionaryChecker();
         if (this.currentGuess.length() < this.word.length) return -1;
         if (!dictionaryChecker.checkWord(this.currentGuess)) return 0;
+        this.guessData = new String[this.word.length]; // RESET here
         // Below here logs the word as a guess and tracks the stats
         this.win = true; // assume the player wins first
         int[] lettersUsed = Arrays.copyOf(this.wordLetterCount, 26); // copy of word letter count to track how many letters have been used (e.g., what if letters repeat?)
@@ -149,11 +152,12 @@ public class Wordle {
             else { // grey case
                 this.win = false; // the player has not won
                 this.guessData[letterIndex] = "grey";
-                if (this.overallGuessData[this.currentGuess.charAt(letterIndex) - 97] == "") this.overallGuessData[this.currentGuess.charAt(letterIndex) - 97] = "grey"; // if there's no colour on that character (EMPTY STRING IN ARRAY), mark it grey
+                if (this.overallGuessData[this.currentGuess.charAt(letterIndex) - 97].equals("")) this.overallGuessData[this.currentGuess.charAt(letterIndex) - 97] = "grey"; // if there's no colour on that character (EMPTY STRING IN ARRAY), mark it grey
             }
         }
         ++guessCount; // one more guess was made
         this.results.add(guessData); // add submitted guess to results
+        this.clearGuess(); // clear guess after submission
         return 1;
     }
 

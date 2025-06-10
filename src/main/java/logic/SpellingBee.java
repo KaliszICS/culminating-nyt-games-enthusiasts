@@ -20,13 +20,15 @@ public class SpellingBee {
     private int score;
     private ArrayList<String> wordsFound;
     private boolean win;
+    DictionaryChecker dictionaryChecker = new DictionaryChecker();
 
     public SpellingBee(String keyword, char goldenLetter) {
         this.keyword = keyword;
+        this.letters = new ArrayList<Character>();
         for (int letterIndex = 0; letterIndex < this.keyword.length(); ++letterIndex) {
             if (!this.letters.contains(this.keyword.charAt(letterIndex))) this.letters.add(this.keyword.charAt(letterIndex)); // if letters doesn't have it yet, add it
         }
-        this.goldenLetter = goldenLetter;
+        this.goldenLetter = Character.toLowerCase(goldenLetter);
         this.currentWord = "";
         this.score = 0;
         this.wordsFound = new ArrayList<String>();
@@ -35,10 +37,11 @@ public class SpellingBee {
 
     public SpellingBee(String keyword, char goldenLetter, String currentWord, int score, ArrayList<String> wordsFound) {
         this.keyword = keyword;
+        this.letters = new ArrayList<Character>(); 
         for (int letterIndex = 0; letterIndex < this.keyword.length(); ++letterIndex) {
             if (!this.letters.contains(this.keyword.charAt(letterIndex))) this.letters.add(this.keyword.charAt(letterIndex)); // if letters doesn't have it yet, add it
         }
-        this.goldenLetter = goldenLetter;
+        this.goldenLetter = Character.toLowerCase(goldenLetter);
         this.currentWord = currentWord;
         this.score = score;
         this.wordsFound = wordsFound;
@@ -69,6 +72,10 @@ public class SpellingBee {
         return this.win;
     }
 
+    public char getGoldenLetter() {
+    return this.goldenLetter;
+    }
+
     /**
      * Input a letter into the current word.
      * 
@@ -77,6 +84,7 @@ public class SpellingBee {
      */
 
     public int inputLetter(char letter) {
+        letter = Character.toLowerCase(letter);
         if (!this.letters.contains(letter) || !Character.isLetter(letter)) return -1;
         if (this.currentWord.length() == 19) return 0;
         this.currentWord += letter;
@@ -94,13 +102,23 @@ public class SpellingBee {
     /**
      * Shuffles the letters.
      */
-
     public void shuffle() {
-        ArrayList<Character> shuffledLetters = new ArrayList<Character>(); // initialize empty shuffled letters
         Random random = new Random();
-        while (this.letters.size() > 0) shuffledLetters.add(this.letters.remove(random.nextInt(this.letters.size()))); // keep adding elements from newLetters to shuffledLetters at random indexes, removing from newLetters each time
-        this.letters = shuffledLetters; // assign shuffledLetters to this.letters
+        for (int i = this.letters.size() - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1); // random index from 0 to i
+            // Swap letters[i] and letters[j]
+            char temp = this.letters.get(i);
+            this.letters.set(i, this.letters.get(j));
+            this.letters.set(j, temp);
+        }
     }
+
+    // public void shuffle() {
+    //     ArrayList<Character> shuffledLetters = new ArrayList<Character>(); // initialize empty shuffled letters
+    //     Random random = new Random();
+    //     while (this.letters.size() > 0) shuffledLetters.add(this.letters.remove(random.nextInt(this.letters.size()))); // keep adding elements from newLetters to shuffledLetters at random indexes, removing from newLetters each time
+    //     this.letters = shuffledLetters; // assign shuffledLetters to this.letters
+    // }
 
     /**
      * Submits the current word.
@@ -111,18 +129,22 @@ public class SpellingBee {
      */
 
     public int submitWord() {
-        DictionaryChecker dictionaryChecker = new DictionaryChecker();
-        if (this.currentWord.length() < 4) return -2;
-        if (!this.currentWord.contains(String.valueOf(this.goldenLetter))) return -1;
-        if (!dictionaryChecker.checkWord(this.currentWord)) return 0;
-        if (this.currentWord.equals(keyword)) this.win = true; // set this.win to true if current word is the keyword
-        int pointValue = (this.currentWord.length() == 4) ? 1 : this.currentWord.length(); // if the word has 4 letters, the point value is 1, otherwise it's the number of the word's letters
+        String wordLower = this.currentWord.toLowerCase();
+        if (wordLower.length() < 4) return -2;
+        if (!wordLower.contains(String.valueOf(this.goldenLetter))) return -1;
+        if (!dictionaryChecker.checkWord(wordLower)) return 0;
+        if (wordsFound.contains(wordLower)) return 0;
+        wordsFound.add(wordLower);
+        if (wordLower.equals(keyword)) this.win = true; // set this.win to true if current word is the keyword
+        int pointValue = (wordLower.length() == 4) ? 1 : wordLower.length(); // if the word has 4 letters, the point value is 1, otherwise it's the number of the word's letters
         ArrayList<Character> uniqueLetters = new ArrayList<Character>();
-        for (int letterIndex = 0; letterIndex < this.currentWord.length(); ++letterIndex) {
-            if (!uniqueLetters.contains(this.currentWord.charAt(letterIndex))) uniqueLetters.add(this.currentWord.charAt(letterIndex)); // if uniqueLetters doesn't have it yet, add it
+         for (int letterIndex = 0; letterIndex < wordLower.length(); ++letterIndex) {
+             char c = wordLower.charAt(letterIndex);
+            if (!uniqueLetters.contains(c)) uniqueLetters.add(c); // if uniqueLetters doesn't have it yet, add it
         }
-        if (uniqueLetters.size() == this.letters.size()) pointValue += this.letters.size(); // if pangram, add the number of available letters to pointValue
+        if (uniqueLetters.size() == this.letters.size()) pointValue += this.letters.size(); //
         this.score += pointValue;
+        this.currentWord = "";
         return pointValue;
     }
 

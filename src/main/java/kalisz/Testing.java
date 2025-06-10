@@ -43,6 +43,9 @@ public class Testing {
                 }
                 break;
         }
+        //connections board
+
+        
 
         // wordle test
         Wordle wordle = new Wordle(new char[]{'t', 'r', 'a', 'i', 'n'});

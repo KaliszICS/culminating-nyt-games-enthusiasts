@@ -21,6 +21,7 @@ public class Connections {
     private int guessesLeft;
     private String yellowCategory, greenCategory, blueCategory, purpleCategory;
     private HashMap<String, String> wordToCategory;
+    private ArrayList<String[]> results; // for the ascii results you copy paste after a game
     private HashMap<String, Boolean> revealed;
 
     /**
@@ -59,6 +60,7 @@ public class Connections {
         this.categoriesCompleted = new ArrayList<String>();
         this.guessesLeft = 4;
         this.currentGuess = new ArrayList<Integer>();
+        this.results = new ArrayList<String[]>();
     }
 
     /**
@@ -74,9 +76,10 @@ public class Connections {
      * @param purpleCategory
      * @param guessesLeft // guesses that the player has left
      * @param revealed // hashmap to track which words have already been revealed through Wordle or Spelling Bee
+     * @param results
      */
 
-    public Connections(String[] yellowWords, String yellowCategory, String[] greenWords, String greenCategory, String[] blueWords, String blueCategory, String[] purpleWords, String purpleCategory, int guessesLeft, HashMap<String, Boolean> revealed) {
+    public Connections(String[] yellowWords, String yellowCategory, String[] greenWords, String greenCategory, String[] blueWords, String blueCategory, String[] purpleWords, String purpleCategory, int guessesLeft, ArrayList<String[]> results, HashMap<String, Boolean> revealed) {
         this.yellowWords = yellowWords;
         this.yellowCategory = yellowCategory;
         this.greenWords = greenWords;
@@ -95,6 +98,7 @@ public class Connections {
         this.categoriesCompleted = new ArrayList<String>();
         this.guessesLeft = guessesLeft;
         this.currentGuess = new ArrayList<Integer>();
+        this.results = results;
         this.revealed = revealed;
     }
 
@@ -128,6 +132,10 @@ public class Connections {
 
     public String getPurpleCategory() {
         return this.purpleCategory;
+    }
+    
+    public ArrayList<String[]> getResults() {
+        return this.results;
     }
 
     /**
@@ -183,8 +191,10 @@ public class Connections {
 
     public String submitGuess() {
         if (this.currentGuess.size() < 4) return "not enough words";
+        String category1 = this.wordToCategory.get(this.board.get(this.currentGuess.get(0))), category2 = this.wordToCategory.get(this.board.get(this.currentGuess.get(1))), category3 = this.wordToCategory.get(this.board.get(this.currentGuess.get(2))), category4 = this.wordToCategory.get(this.board.get(this.currentGuess.get(3)));
+        this.results.add(new String[]{category1, category2, category3, category4}); // add the stats of the submitted guess to the results
         this.currentGuess.sort(null); // so that the indexes of the guess are in order to remove properly
-        if (this.wordToCategory.get(this.board.get(this.currentGuess.get(0))) == this.wordToCategory.get(this.board.get(this.currentGuess.get(1))) && this.wordToCategory.get(this.board.get(this.currentGuess.get(1))) == this.wordToCategory.get(this.board.get(this.currentGuess.get(2))) && this.wordToCategory.get(this.board.get(this.currentGuess.get(2))) == this.wordToCategory.get(this.board.get(this.currentGuess.get(3)))) { // if a category is completed
+        if (category1.equals(category2) && category2.equals(category3) && category3.equals(category4)) { // if a category is completed
             this.board.remove((int) this.currentGuess.get(3)); // remove all the words from the board
             this.board.remove((int) this.currentGuess.get(2));
             this.board.remove((int) this.currentGuess.get(1));

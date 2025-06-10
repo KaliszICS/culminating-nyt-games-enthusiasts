@@ -12,7 +12,7 @@ import java.net.URL;
 
 public class DictionaryChecker {
 
-    public static boolean checkWord(String word) {
+    public boolean checkWord(String word) {
         try {
             URL url = new URL("https://api.dictionaryapi.dev/api/v2/entries/en/" + word);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();

@@ -14,33 +14,12 @@ import java.net.URL;
 
 public class DictionaryChecker {
 
-    public static boolean checkWordExists(String word) {
-/* 
-        String apiUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + word;
+    public boolean checkWord(String word) {
         try {
-            URL url = new URL(apiUrl);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-
-            int responseCode = connection.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) { // 200 OK
-                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String inputLine;
-                StringBuilder content = new StringBuilder();
-                while ((inputLine = in.readLine()) != null) {
-                    content.append(inputLine);
-                }
-                in.close();
-                connection.disconnect();
-                // If the response is a valid JSON array, the word exists.
-                // A simple check for "word" key within the JSON can also indicate existence.
-                return content.toString().contains("\"word\":\"" + word.toLowerCase() + "\"");
-            } else if (responseCode == HttpURLConnection.HTTP_NOT_FOUND) { // 404 Not Found
-                return false; // Word not found
-            } else {
-                System.out.println("API request failed with response code: " + responseCode);
-                return false; // Other API errors
-            }
+            URL url = new URL("https://api.dictionaryapi.dev/api/v2/entries/en/" + word);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            return (con.getResponseCode() == 200);
         } catch (Exception e) {
             e.printStackTrace();
             return false;

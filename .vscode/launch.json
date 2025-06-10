@@ -4,7 +4,6 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-<<<<<<< HEAD
         
         {
             "type": "java",
@@ -16,14 +15,13 @@
             "type": "java",
             "name": "KaliszTimes",
             "request": "launch",
-            "mainClass": "kalisz.KaliszTimes",
-=======
+            "mainClass": "kalisz.KaliszTimes"
+        },
         {
             "type": "java",
             "name": "Testing",
             "request": "launch",
             "mainClass": "kalisz.Testing",
->>>>>>> c5dd421 (Create Testing.java to temporarily run game, fix Leaderboard.java file I/O)
             "projectName": "straight-m-testing"
         }
     ]

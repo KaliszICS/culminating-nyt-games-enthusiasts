@@ -14,7 +14,7 @@ import java.io.*;
 import java.io.File; // file i/o
 import java.io.IOException;
 
-public class Leaderboard {
+public class Player {
 
     private String username, password; // user username to store data
     private HashMap<String, String> passwords; // to let users log into local accounts
@@ -31,7 +31,7 @@ public class Leaderboard {
      * Doesn't assign any instance variables (they are all assigned under login).
      */
 
-    public Leaderboard() {
+    public Player() {
         this.passwords = new HashMap<String, String>();
         try {
             this.sc = new Scanner(new BufferedReader(new FileReader("src/main/java/logic/passwords.txt")));

@@ -1,5 +1,7 @@
 package logic;
 
+import java.util.ArrayList;
+
 /**
  * Class for the Wordle game.
  * The class includes getters for some variables and methods to run the game (adding letters, submitting guesses, etc.).
@@ -19,9 +21,10 @@ public class Wordle {
     private int guessCount;
     private boolean win;
     private int[] wordLetterCount; // will have size 26
+    private ArrayList<String[]> results; // for the ascii results you copy paste after a game
 
     /**
-     * Default constructor to make new wordle game with every stat at default.
+     * Default constructor to make new Wordle game with every stat at default.
      * 
      * @param word solution word
      */
@@ -37,10 +40,11 @@ public class Wordle {
         for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
             ++wordLetterCount[this.word[letterIndex] - 'A'];
         }
+        this.results = new ArrayList<String[]>();
     }
 
     /**
-     * Constructor to initialize an already-started game, assigns each variable
+     * Constructor to initialize an already-started game which assigns each variable.
      * 
      * @param word solution word
      * @param guessCount the number of guesses already made
@@ -57,6 +61,7 @@ public class Wordle {
         for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
             ++wordLetterCount[this.word[letterIndex] - 'A'];
         }
+        this.results = new ArrayList<String[]>();
     }
 
     public int getWordLength() {
@@ -81,6 +86,10 @@ public class Wordle {
 
     public boolean getWin() {
         return this.win;
+    }
+
+    public ArrayList<String[]> getResults() {
+        return this.results;
     }
 
     /**
@@ -149,8 +158,8 @@ public class Wordle {
                 }
             }
         }
-
-        ++guessCount;
+        ++guessCount; // one more guess was made
+        this.results.add(guessData); // add submitted guess to results
         return 1;
     }
 }

@@ -15,7 +15,13 @@ all other .txt files should be named after each username (e.g., fz.txt) and cont
 
 adplayer just reads from the .txt file mostly. i don't know how to code the gui to embed the video or make it redirect on click (or a skip ad button).
 
+
+
+i gotta move user file initialization from login to saveLoginInfo ljasdflghdgp9ehsgoiirwhjgoiersjg
+
+
+
 do i catch exception or specific exceptions based on the methods used in the try block? does it matter or can i just catch exceptions for all of them?
 i'm using instance variables for scanner/printwriter and calling on this.sc for the methods - does this work?
 
-i gotta move user file initialization from login to saveLoginInfo ljasdflghdgp9ehsgoiirwhjgoiersjg
+does it matter if we assign default values inside a constructor? can't we just do it outside the constructor?? does it matter at all actually

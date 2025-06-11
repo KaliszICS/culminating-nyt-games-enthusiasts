@@ -6,7 +6,9 @@ import java.util.ArrayList;
  * Class for the Wordle game.
  * The class includes getters for some variables and methods to run the game (adding letters, submitting guesses, etc.).
  * Currently takes in a word of any length to be guessed. Always gives the user 6 guesses (words of length 3 or below not recommended).
- * Does not currently make use of a dictionary API to validate guesses (to be added).
+ * 
+ * CURRENTLY USES UpperCase (change to uppercase for Elliot)
+ * Edited to take in strings, edit back to char array to match GUI 
  * 
  * @author @FranklinZhu1
  */
@@ -15,7 +17,8 @@ import java.util.Arrays;
 
 public class Wordle {
 
-    private String word, currentGuess;
+    private char[] word;
+    private String currentGuess;
     private String[] guessData, overallGuessData; // guessData is local to each guess, overallGuessData is a 26 length array for each character to track overall (think of the on-screen keyboard)
     private int guessCount;
     private boolean win;
@@ -28,17 +31,17 @@ public class Wordle {
      * @param word solution word
      */
 
-    public Wordle(String word) {
-        this.word = word.toUpperCase();
+    public Wordle(char[] word) {
+        this.word = word;
         this.guessCount = 0;
-        this.guessData = new String[this.word.length()];
+        this.guessData = new String[this.word.length];
         this.overallGuessData = new String[26];
         Arrays.fill(this.overallGuessData, "");
         this.currentGuess = "";
         this.win = false;
         this.wordLetterCount = new int[26];
         for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
-            ++wordLetterCount[this.word.charAt(letterIndex) - 'A'];
+            ++wordLetterCount[this.word[letterIndex] - 97];
         }
         this.results = new ArrayList<String[]>();
     }
@@ -51,26 +54,26 @@ public class Wordle {
      * @param overallGuessData the data for each letter already discovered
      */
 
-    public Wordle(String word, int guessCount, String[] overallGuessData) {
-        this.word = word.toLowerCase();
+    public Wordle(char[] word, int guessCount, String[] overallGuessData) {
+        this.word = word;
         this.guessCount = guessCount;
-        this.guessData = new String[this.word.length()];
+        this.guessData = new String[this.word.length];
         this.overallGuessData = overallGuessData;
         Arrays.fill(this.overallGuessData, "");
         this.currentGuess = "";
         this.win = false;
         for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
-            ++wordLetterCount[this.word.charAt(letterIndex) - 'A'];
+            ++wordLetterCount[this.word[letterIndex] - 97]; // {1, 0, 0, 1, 2, 0, 0, 0, 0...}
         }
         this.results = new ArrayList<String[]>();
     }
 
-    public String getWord() {
+    public char[] getWord() {
         return this.word;
     }
 
     public int getWordLength() {
-        return this.word.length();
+        return this.word.length;
     }
 
     public int getGuessCount() {
@@ -105,8 +108,8 @@ public class Wordle {
      */
 
     public boolean inputLetter(char letter) {
-        if (this.currentGuess.length() >= this.word.length() || !Character.isLetter(letter)) return false;
-        this.currentGuess += Character.toLowerCase(letter);
+        if (this.currentGuess.length() >= this.word.length || !Character.isLetter(letter)) return false;
+        this.currentGuess += Character.toUpperCase(letter);
         return true;
     }
 
@@ -127,7 +130,7 @@ public class Wordle {
 
      public int submitGuess() {
         DictionaryChecker dictionaryChecker = new DictionaryChecker();
-        if (this.currentGuess.length() < this.word.length()) {
+        if (this.currentGuess.length() < this.word.length) {
             this.currentGuess = ""; // clear guess after submission
             return -1;
         }
@@ -136,15 +139,15 @@ public class Wordle {
             return 0;
         }
         // Below here logs the word as a guess and tracks the stats
-        this.guessData = new String[this.word.length()];
+        this.guessData = new String[this.word.length];
         Arrays.fill(this.guessData, ""); // reset guessData to empty strings 
         this.win = true; // assume the player wins first
         int[] lettersUsed = Arrays.copyOf(this.wordLetterCount, 26); // copy of word letter count to track how many letters have been used (e.g., what if letters repeat?)
         for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
-            int letterCode = this.currentGuess.charAt(letterIndex) - 'A'; // 0 = 'a', 1 = 'b', etc.
-            if (this.word.charAt(letterIndex) == this.currentGuess.charAt(letterIndex)) { // green case
+            int letterCode = this.currentGuess.charAt(letterIndex) - 97; // 0 = 'a', 1 = 'b', etc.
+            if (this.word[letterIndex] == this.currentGuess.charAt(letterIndex)) { // green case
                 if (lettersUsed[letterCode] == 0) { // letter already marked yellow previously
-                    for (int revIndex = this.word.length() - 1; revIndex >= 0; --revIndex) { // search backwards through guessData to find the last yellow
+                    for (int revIndex = this.word.length - 1; revIndex >= 0; --revIndex) { // search backwards through guessData to find the last yellow
                         if (this.guessData[revIndex].equals("yellow")) {
                             this.guessData[revIndex] = "grey"; // turn it grey instead
                             break;

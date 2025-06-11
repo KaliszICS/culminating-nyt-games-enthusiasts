@@ -39,8 +39,8 @@ public class GraphicsHandler {
        // SpellingBeeWinPanel sbWinPanel = new  SpellingBeeWinPanel();
         
        //temp mainPanel.add(titlePanel);
-       //temp mainPanel.add(selectionPanel);
-       // mainPanel.add(connectionsPanel);
+        mainPanel.add(selectionPanel);
+        mainPanel.add(connectionsPanel);
       //  mainPanel.add(wordleStartPanel);
         mainPanel.add(wordleGamePanel);
       //  mainPanel.add(wordleWinPanel);

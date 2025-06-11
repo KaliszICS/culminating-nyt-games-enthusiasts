@@ -106,7 +106,7 @@ public class Wordle {
 
     public boolean inputLetter(char letter) {
         if (this.currentGuess.length() >= this.word.length() || !Character.isLetter(letter)) return false;
-        this.currentGuess += Character.toLowerCase(letter);
+        this.currentGuess += Character.toUpperCase(letter);
         return true;
     }
 

@@ -36,8 +36,8 @@ public class GUIConstants {
     public GUIConstants() {
 
         loadImages();
-    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-     // Dimension screenSize = new Dimension(1200, 800);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    //  Dimension screenSize = new Dimension(1200, 800);
         WINDOW_WIDTH = (int) screenSize.getWidth();
         WINDOW_HEIGHT = (int) screenSize.getHeight();
         scaleX = screenSize.getWidth() / BASE_WINDOW_WIDTH;

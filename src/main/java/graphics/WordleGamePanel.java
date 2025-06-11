@@ -8,7 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,6 +16,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.Popup;
 import javax.swing.SwingUtilities;
 
 import graphics.buttons.BackButton;
@@ -50,7 +51,12 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 		this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));
 		 
 		 setLayout(null);
-		
+		addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if(wordleGame.getWin()) //Only if user has won, allow user to click to go back to the previous panel.
+					KaliszTimes.getGraphicsHandler().previousPanel();
+			}
+		});
 		 
 		 
 		
@@ -125,6 +131,7 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 					if(lettersInQueue.size() == 5 && e.getClickType() == KeyboardClickEvent.ENTER) {
 						
 						int result = wordleGame.submitGuess();
+						System.out.println("Guess submitted");
 						for(char c : lettersInQueue) {
 							System.out.println(c);
 						}
@@ -147,6 +154,15 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 						//wordleGame.clearGuess();
 						rowNumber++;
 
+
+					if(wordleGame.getWin()) {
+						System.out.println("You win!");
+						//KaliszTimes.getGraphicsHandler().previousPanel();
+						
+
+
+
+					}
 
 			}else {
 				System.out.println("Guess invalid!");
@@ -355,28 +371,5 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 			//graphics.fillRect(, i, i, i);
 		}
 	}
+	
 }
-	/* 
-	//Return an int array of length 5, with values that correspond to the similarity of letter to the answer
-	//Eg: 0 = letter not present in word. 1 = letter present in word, but not at that current position. 2 = letter present, in that current position.
-	//char[] submittedString and char[] answer should be parallel.
-	private int[] compareSubmittedWordToAnswer(char[] submittedString, char[] answer) {
-		int[] similarityData = new int[5];
-
-		for(int i = 0; i < submittedString.length; i++) {
-			//For each position, it will check if it matches.
-			for(int x = 0; x < answer.length; x++) {
-				if(submittedString[i] == answer[i]) { //If letter present in that current position
-					similarityData[i] = 2;
-				}else if(submittedString[i] == answer[x]) { //If letter is present, but not in that current position.
-					similarityData[i] = 1;
-				}else{
-					similarityData[i] = 0; //If letter is not present in the word.
-				}
-			}
-		}
-		return similarityData;
-
-	}
-}
-*/

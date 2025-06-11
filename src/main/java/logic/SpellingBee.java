@@ -1,5 +1,8 @@
 package logic;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 /**
  * Class for the Spelling Bee game.
  * Contains getters for most variables and methods to run the game (e.g., adding letters to the guess, submitting the guesses).
@@ -7,9 +10,6 @@ package logic;
  * 
  * @author @FranklinZhu1
  */
-
-import java.util.ArrayList;
-import java.util.Random;
 
 public class SpellingBee {
     
@@ -20,32 +20,43 @@ public class SpellingBee {
     private ArrayList<String> wordsFound;
     private boolean win;
 
+    /**
+     * A default constructor for a new game.
+     * Takes in the keyword that the player needs to guess, sets the golden letter to the first character, and gives all other instance variables default values.
+     * 
+     * @param keyword Keyword that the player needs to guess
+     */
+
     public SpellingBee(String keyword) {
         this.keyword = keyword.toUpperCase();
         this.goldenLetter = Character.toUpperCase(keyword.charAt(0));
         this.letters = new ArrayList<Character>();
         for (int letterIndex = 0; letterIndex < this.keyword.length(); ++letterIndex) {
-            this.letters.add(this.keyword.charAt(letterIndex)); 
-                 
-                //Golden letter is always at index 0.
+            this.letters.add(this.keyword.charAt(letterIndex)); //Golden letter is always at index 0.
         }
-     
-        
         this.currentWord = "";
         this.score = 0;
         this.wordsFound = new ArrayList<String>();
         this.win = false;
     }
 
-    public SpellingBee(String keyword, char goldenLetter, String currentWord, int score, ArrayList<String> wordsFound) {
+    /**
+     * Constructor for game in progress.
+     * Sets instance variables equal to parameters.
+     * 
+     * @param keyword Keyword that the player needs to guess
+     * @param goldenLetter Letter that the player needs to include in each of their guesses
+     * @param currentWord Current guess that the player has typed
+     * @param score Score that the player has achieved thus far
+     * @param wordsFound Number of words that the player has found thus far
+     */
+
+    public SpellingBee(String keyword, String currentWord, int score, ArrayList<String> wordsFound) {
         this.keyword = keyword;
         this.letters = new ArrayList<Character>(); 
-         this.goldenLetter = Character.toUpperCase(keyword.charAt(0));
+        this.goldenLetter = Character.toUpperCase(keyword.charAt(0));
         for (int letterIndex = 0; letterIndex < this.keyword.length(); ++letterIndex) {
-          
-                    this.letters.add(this.keyword.charAt(letterIndex)); 
-                 
-                
+            this.letters.add(this.keyword.charAt(letterIndex));     
         }
         this.currentWord = currentWord;
         this.score = score;
@@ -53,29 +64,71 @@ public class SpellingBee {
         this.win = false;
     }
 
+    /**
+     * Gets the keyword to be guessed.
+     * 
+     * @return Keyword to be guessed
+     */
+
     public String getKeyword() {
         return this.keyword;
     }
+
+    /**
+     * Gets the list of letters available to use.
+     * 
+     * @return The list of letters available to use
+     */
 
     public ArrayList<Character> getLetters() {
         return this.letters;
     }
 
+    /**
+     * Gets the golden letter to be used in guesses.
+     * 
+     * @return The golden letter to be used in guesses
+     */
+
     public char getGoldenLetter() {
         return this.goldenLetter;
     }
 
+    /**
+     * Gets the current word that the user has typed.
+     * 
+     * @return The current word that the user has typed
+     */
+
     public String getCurrentWord() {
         return this.currentWord;
     }
+    
+    /**
+     * Gets the score that the user has currently achieved.
+     * 
+     * @return The score that the user has currently achieved
+     */
 
     public int getScore() {
         return this.score;
     }
 
+    /**
+     * Gets the list of words found by the user thus far.
+     * 
+     * @return The list of words found by the user thus far
+     */
+
     public ArrayList<String> getWordsFound() {
         return this.wordsFound;
     }
+
+    /**
+     * Gets the win boolean, which indicates if the player has won or not (gotten the keyword or not).
+     * 
+     * @return The win boolean
+     */
 
     public boolean getWin() {
         return this.win;
@@ -107,6 +160,7 @@ public class SpellingBee {
     /**
      * Shuffles the letters.
      */
+
     public void shuffle() {
         Random random = new Random();
         for (int i = this.letters.size() - 1; i > 0; i--) {

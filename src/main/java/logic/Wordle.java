@@ -1,6 +1,7 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Class for the Wordle game.
@@ -12,8 +13,6 @@ import java.util.ArrayList;
  * 
  * @author @FranklinZhu1
  */
-
-import java.util.Arrays;
 
 public class Wordle {
 
@@ -68,33 +67,78 @@ public class Wordle {
         this.results = new ArrayList<String[]>();
     }
 
+    /**
+     * Gets the word to be guessed.
+     * 
+     * @return The word to be guessed
+     */
+
     public String getWord() {
         return this.word;
     }
+
+    /**
+     * Gets the length of the word to be guessed.
+     * @return The length of the word to be guessed
+     */
 
     public int getWordLength() {
         return this.word.length();
     }
 
+    /**
+     * Gets the number of guesses the user has already made.
+     * @return The number of guesses the user has already made
+     */
+
     public int getGuessCount() {
         return this.guessCount;
     }
+
+    /**
+     * Gets the data from the last guess the user made.
+     * 
+     * @return The data from the last guess the user made
+     */
 
     public String[] getGuessData() {
         return this.guessData;
     }
 
+    /**
+     * Get the overall guess data (colours shown on the on-screen keyboard).
+     * @return The overall guess data (colours shown on the on-screen keyboard)
+     */
+
     public String[] getOverallGuessData() {
         return this.overallGuessData;
     }
+
+    /**
+     * Gets the current guess the player is typing.
+     * 
+     * @return The current guess the player is typing
+     */
 
     public String getCurrentGuess() {
         return this.currentGuess;
     }
 
+    /**
+     * Gets the win boolean, which indicates if the player has won or not.
+     * 
+     * @return The win boolean
+     */
+
     public boolean getWin() {
         return this.win;
     }
+
+    /**
+     * Gets the results of the player's finished game, which tracks the data of all of their guesses.
+     * 
+     * @return The results of the player's finished game
+     */
 
     public ArrayList<String[]> getResults() {
         return this.results;

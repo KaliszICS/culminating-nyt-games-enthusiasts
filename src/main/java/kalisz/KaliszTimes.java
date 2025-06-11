@@ -4,7 +4,8 @@ package kalisz;
 import graphics.GUIConstants;
 import graphics.GraphicsHandler;
 import graphics.utils.GameDataHandler;
-import graphics.utils.JFXInitializer;
+//import graphics.utils.JFXInitializer;
+/*
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
@@ -13,7 +14,7 @@ import javafx.scene.media.MediaView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import logic.AIHandler;
-
+*/
 
 import java.awt.Toolkit;
 import java.io.File;
@@ -45,7 +46,7 @@ public class KaliszTimes {
 		}
 		
 		
-		JFXInitializer.initJavaFX();
+		//JFXInitializer.initJavaFX();
 
         // Initialize JavaFX to support ad player
        
@@ -131,5 +132,5 @@ public class KaliszTimes {
    		 mediaPlayer.play();
 		 inAd = true;
     }
-	
+	*/
 }

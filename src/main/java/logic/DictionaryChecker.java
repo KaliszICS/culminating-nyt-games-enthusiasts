@@ -15,7 +15,7 @@ import java.net.URL;
 public class DictionaryChecker {
 
     public boolean checkWord(String word) {
-      /*   try {
+         try {
             
             URL url = new URL("https://api.dictionaryapi.dev/api/v2/entries/en/" + word.toLowerCase());
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -26,8 +26,8 @@ public class DictionaryChecker {
             return false;
         }
          
-        */
-        return true;
+        
+        // return true;
     }
 
 

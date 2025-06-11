@@ -27,8 +27,8 @@ public class Player {
     private int wordleAttempts, connectionsAttempts; // total games played for both
     private Scanner sc; // scanner to scan from passwords and user files
     private PrintWriter pw; // printwriter to write onto passwords and user files
-    final String filepath = "src/main/java/logic/user files/"; // filepath for user files
-    final String passwordsFilename = "passwords.txt"; // filename for passwords file
+    private static final String filepath = "src/main/java/logic/user files/"; // filepath for user files
+    private static final String passwordsFilename = "passwords.txt"; // filename for passwords file
 
     /**
      * Default constructor to initialize the passwords map from file.
@@ -37,7 +37,7 @@ public class Player {
     public Player() {
         this.passwords = new HashMap<String, String>();
         try {
-            this.sc = new Scanner(new BufferedReader(new FileReader(this.filepath + this.passwordsFilename)));
+            this.sc = new Scanner(new BufferedReader(new FileReader(filepath + passwordsFilename)));
             while (this.sc.hasNext()) this.passwords.put(this.sc.next(), this.sc.next()); // read "username password" over and over again
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -110,7 +110,7 @@ public class Player {
         this.username = username;
         this.password = password;
         try {
-            this.pw = new PrintWriter(new FileWriter(this.filepath + this.passwordsFilename, true));
+            this.pw = new PrintWriter(new FileWriter(filepath + passwordsFilename, true));
             this.pw.printf("%s %s\n", username, password); // write username and password onto passwords.txt
             this.passwords.put(username, password); // store user username and password in hashmap
             // initialize all instance variables for user (like a default constructor)
@@ -119,7 +119,7 @@ public class Player {
             this.spellingBeeStats = new ArrayList<Integer>();
             this.wordleAttempts = 0;
             this.connectionsAttempts = 0;
-            File userFile = new File(this.filepath + this.username + ".txt");
+            File userFile = new File(filepath + this.username + ".txt");
             userFile.createNewFile(); // initialize empty user file at filepath
             saveUserData(); // save empty data to user file
         } catch (IOException e) {
@@ -143,7 +143,7 @@ public class Player {
             this.username = username; // user is now logged in (instance variables set equal to whatever the user provided here)
             this.password = password;
             try {
-                this.sc = new Scanner(new BufferedReader(new FileReader(this.filepath + this.username + ".txt")));
+                this.sc = new Scanner(new BufferedReader(new FileReader(filepath + this.username + ".txt")));
                 this.wordleStats = new int[]{this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt()}; // first 6 integers of user file should be the wordle stats
                 this.connectionsStats = new int[]{this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt()}; // next 4 integers should be connections stats
                 this.wordleAttempts = this.sc.nextInt(); // next integer should be wordle attempts
@@ -256,7 +256,7 @@ public class Player {
     public int saveUserData() {
         if (this.username == null) return 0; // user doesn't exist
         try {
-            File userFile = new File(this.filepath + this.username + ".txt"), tempUserFile = new File(this.filepath + "temp.txt");
+            File userFile = new File(filepath + this.username + ".txt"), tempUserFile = new File(filepath + "temp.txt");
             this.pw = new PrintWriter(new FileWriter(tempUserFile, true));
             this.pw.printf("%d %d %d %d %d %d\n", this.wordleStats[0], this.wordleStats[1], this.wordleStats[2], this.wordleStats[3], this.wordleStats[4], this.wordleStats[5]);
             this.pw.printf("%d %d %d %d\n", this.connectionsStats[0], this.connectionsStats[1], this.connectionsStats[2], this.connectionsStats[3]);

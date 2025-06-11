@@ -26,7 +26,7 @@ import graphics.buttons.Image;
 import graphics.buttons.KeyboardButton;
 import graphics.buttons.WordleButton;
 import graphics.utils.PanelAttributes;
-import javafx.application.Platform;
+//import javafx.application.Platform;
 //import javafx.scene.text.Font;
 import kalisz.KaliszTimes;
 import logic.DictionaryChecker;
@@ -116,7 +116,7 @@ public class WordleGamePanel extends JPanel implements KeyListener, PanelAttribu
 							System.out.println("Lost");
 							KaliszTimes.adPopup("Uh oh! You exceeded the max number of guesses without guessing the right word!\nWatch an ad to continue!\n(Reminder: Kalisz Times Games is a freemium model. By watching an ad, you directly support the developers of this game. We thank you for your support and contributions)");
 							/* */
-							Platform.runLater(() -> {
+							/*Platform.runLater(() -> {
 								KaliszTimes.showVideoPopup("Ad.mp4", () -> {
 									KaliszTimes.popup("Your ad is over! You may now resume to playing the game.");
 
@@ -147,7 +147,7 @@ public class WordleGamePanel extends JPanel implements KeyListener, PanelAttribu
 							);
 							});
 
-							
+							*/
 						}
 
 						if(lettersInQueue.size() == 5) {

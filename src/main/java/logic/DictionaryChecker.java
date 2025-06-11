@@ -16,7 +16,8 @@ public class DictionaryChecker {
 
     public boolean checkWord(String word) {
         try {
-            URL url = new URL("https://api.dictionaryapi.dev/api/v2/entries/en/" + word);
+            
+            URL url = new URL("https://api.dictionaryapi.dev/api/v2/entries/en/" + word.toLowerCase());
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             return (con.getResponseCode() == 200);
@@ -24,8 +25,7 @@ public class DictionaryChecker {
             e.printStackTrace();
             return false;
         }
-            */
-            return true;
+         
     }
 
 

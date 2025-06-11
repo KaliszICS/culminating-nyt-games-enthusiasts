@@ -76,7 +76,7 @@ public class WordleGamePanel extends JPanel implements KeyListener {
     	SwingUtilities.invokeLater(() -> requestFocusInWindow());
 
 		//Implement Franklin's Wordle Game 
-		this.wordleGame = new Wordle(new char[] {'P', 'A', 'N', 'I', 'C'});
+		this.wordleGame = new Wordle("PANIC");
 
 
 
@@ -125,6 +125,9 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 					if(lettersInQueue.size() == 5 && e.getClickType() == KeyboardClickEvent.ENTER) {
 						
 						int result = wordleGame.submitGuess();
+						for(char c : lettersInQueue) {
+							System.out.println(c);
+						}
 						if (result == 1) { // guess submitted successfully
 							String[] guessResult = wordleGame.getGuessData(); // e.g., ["green", "grey", "yellow", ...]
 
@@ -134,14 +137,14 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 								// You could store this color in a parallel 2D array like String[][] gridColors;
 								// and draw it in your paintComponent() with colored rectangles.
 								gridColours[rowNumber][i] = color;
-
+								
 
 								System.out.println(color);
 								repaint();
         	}
-			//Clear queue, go to next row number.
+						//Clear queue, go to next row number.
 						lettersInQueue.clear();
-						wordleGame.clearGuess();
+						//wordleGame.clearGuess();
 						rowNumber++;
 
 

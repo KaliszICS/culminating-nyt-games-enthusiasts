@@ -41,7 +41,7 @@ public class Wordle {
         this.win = false;
         this.wordLetterCount = new int[26];
         for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
-            ++wordLetterCount[this.word[letterIndex] - 97];
+            ++wordLetterCount[this.word[letterIndex] - 'A'];
         }
         this.results = new ArrayList<String[]>();
     }
@@ -63,7 +63,7 @@ public class Wordle {
         this.currentGuess = "";
         this.win = false;
         for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
-            ++wordLetterCount[this.word[letterIndex] - 97]; // {1, 0, 0, 1, 2, 0, 0, 0, 0...}
+            ++wordLetterCount[this.word[letterIndex] - 'A']; // {1, 0, 0, 1, 2, 0, 0, 0, 0...}
         }
         this.results = new ArrayList<String[]>();
     }
@@ -144,7 +144,7 @@ public class Wordle {
         this.win = true; // assume the player wins first
         int[] lettersUsed = Arrays.copyOf(this.wordLetterCount, 26); // copy of word letter count to track how many letters have been used (e.g., what if letters repeat?)
         for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
-            int letterCode = this.currentGuess.charAt(letterIndex) - 97; // 0 = 'a', 1 = 'b', etc.
+            int letterCode = this.currentGuess.charAt(letterIndex) - 'A'; // 0 = 'a', 1 = 'b', etc.
             if (this.word[letterIndex] == this.currentGuess.charAt(letterIndex)) { // green case
                 if (lettersUsed[letterCode] == 0) { // letter already marked yellow previously
                     for (int revIndex = this.word.length - 1; revIndex >= 0; --revIndex) { // search backwards through guessData to find the last yellow

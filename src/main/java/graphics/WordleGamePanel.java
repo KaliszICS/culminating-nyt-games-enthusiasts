@@ -26,6 +26,7 @@ import graphics.buttons.Image;
 import graphics.buttons.KeyboardButton;
 import graphics.buttons.WordleButton;
 import graphics.utils.PanelAttributes;
+import javafx.application.Platform;
 //import javafx.scene.text.Font;
 import kalisz.KaliszTimes;
 import logic.DictionaryChecker;
@@ -78,22 +79,7 @@ public class WordleGamePanel extends JPanel implements KeyListener, PanelAttribu
 		
 
 		//Implement Franklin's Wordle Game 
-		this.wordleGame = new Wordle("MAGMA");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		this.wordleGame = new Wordle(origin.getWordleAnswer());
 
 
 		 //Adds digital keyboard listener (ours) that will listen for special KeyboardClickEvent
@@ -102,6 +88,7 @@ public class WordleGamePanel extends JPanel implements KeyListener, PanelAttribu
 			
 			@Override
 			public void handleClick(KeyboardClickEvent e) {
+				System.out.println(wordleGame.getWord());
 				if(rowNumber <= 5) { //If max rows is not exceeded
 					char letter = e.getKeyClicked();
 
@@ -125,6 +112,44 @@ public class WordleGamePanel extends JPanel implements KeyListener, PanelAttribu
 					}
 					//If queue is full, give user the ability to submit their word to verify each individual letter.
 					if(e.getClickType() == KeyboardClickEvent.ENTER) {
+						if(rowNumber == 5 && !wordleGame.getCurrentGuess().equals(wordleGame.getWord())) {
+							System.out.println("Lost");
+							KaliszTimes.adPopup("Uh oh! You exceeded the max number of guesses without guessing the right word!\nWatch an ad to continue!\n(Reminder: Kalisz Times Games is a freemium model. By watching an ad, you directly support the developers of this game. We thank you for your support and contributions)");
+							/* */
+							Platform.runLater(() -> {
+								KaliszTimes.showVideoPopup("Ad.mp4", () -> {
+									KaliszTimes.popup("Your ad is over! You may now resume to playing the game.");
+
+
+
+									//WIN EVENT
+									origin.setFinished();
+									origin.repaint();
+
+										// Properly remove panel from parent
+									getPanel().setFocusable(false);
+									getPanel().setVisible(false);
+									
+
+										Container parent = getPanel().getParent();
+										if (parent != null) {
+											parent.remove(getPanel());
+											parent.revalidate();
+											parent.repaint();
+										}
+
+										GraphicsHandler.activeWordleInstances.remove(origin); // cleanup
+										KaliszTimes.getGraphicsHandler().goBack(); // navigate
+							
+
+
+								}
+							);
+							});
+
+							
+						}
+
 						if(lettersInQueue.size() == 5) {
 							int result = wordleGame.submitGuess();
 							System.out.println("Guess submitted");
@@ -153,7 +178,7 @@ public class WordleGamePanel extends JPanel implements KeyListener, PanelAttribu
 
 						if(wordleGame.getWin()) {
 							KaliszTimes.popup("Congratulations! " + wordleGame.getWord() + " was the correct word!");
-							origin.setFinished(wordleGame.getWord());
+							origin.setFinished();
 							origin.repaint();
 
 								// Properly remove panel from parent

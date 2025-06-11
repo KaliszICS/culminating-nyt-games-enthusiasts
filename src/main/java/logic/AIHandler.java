@@ -10,7 +10,7 @@ public class AIHandler {
     
      public static String chatGPT(String message) {
         String url = "https://api.openai.com/v1/chat/completions";
-        String apiKey = ""; // API key goes here
+        String apiKey = "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"; // API key goes here
         String model = "gpt-4o-mini"; // current model of chatgpt api
 
         try {

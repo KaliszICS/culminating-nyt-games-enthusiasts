@@ -6,9 +6,12 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
+import graphics.ConnectionsPanel;
 import graphics.GUIConstants;
 import graphics.GraphicsHandler;
 import graphics.SpellingBeeGamePanel;
@@ -19,14 +22,16 @@ import graphics.SpellingBeeGamePanel;
 import kalisz.KaliszTimes;
 
 public class SpellingBeeEnterButton extends Button {
-private SpellingBeeGamePanel spellingBeeInstance;
+    private SpellingBeeGamePanel spellingBeeInstance;
 	private boolean finished = false;
+    int SPELLING_BEE_BOARD_OFFSET = 7;
 	private String spellingBeeAnswer;
 	private int uniqueID;
 
-    public SpellingBeeEnterButton(BufferedImage image, int uniqueID) {
+    public SpellingBeeEnterButton(BufferedImage image, int uniqueID, String spellingBeeAnswer) {
         super(image);
-		this.uniqueID = uniqueID;
+		this.uniqueID = uniqueID + SPELLING_BEE_BOARD_OFFSET;
+        this.spellingBeeAnswer = spellingBeeAnswer;
 		
     }
     
@@ -61,6 +66,10 @@ private SpellingBeeGamePanel spellingBeeInstance;
 	 @Override
     protected void paintComponent(Graphics g) {
 		Graphics2D graphics = (Graphics2D) g;
+        if(ConnectionsPanel.connectionsGame.currentGuess.contains(uniqueID)) {
+            graphics.setColor(Color.gray);
+            graphics.fillRect(0, 0, 100, 100);
+        }
 
         if (!finished) {// paints the image from the Button class
 			 super.paintComponent(g);
@@ -96,9 +105,26 @@ private SpellingBeeGamePanel spellingBeeInstance;
 	public SpellingBeeGamePanel getSpellingBeeInstance() {
 		return this.spellingBeeInstance;
 	}
-	public void setFinished(String spellingBeeAnswer) {
-		this.spellingBeeAnswer = spellingBeeAnswer;
+   
+	public void setFinished() {
 		finished = true;
 		removeMouseListener(this);
+        addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+
+                ConnectionsPanel.connectionsGame.selectWord(uniqueID);
+                repaint();
+
+
+
+
+				
+				
+			}
+		});
 	}
+    public String getKeyWord() {
+        return this.spellingBeeAnswer;
+    }
+   
 }

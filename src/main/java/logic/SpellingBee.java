@@ -20,17 +20,14 @@ public class SpellingBee {
     private ArrayList<String> wordsFound;
     private boolean win;
 
-    public SpellingBee(String keyword, char goldenLetter) {
+    public SpellingBee(String keyword) {
         this.keyword = keyword.toUpperCase();
-        this.goldenLetter = Character.toUpperCase(goldenLetter);
+        this.goldenLetter = Character.toUpperCase(keyword.charAt(0));
         this.letters = new ArrayList<Character>();
         for (int letterIndex = 0; letterIndex < this.keyword.length(); ++letterIndex) {
-            if (!this.letters.contains(this.keyword.charAt(letterIndex))) {
-                if(this.keyword.charAt(letterIndex) != this.goldenLetter) {
-                    this.letters.add(this.keyword.charAt(letterIndex)); // if letters doesn't have it yet, add it as long as it's not the golden letter.
+            this.letters.add(this.keyword.charAt(letterIndex)); 
                  
-                }
-            }
+                //Golden letter is always at index 0.
         }
      
         
@@ -43,14 +40,12 @@ public class SpellingBee {
     public SpellingBee(String keyword, char goldenLetter, String currentWord, int score, ArrayList<String> wordsFound) {
         this.keyword = keyword;
         this.letters = new ArrayList<Character>(); 
-        this.goldenLetter = Character.toUpperCase(goldenLetter);
+         this.goldenLetter = Character.toUpperCase(keyword.charAt(0));
         for (int letterIndex = 0; letterIndex < this.keyword.length(); ++letterIndex) {
-            if (!this.letters.contains(this.keyword.charAt(letterIndex))) {
-                if(this.keyword.charAt(letterIndex) != this.goldenLetter) {
-                    this.letters.add(this.keyword.charAt(letterIndex)); // if letters doesn't have it yet, add it as long as it's not the golden letter.
+          
+                    this.letters.add(this.keyword.charAt(letterIndex)); 
                  
-                }
-            }
+                
         }
         this.currentWord = currentWord;
         this.score = score;

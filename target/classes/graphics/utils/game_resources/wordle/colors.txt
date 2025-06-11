@@ -1,0 +1,1 @@
+white,black,brown,green,purple,coral,lemon,olive,azure,beige

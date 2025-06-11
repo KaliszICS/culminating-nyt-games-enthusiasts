@@ -1,5 +1,6 @@
 package logic.events;
 
+import graphics.ConnectionsPanel;
 import graphics.SpellingBeeGamePanel;
 import graphics.WordleGamePanel;
 
@@ -12,6 +13,12 @@ public static void fireWordleClickEvent(WordleGamePanel source, char keyClicked,
         }
     }
  public static void fireSpellingBeeClickEvent(SpellingBeeGamePanel source, char keyClicked, int clickType) {
+        KeyboardClickEvent event = new KeyboardClickEvent(source, keyClicked, clickType);
+        for (KeyboardClickEventListener listener : source.getListeners()) {
+            listener.handleClick(event);
+        }
+    }
+ public static void fireConnectionsClickEvent(ConnectionsPanel source, char keyClicked, int clickType) {
         KeyboardClickEvent event = new KeyboardClickEvent(source, keyClicked, clickType);
         for (KeyboardClickEventListener listener : source.getListeners()) {
             listener.handleClick(event);

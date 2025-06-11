@@ -38,14 +38,14 @@ public class SpellingBeeGamePanel extends JPanel implements KeyListener, PanelAt
 	private ArrayList<Button> letterButtons = new ArrayList<Button>();
 	
 	public SpellingBee spellingBeeGame;
-	private SpellingBeeEnterButton origin;
+	SpellingBeeEnterButton origin;
 	
 	public SpellingBeeGamePanel(SpellingBeeEnterButton origin) {
 		this.origin = origin;
 		this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));
 		setLayout(null);
-		 
-		spellingBeeGame = new SpellingBee("keyword", 'w');
+		 System.out.println(origin.getKeyWord());
+		spellingBeeGame = new SpellingBee(origin.getKeyWord());
 		
  		//Adds physical keyboard compatibility 
 		addKeyListener(this);
@@ -113,7 +113,7 @@ public class SpellingBeeGamePanel extends JPanel implements KeyListener, PanelAt
 			}
 		});
 		add(submitButton);
-		 
+		 System.out.println("SIZE " + spellingBeeGame.getLetters().size() + " " + spellingBeeGame.getKeyword());
 		 //Golden letter
 		 int refX1 = 455;
 		 int refY1 = 465;
@@ -125,35 +125,35 @@ public class SpellingBeeGamePanel extends JPanel implements KeyListener, PanelAt
 
 		 int refX2 = 340;
 		 int refY2 = 400;
-		 Button leftTopLetter = new SpellingBeeButton(GUIConstants.normal_letter_image, spellingBeeGame.getLetters().get(0), GUIConstants.scaleX(refX2), GUIConstants.scaleY(refY2), getPanel());
+		 Button leftTopLetter = new SpellingBeeButton(GUIConstants.normal_letter_image, spellingBeeGame.getLetters().get(1), GUIConstants.scaleX(refX2), GUIConstants.scaleY(refY2), getPanel());
 		letterButtons.add(leftTopLetter);
 
 		 
 		 int refX3 = 575;
 		 int refY3 = 400;
-		 Button rightTopLetter = new SpellingBeeButton(GUIConstants.normal_letter_image, spellingBeeGame.getLetters().get(1), GUIConstants.scaleX(refX3), GUIConstants.scaleY(refY3), getPanel());
+		 Button rightTopLetter = new SpellingBeeButton(GUIConstants.normal_letter_image, spellingBeeGame.getLetters().get(2), GUIConstants.scaleX(refX3), GUIConstants.scaleY(refY3), getPanel());
 		
 		letterButtons.add(rightTopLetter);
 		
 		int refX4 = 340;
 		int refY4 = 532;
-		Button leftBottomLetter = new SpellingBeeButton(GUIConstants.normal_letter_image, spellingBeeGame.getLetters().get(2), GUIConstants.scaleX(refX4), GUIConstants.scaleY(refY4), getPanel());
+		Button leftBottomLetter = new SpellingBeeButton(GUIConstants.normal_letter_image, spellingBeeGame.getLetters().get(3), GUIConstants.scaleX(refX4), GUIConstants.scaleY(refY4), getPanel());
 		letterButtons.add(leftBottomLetter);
 		
 		int refX5 = 575;
 		int refY5 = 532;
-		Button rightBottomLetter = new SpellingBeeButton(GUIConstants.normal_letter_image, spellingBeeGame.getLetters().get(3), GUIConstants.scaleX(refX5), GUIConstants.scaleY(refY5), getPanel());
+		Button rightBottomLetter = new SpellingBeeButton(GUIConstants.normal_letter_image, spellingBeeGame.getLetters().get(4), GUIConstants.scaleX(refX5), GUIConstants.scaleY(refY5), getPanel());
 		letterButtons.add(rightBottomLetter);
 		
 
 		int refX6 = 455;
 		int refY6 = 330;
-		Button middleTopLetter = new SpellingBeeButton(GUIConstants.normal_letter_image, spellingBeeGame.getLetters().get(4), GUIConstants.scaleX(refX6), GUIConstants.scaleY(refY6), getPanel());
+		Button middleTopLetter = new SpellingBeeButton(GUIConstants.normal_letter_image, spellingBeeGame.getLetters().get(5), GUIConstants.scaleX(refX6), GUIConstants.scaleY(refY6), getPanel());
 		letterButtons.add(middleTopLetter);
 		 
 		int refX7 = 455;
 		int refY7 = 598;
-		Button middleBottomLetter = new SpellingBeeButton(GUIConstants.normal_letter_image, spellingBeeGame.getLetters().get(5), GUIConstants.scaleX(refX7), GUIConstants.scaleY(refY7), getPanel());
+		Button middleBottomLetter = new SpellingBeeButton(GUIConstants.normal_letter_image, spellingBeeGame.getLetters().get(6), GUIConstants.scaleX(refX7), GUIConstants.scaleY(refY7), getPanel());
 		letterButtons.add(middleBottomLetter);
 		 
 
@@ -166,7 +166,7 @@ public class SpellingBeeGamePanel extends JPanel implements KeyListener, PanelAt
 					spellingBeeGame.inputLetter(e.getKeyClicked());
 					System.out.println("Clicked");
 
-				//currentTextString+=e.getKeyClicked();
+				
 				repaint();
 				}
 				if(e.getClickType() == KeyboardClickEvent.BACKSPACE) {
@@ -196,7 +196,7 @@ public class SpellingBeeGamePanel extends JPanel implements KeyListener, PanelAt
 					}
 					if(spellingBeeGame.getWin()) {
 							KaliszTimes.popup("Congratulations! " + spellingBeeGame.getKeyword() + " was the correct word!");
-							origin.setFinished(spellingBeeGame.getKeyword());
+							origin.setFinished();
 							origin.repaint();
 
 								// Properly remove panel from parent

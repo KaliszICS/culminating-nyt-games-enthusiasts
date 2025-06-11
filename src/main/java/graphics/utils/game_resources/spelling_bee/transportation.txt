@@ -1,0 +1,1 @@
+railway,passage,carriage,freight,shuttle,carrier,convoy,tractor,tramway,trolley,cruiser,ferrying,scooter,bicycle,cabriole,gliders

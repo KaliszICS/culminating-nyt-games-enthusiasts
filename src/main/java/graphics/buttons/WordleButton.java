@@ -6,9 +6,11 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
+import graphics.ConnectionsPanel;
 import graphics.GUIConstants;
 import graphics.GraphicsHandler;
 import graphics.WordleGamePanel;
@@ -21,9 +23,10 @@ public class WordleButton extends Button {
 	private String wordleAnswer;
 	private int uniqueID;
 
-    public WordleButton(BufferedImage image, int uniqueID) {
+    public WordleButton(BufferedImage image, int uniqueID, String wordleAnswer) {
         super(image);
 		this.uniqueID = uniqueID;
+		this.wordleAnswer = wordleAnswer;
 		
     }
     
@@ -59,6 +62,10 @@ public class WordleButton extends Button {
     protected void paintComponent(Graphics g) {
 		Graphics2D graphics = (Graphics2D) g;
 
+		if(ConnectionsPanel.connectionsGame.currentGuess.contains(uniqueID)) {
+            graphics.setColor(Color.gray);
+            graphics.fillRect(0, 0, 100, 100);
+        }
         if (!finished) {// paints the image from the Button class
 			 super.paintComponent(g);
 			if(wordleInstance != null && wordleInstance.wordleGame != null && !wordleInstance.wordleGame.getWin()) {
@@ -93,9 +100,18 @@ public class WordleButton extends Button {
 	public WordleGamePanel getWordleInstance() {
 		return this.wordleInstance;
 	}
-	public void setFinished(String wordleAnswer) {
-		this.wordleAnswer = wordleAnswer;
+	public void setFinished() {
 		finished = true;
 		removeMouseListener(this);
+
+		addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				ConnectionsPanel.connectionsGame.selectWord(uniqueID);
+                repaint();
+			}
+		});
+	}
+	public String getWordleAnswer() {
+		return wordleAnswer;
 	}
 }

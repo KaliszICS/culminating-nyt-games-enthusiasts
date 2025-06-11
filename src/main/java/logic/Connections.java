@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class Connections {
 
     private ArrayList<String> board, categoriesCompleted;
-    private ArrayList<Integer> currentGuess; // takes indexes from the board array
+    public ArrayList<Integer> currentGuess; // takes indexes from the board array
     private String[] yellowWords, greenWords, blueWords, purpleWords;
     private int guessesLeft;
     private String yellowCategory, greenCategory, blueCategory, purpleCategory;
@@ -161,13 +161,13 @@ public class Connections {
      * @return the word to be revealed through Wordle or Spelling Bee, null if already revealed
      */
 
-    public String selectWord(int index) {
-        if (!this.revealed.get(this.board.get(index))) return this.board.get(index); // if not revealed, return the word to be wordled/spelling beed
-        if (this.currentGuess.contains(index)) this.currentGuess.remove(index); // deselects index if already in guess
+    public String selectWord(int index) {// 
+       // you can't do this. + redundant if (!this.revealed.get(this.board.get(index))) return this.board.get(index); // if not revealed, return the word to be wordled/spelling beed
+        if (this.currentGuess.contains(index)) this.currentGuess.remove(Integer.valueOf(index)); // deselects index if already in guess //can't do this
         else if (this.currentGuess.size() < 4) this.currentGuess.add(index);
         return null;
     }
-
+    
     /**
      * Update the revealed hashmap to reveal a word that was successfully revealed through Wordle or Spelling Bee.
      * 

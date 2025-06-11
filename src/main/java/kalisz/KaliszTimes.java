@@ -1,10 +1,22 @@
 package kalisz;
 
+
 import graphics.GUIConstants;
 import graphics.GraphicsHandler;
+import graphics.utils.GameDataHandler;
+import graphics.utils.JFXInitializer;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import logic.AIHandler;
-import logic.AudioHandler;
+
+
 import java.awt.Toolkit;
+import java.io.File;
 
 import javax.swing.JOptionPane;
 
@@ -13,13 +25,26 @@ import java.awt.Dimension;
 public class KaliszTimes {
 	
 	private static GraphicsHandler handler = null;
-	private static AudioHandler audioHandler = null;
+	
+	public static boolean inAd = false;
 
 	public static void main(String args[]) {
-		audioHandler = new AudioHandler();
+		new GameDataHandler(); //Initialize game data.
+
+
+		System.out.println(GameDataHandler.yellowCategory + " YELLOW");
+		for(String yellow : GameDataHandler.yellowWords) {
+			System.out.println(yellow);
+		}
+		
+		
+		JFXInitializer.initJavaFX();
+
+        // Initialize JavaFX to support ad player
+       
 
 		//Initialize constants
-		GUIConstants constants = new GUIConstants();
+		new GUIConstants();
 		System.out.println(GUIConstants.WINDOW_WIDTH + " " + GUIConstants.WINDOW_HEIGHT);
 
 		//KaliszTimes.getAudioHandler().playSound("/button_sound.wav"); //work on this
@@ -34,11 +59,51 @@ public class KaliszTimes {
 	public static GraphicsHandler getGraphicsHandler() {
 		return handler;
 	}
-	public static AudioHandler getAudioHandler() {
-		return audioHandler;
-	}
+	
 	public static void popup(String message) {
 		JOptionPane.showMessageDialog(null, message, "Information!", JOptionPane.INFORMATION_MESSAGE);
 	}
+	public static void adPopup(String message) {
+		JOptionPane.showMessageDialog(null, message, "Watch an ad to revive!", JOptionPane.INFORMATION_MESSAGE);
+	}
+
+
+	public static void showVideoPopup(String videoFilePath, Runnable onVideoEnd) {
+        Stage popupStage = new Stage();
+        popupStage.initModality(Modality.APPLICATION_MODAL); // blocks other windows until closed
+        popupStage.setTitle("30 Second Ad");
+
+		popupStage.setOnCloseRequest(event -> event.consume()); //Blocks user from closing the ad
+
+        File file = new File(videoFilePath);
+        Media media = new Media(file.toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        MediaView mediaView = new MediaView(mediaPlayer);
+
+        BorderPane root = new BorderPane(mediaView);
+
+		
+       
+		mediaView.setFitWidth(640);
+		mediaView.setFitHeight(480);
+		mediaView.setPreserveRatio(true);
+        Scene scene = new Scene(root, 640, 480);
+        popupStage.setScene(scene);
+        popupStage.show();
+
+
+        mediaPlayer.setOnEndOfMedia(() -> {
+			inAd = false;
+			popupStage.close();
+			mediaPlayer.dispose(); 
+			if (onVideoEnd != null) {
+            onVideoEnd.run();  // Ppost-video code ran here
+        	}
+			
+    	});
+
+   		 mediaPlayer.play();
+		 inAd = true;
+    }
 	
 }

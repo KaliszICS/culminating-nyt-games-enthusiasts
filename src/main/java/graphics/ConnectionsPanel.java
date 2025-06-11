@@ -3,12 +3,15 @@ package graphics;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -19,20 +22,55 @@ import graphics.buttons.Button;
 import graphics.buttons.Image;
 import graphics.buttons.SpellingBeeEnterButton;
 import graphics.buttons.WordleButton;
+import graphics.utils.GameDataHandler;
 import graphics.utils.PanelAttributes;
 import kalisz.KaliszTimes;
+import logic.Connections;
+import logic.events.EventHandler;
+import logic.events.KeyboardClickEvent;
+import logic.events.KeyboardClickEventListener;
 
 public class ConnectionsPanel extends JPanel implements PanelAttributes {
 	ArrayList<WordleButton> wordleButtons = new ArrayList<WordleButton>();
-	
+	private final ArrayList<KeyboardClickEventListener> listeners = new ArrayList<KeyboardClickEventListener>();
 
 	ArrayList<Button> spellingBeeButtons = new ArrayList<Button>();
+
+	static GameDataHandler data;
+	public static Connections connectionsGame;
 	
 	public ConnectionsPanel() {
 		this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));
 		 
 		 setLayout(null);
 		 
+		
+		 //RUN CONNECTIONS
+		 connectionsGame = new Connections(GameDataHandler.yellowWords, GameDataHandler.yellowCategory,
+		 GameDataHandler.greenWords, GameDataHandler.greenCategory, GameDataHandler.blueWords, GameDataHandler.blueCategory, GameDataHandler.purpleWords, GameDataHandler.purpleCategory);
+
+		//ADD EVENT HANDLER
+		 addKeyboardListener(new KeyboardClickEventListener() {
+
+			@Override
+			public void handleClick(KeyboardClickEvent e) {
+				if(e.getClickType() == KeyboardClickEvent.ENTER) {
+					String code = connectionsGame.submitGuess();
+
+					if(code.equals("not enough words")) {
+						KaliszTimes.popup("You have not selected enough words to make a connection!");
+					}else if(code.equals("wrong")){
+						KaliszTimes.popup("That is the incorrect connection! -1 guess!");
+					}else if(code.equals("game over")) {
+						KaliszTimes.popup("You lost :(");
+					}else{
+						KaliszTimes.popup("You successfully guessed the category: " + code);
+					}
+				}
+			}
+
+		 });
+		
 		 
 		 //Add back button
 		 add(new BackButton(GUIConstants.backButtonImage));
@@ -60,13 +98,35 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 		//Add Submit Button
 		int refSubmitX = 1088;
 		int refSubmitY = 925;
-		add(new Button(GUIConstants.submitButtonImage, GUIConstants.scaleX(refSubmitX), GUIConstants.scaleY(refSubmitY)));
+		Button submitButton = new Button(GUIConstants.submitButtonImage, GUIConstants.scaleX(refSubmitX), GUIConstants.scaleY(refSubmitY));
+		submitButton.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				EventHandler.fireConnectionsClickEvent(getPanel(), ' ', KeyboardClickEvent.ENTER);
+			}
+		});
+		add(submitButton);
 
 		 //Add wordle icons and make them all clickable. Store all of these new buttons in a list.
+
+		 //Step 1: Make an array of wordle answers
+		ArrayList<String> wordleAnswers = new ArrayList<>();
+		//Step 2: Add the first two elements of each colour of array into the list (these are the wordle answers)
+		Collections.addAll(wordleAnswers,
+    		connectionsGame.getYellowWords()[0], connectionsGame.getYellowWords()[1],
+    		connectionsGame.getGreenWords()[0], connectionsGame.getGreenWords()[1],
+    			connectionsGame.getBlueWords()[0], connectionsGame.getBlueWords()[1],
+    		connectionsGame.getPurpleWords()[0], connectionsGame.getPurpleWords()[1]
+		);
+
+		// Step 3: Shuffle to randomize
+		Collections.shuffle(wordleAnswers);
+
+
+
 		 //8 tiles
 
 		 for(int i = 0; i < 8; i++) {
-			WordleButton wordleButton = new WordleButton(GUIConstants.wordleButtonImage, i);
+			WordleButton wordleButton = new WordleButton(GUIConstants.wordleButtonImage, i, wordleAnswers.get(i).toUpperCase());
 
 			int refX = 695 + ( (i / 2) < 2 ? i * 153 : (i - 4) * 153);
 			int refY = 250 + ( (i / 2) >= 2 ? 153 : 0);
@@ -87,9 +147,25 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 			add(b);
 		 }
 
+
+		  //Step 1: Make an array of spelling bee answers
+		ArrayList<String> spellingBeeAnswers = new ArrayList<>();
+		//Step 2: Add the last two elements of each colour of array into the list (these are the spelling bee answers)
+		Collections.addAll(spellingBeeAnswers,
+    		connectionsGame.getYellowWords()[2], connectionsGame.getYellowWords()[3],
+    		connectionsGame.getGreenWords()[2], connectionsGame.getGreenWords()[3],
+    			connectionsGame.getBlueWords()[2], connectionsGame.getBlueWords()[3],
+    		connectionsGame.getPurpleWords()[2], connectionsGame.getPurpleWords()[3]
+		);
+
+		// Step 3: Shuffle to randomize
+		Collections.shuffle(spellingBeeAnswers);
+
+
+
 		 //Add Spelling Bee Buttons
 		  for(int i = 0; i < 8; i++) {
-			Button spellingBeeButton = new SpellingBeeEnterButton(GUIConstants.spellingBeeButtonImage, i);
+			Button spellingBeeButton = new SpellingBeeEnterButton(GUIConstants.spellingBeeButtonImage, i, spellingBeeAnswers.get(i).toUpperCase());
 			int refX = 695 + ( (i / 2) < 2 ? i * 153 : (i - 4) * 153);
 			int refY = 550 + ( (i / 2) >= 2 ? 153 : 0);
 			int refWidth = GUIConstants.DEFAULT_BUTTON_WIDTH;
@@ -104,6 +180,19 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 		 for(Button b : spellingBeeButtons) {
 			add(b);
 		 }
+
+
+
+		
+
+
+
+
+
+
+
+
+
 
 
 		 repaint();
@@ -127,5 +216,18 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 	public void focus() {
 		setFocusable(true);
     	SwingUtilities.invokeLater(() -> requestFocusInWindow());
+	}
+	 public void addKeyboardListener(KeyboardClickEventListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeKeyboardListener(KeyboardClickEventListener listener) {
+        listeners.remove(listener);
+    }
+	public ArrayList<KeyboardClickEventListener> getListeners() {
+		return listeners;
+	}
+	public ConnectionsPanel getPanel() {
+		return this;
 	}
 }

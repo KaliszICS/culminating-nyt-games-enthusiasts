@@ -34,18 +34,23 @@ public class Testing {
                 username = sc.nextLine();
                 password = sc.nextLine();
                 int loginCode = player.login(username, password);
-                while (loginCode < 1) {
-                    System.out.println(((loginCode == -1) ? "Username not registered. " : "Wrong password. ") + "Please input your credentials again (or input \"hell naw\" to exit):");
+                while (loginCode != 1) {
+                    System.out.println(((loginCode == -1) ? "Username not registered. " : "Wrong password. ") + "Please input your credentials again (or input \"hell\" \"naw\" to exit):");
                     username = sc.nextLine();
                     password = sc.nextLine();
                     if ((username + password).equals("hellnaw")) break;
                     loginCode = player.login(username, password);
                 }
+                System.out.println("Login successful! (If you didn't type hell naw!)");
                 break;
         }
 
+        //connections board
+
+        
+
         // wordle test
-        Wordle wordle = new Wordle(new char[]{'t', 'r', 'a', 'i', 'n'});
+        Wordle wordle = new Wordle("Magma");
         System.out.println("WORDLE TEST!!! input the letter that you want to type into the guess (the first letter will be taken if you type a word)");
         String inputString = sc.nextLine();
         boolean done = false;
@@ -54,26 +59,32 @@ public class Testing {
             switch (inputString) {
                 case "":
                     break;
-                case "backspace":
+                case "delete":
                     wordle.deleteLetter();
                     System.out.println("Guess is now " + wordle.getCurrentGuess());
                     break;
                 case "submit":
-                    wordle.submitGuess();
                     ++guesses;
-                    for (int index = 0; index < 5; ++index) System.out.print(wordle.getGuessData()[index] + " ");
+                    switch (wordle.submitGuess()) {
+                        case -1:
+                            System.out.print("Not enough letters!");
+                            break;
+                        case 0:
+                            System.out.print("Not a word!");
+                            break;
+                        default:
+                            for (int index = 0; index < 5; ++index) System.out.print(wordle.getGuessData()[index] + " ");
+                            break;
+                    }
                     System.out.println();
                     done = wordle.getWin();
-                    break;
-                case "clear":
-                    wordle.clearGuess();
                     break;
                 default:
                     wordle.inputLetter(inputString.charAt(0));
                     System.out.println("Guess is now " + wordle.getCurrentGuess());
                     break;
             }
-            inputString = sc.nextLine();
+            if (!done && guesses < 6) inputString = sc.nextLine();
         }
         if (wordle.getWin()) System.out.println("You won! Congrats!");
         else System.out.println("Better luck next time!");
@@ -82,9 +93,21 @@ public class Testing {
             for (int i = 0; i < 5; ++i) { // change 5 as needed (i hardcoded the word for now)
                 System.out.print(wordle.getResults().get(index)[i] + " ");
             }
+            System.out.println();
         }
-
-
+        if (player.addWordleAttempt((wordle.getWin()) ? guesses : -1)) System.out.println("Score saved to profile!");
+        else System.out.println("User not logged in. Score not saved.");
+        switch (player.saveUserData()) {
+            case -1:
+                System.out.println("Uh oh! The save files are corrupted; the save did not go through.");
+                break;
+            case 0:
+                System.out.println("Save failed since you are not logged in. :(");
+                break;
+            case 1:
+                System.out.println("Save successful!");
+        }
+        
     }
 
 }

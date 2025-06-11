@@ -38,6 +38,8 @@ public class Connections {
      */
 
     public Connections(String[] yellowWords, String yellowCategory, String[] greenWords, String greenCategory, String[] blueWords, String blueCategory, String[] purpleWords, String purpleCategory) {
+        this.wordToCategory = new HashMap<>();
+        this.revealed = new HashMap<>();
         this.yellowWords = yellowWords;
         this.yellowCategory = yellowCategory;
         this.greenWords = greenWords;
@@ -80,6 +82,8 @@ public class Connections {
      */
 
     public Connections(String[] yellowWords, String yellowCategory, String[] greenWords, String greenCategory, String[] blueWords, String blueCategory, String[] purpleWords, String purpleCategory, int guessesLeft, ArrayList<String[]> results, HashMap<String, Boolean> revealed) {
+        this.wordToCategory = new HashMap<>();
+        this.revealed = new HashMap<>();
         this.yellowWords = yellowWords;
         this.yellowCategory = yellowCategory;
         this.greenWords = greenWords;
@@ -190,18 +194,18 @@ public class Connections {
      */
 
     public String submitGuess() {
+        
         if (this.currentGuess.size() < 4) return "not enough words";
         String category1 = this.wordToCategory.get(this.board.get(this.currentGuess.get(0))), category2 = this.wordToCategory.get(this.board.get(this.currentGuess.get(1))), category3 = this.wordToCategory.get(this.board.get(this.currentGuess.get(2))), category4 = this.wordToCategory.get(this.board.get(this.currentGuess.get(3)));
         this.results.add(new String[]{category1, category2, category3, category4}); // add the stats of the submitted guess to the results
         this.currentGuess.sort(null); // so that the indexes of the guess are in order to remove properly
         if (category1.equals(category2) && category2.equals(category3) && category3.equals(category4)) { // if a category is completed
-            this.board.remove((int) this.currentGuess.get(3)); // remove all the words from the board
+            this.board.remove((int) this.currentGuess.get(3));
             this.board.remove((int) this.currentGuess.get(2));
             this.board.remove((int) this.currentGuess.get(1));
             this.board.remove((int) this.currentGuess.get(0));
-            String categoryCompleted = this.wordToCategory.get(this.board.get(this.currentGuess.get(0))); // category successfully guessed
-            this.categoriesCompleted.add(categoryCompleted);
-            return categoryCompleted;
+            this.categoriesCompleted.add(category1); // category successfully guessed
+            return category1;
         }
         if (--this.guessesLeft == 0) return "game over"; // if the player has no guesses left and fails the game (-- decrements the amount of guesses left)
         return "wrong"; // player didn't fail the game since the above line didn't run

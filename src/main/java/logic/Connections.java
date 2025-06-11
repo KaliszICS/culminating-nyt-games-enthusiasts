@@ -19,10 +19,10 @@ public class Connections {
     public ArrayList<Integer> currentGuess; // takes indexes from the board array
     private String[] yellowWords, greenWords, blueWords, purpleWords;
     private int guessesLeft;
-    private String yellowCategory, greenCategory, blueCategory, purpleCategory;
-    private HashMap<String, String> wordToCategory;
+    private String yellowCategory, greenCategory, blueCategory, purpleCategory; // yellowCategory = "Rooms in rekugjhselkfgj seg"
+    private HashMap<String, String> wordToCategory; // wordToCategory.get("hall") -> "yellow"
     private ArrayList<String[]> results; // for the ascii results you copy paste after a game
-    private HashMap<String, Boolean> revealed;
+    private HashMap<String, Boolean> revealed; // .get("hall") -> false .......... true
 
     /**
      * Constructor for new game. Takes in data about each category.
@@ -194,7 +194,6 @@ public class Connections {
      */
 
     public String submitGuess() {
-        
         if (this.currentGuess.size() < 4) return "not enough words";
         String category1 = this.wordToCategory.get(this.board.get(this.currentGuess.get(0))), category2 = this.wordToCategory.get(this.board.get(this.currentGuess.get(1))), category3 = this.wordToCategory.get(this.board.get(this.currentGuess.get(2))), category4 = this.wordToCategory.get(this.board.get(this.currentGuess.get(3)));
         this.results.add(new String[]{category1, category2, category3, category4}); // add the stats of the submitted guess to the results

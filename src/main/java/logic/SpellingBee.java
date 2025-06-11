@@ -138,19 +138,19 @@ public class SpellingBee {
         if (this.currentWord.length() < 4) {
             this.currentWord = "";
             return -3;
-        } 
-        if (!this.currentWord.contains(String.valueOf(this.goldenLetter))){
+        }
+        if (!this.currentWord.contains(String.valueOf(this.goldenLetter))) {
             this.currentWord = "";
             return -2;
-        } 
-        if (!dictionaryChecker.checkWord(this.currentWord)){
+        }
+        if (!dictionaryChecker.checkWord(this.currentWord)) {
             this.currentWord = "";
             return -1;
-        } 
-        if (this.wordsFound.contains(this.currentWord)){
+        }
+        if (this.wordsFound.contains(this.currentWord)) {
             this.currentWord = "";
             return 0;
-        } 
+        }
         // below here assumes it is a valid word
         this.wordsFound.add(this.currentWord);
         if (this.currentWord.equals(keyword)) this.win = true; // set this.win to true if current word is the keyword

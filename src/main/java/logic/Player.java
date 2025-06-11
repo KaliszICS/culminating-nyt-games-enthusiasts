@@ -94,6 +94,8 @@ public class Player {
      */
 
     public void saveLoginInfo(String username, String password) {
+        this.username = username;
+        this.password = password;
         try {
             this.pw = new PrintWriter(new FileWriter(this.filepath + this.passwordsFilename, true));
             this.pw.printf("%s %s\n", username, password); // write username and password onto passwords.txt

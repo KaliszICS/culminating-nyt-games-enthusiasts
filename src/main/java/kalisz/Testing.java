@@ -50,7 +50,7 @@ public class Testing {
         
 
         // wordle test
-        Wordle wordle = new Wordle("magma");
+        Wordle wordle = new Wordle("MAGMA");
         System.out.println("WORDLE TEST!!! input the letter that you want to type into the guess (the first letter will be taken if you type a word)");
         String inputString = sc.nextLine();
         boolean done = false;

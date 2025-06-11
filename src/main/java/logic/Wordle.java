@@ -32,8 +32,10 @@ public class Wordle {
      */
 
     public Wordle(String word) {
+    public Wordle(String word) {
         this.word = word;
         this.guessCount = 0;
+        this.guessData = new String[this.word.length()];
         this.guessData = new String[this.word.length()];
         this.overallGuessData = new String[26];
         Arrays.fill(this.overallGuessData, "");
@@ -41,6 +43,7 @@ public class Wordle {
         this.win = false;
         this.wordLetterCount = new int[26];
         for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
+            ++wordLetterCount[this.word.charAt(letterIndex) - 'A'];
             ++wordLetterCount[this.word.charAt(letterIndex) - 'A'];
         }
         this.results = new ArrayList<String[]>();
@@ -55,8 +58,10 @@ public class Wordle {
      */
 
     public Wordle(String word, int guessCount, String[] overallGuessData) {
+    public Wordle(String word, int guessCount, String[] overallGuessData) {
         this.word = word;
         this.guessCount = guessCount;
+        this.guessData = new String[this.word.length()];
         this.guessData = new String[this.word.length()];
         this.overallGuessData = overallGuessData;
         Arrays.fill(this.overallGuessData, "");
@@ -64,15 +69,18 @@ public class Wordle {
         this.win = false;
         for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
             ++wordLetterCount[this.word.charAt(letterIndex) - 'A']; // {1, 0, 0, 1, 2, 0, 0, 0, 0...}
+            ++wordLetterCount[this.word.charAt(letterIndex) - 'A']; // {1, 0, 0, 1, 2, 0, 0, 0, 0...}
         }
         this.results = new ArrayList<String[]>();
     }
 
     public String getWord() {
+    public String getWord() {
         return this.word;
     }
 
     public int getWordLength() {
+        return this.word.length();
         return this.word.length();
     }
 
@@ -109,6 +117,7 @@ public class Wordle {
 
     public boolean inputLetter(char letter) {
         if (this.currentGuess.length() >= this.word.length() || !Character.isLetter(letter)) return false;
+        if (this.currentGuess.length() >= this.word.length() || !Character.isLetter(letter)) return false;
         this.currentGuess += Character.toUpperCase(letter);
         return true;
     }
@@ -131,6 +140,7 @@ public class Wordle {
      public int submitGuess() {
         DictionaryChecker dictionaryChecker = new DictionaryChecker();
         if (this.currentGuess.length() < this.word.length()) {
+        if (this.currentGuess.length() < this.word.length()) {
             this.currentGuess = ""; // clear guess after submission
             return -1;
         }
@@ -140,13 +150,16 @@ public class Wordle {
         }
         // Below here logs the word as a guess and tracks the stats
         this.guessData = new String[this.word.length()];
+        this.guessData = new String[this.word.length()];
         Arrays.fill(this.guessData, ""); // reset guessData to empty strings 
         this.win = true; // assume the player wins first
         int[] lettersUsed = Arrays.copyOf(this.wordLetterCount, 26); // copy of word letter count to track how many letters have been used (e.g., what if letters repeat?)
         for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
             int letterCode = this.currentGuess.charAt(letterIndex) - 'A'; // 0 = 'a', 1 = 'b', etc.
             if (this.word.charAt(letterIndex) == this.currentGuess.charAt(letterIndex)) { // green case
+            if (this.word.charAt(letterIndex) == this.currentGuess.charAt(letterIndex)) { // green case
                 if (lettersUsed[letterCode] == 0) { // letter already marked yellow previously
+                    for (int revIndex = this.word.length() - 1; revIndex >= 0; --revIndex) { // search backwards through guessData to find the last yellow
                     for (int revIndex = this.word.length() - 1; revIndex >= 0; --revIndex) { // search backwards through guessData to find the last yellow
                         if (this.guessData[revIndex].equals("yellow")) {
                             this.guessData[revIndex] = "grey"; // turn it grey instead

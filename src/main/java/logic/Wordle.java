@@ -103,7 +103,7 @@ public class Wordle {
 
     public boolean inputLetter(char letter) {
         if (this.currentGuess.length() >= this.word.length || !Character.isLetter(letter)) return false;
-        this.currentGuess += (letter < 97) ? (char) (letter + 32) : letter; // convert to lowercase (there is no toLowercase() for characters)
+        this.currentGuess += Character.toLowerCase(letter);
         return true;
     }
 
@@ -113,14 +113,6 @@ public class Wordle {
 
     public void deleteLetter() {
         if (this.currentGuess.length() > 0) this.currentGuess = this.currentGuess.substring(0, this.currentGuess.length() - 1);
-    }
-
-    /**
-     * Clears the current guess, removing all its letters.
-     */
-
-    public void clearGuess() {
-        this.currentGuess = "";
     }
 
     /**
@@ -134,7 +126,6 @@ public class Wordle {
         DictionaryChecker dictionaryChecker = new DictionaryChecker();
         if (this.currentGuess.length() < this.word.length) return -1;
         if (!dictionaryChecker.checkWord(this.currentGuess)) return 0;
-        this.guessData = new String[this.word.length]; // RESET here
         // Below here logs the word as a guess and tracks the stats
         this.win = true; // assume the player wins first
         int[] lettersUsed = Arrays.copyOf(this.wordLetterCount, 26); // copy of word letter count to track how many letters have been used (e.g., what if letters repeat?)
@@ -157,7 +148,7 @@ public class Wordle {
         }
         ++guessCount; // one more guess was made
         this.results.add(guessData); // add submitted guess to results
-        this.clearGuess(); // clear guess after submission
+        this.currentGuess = ""; // clear guess after submission
         return 1;
     }
 

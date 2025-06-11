@@ -1,28 +1,104 @@
 package graphics.buttons;
 
 
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
+import graphics.GUIConstants;
+import graphics.GraphicsHandler;
 import graphics.SpellingBeeGamePanel;
+import graphics.SpellingBeeGamePanel;
+
+
+
 import kalisz.KaliszTimes;
 
 public class SpellingBeeEnterButton extends Button {
+private SpellingBeeGamePanel spellingBeeInstance;
+	private boolean finished = false;
+	private String spellingBeeAnswer;
+	private int uniqueID;
 
-    public SpellingBeeEnterButton(BufferedImage image) {
+    public SpellingBeeEnterButton(BufferedImage image, int uniqueID) {
         super(image);
+		this.uniqueID = uniqueID;
+		
     }
     
 
-
 	@Override
 	public void mousePressed(MouseEvent e) {
-		//Generate a new spelling bee instance
-		SpellingBeeGamePanel newSpellingBeeGamePanel = new SpellingBeeGamePanel();
-        System.out.println(newSpellingBeeGamePanel);
-        KaliszTimes.getGraphicsHandler().addToPanel(newSpellingBeeGamePanel);
-        KaliszTimes.getGraphicsHandler().reloadFrame();
-        KaliszTimes.getGraphicsHandler().jumpToRecentlyAdded();
-	}
+		//Generate a new SpellingBee instance
+		if(!GraphicsHandler.activeSpellingBeeInstances.containsKey(this)) {
+			//Track SpellingBee instance
+			spellingBeeInstance = new SpellingBeeGamePanel(this);
+			GraphicsHandler.activeSpellingBeeInstances.put(this, spellingBeeInstance);
+			KaliszTimes.getGraphicsHandler().addPanel(spellingBeeInstance, "Spelling Bee Game Panel " + uniqueID);
+		}else{
+			spellingBeeInstance = GraphicsHandler.activeSpellingBeeInstances.get(this);
+			KaliszTimes.getGraphicsHandler().jump("Spelling Bee Game Panel " + uniqueID);
+			
+		}
+		spellingBeeInstance.focus();
 
+
+        
+        
+
+     
+	}
+	
+	@Override
+	public void mouseEntered(MouseEvent e) { //overrides, so it can disable? might change this
+		this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		
+	}
+	 @Override
+    protected void paintComponent(Graphics g) {
+		Graphics2D graphics = (Graphics2D) g;
+
+        if (!finished) {// paints the image from the Button class
+			 super.paintComponent(g);
+			if(spellingBeeInstance != null && spellingBeeInstance.spellingBeeGame != null && !spellingBeeInstance.spellingBeeGame.getWin()) {
+				graphics.setFont(new Font("Arial", Font.BOLD, 15));
+				int textWidth = graphics.getFontMetrics().stringWidth("In Progress");
+				int textHeight = graphics.getFontMetrics().getAscent();
+				int textX = (getWidth() - textWidth) / 2;
+				int textY = (getHeight() + textHeight) / 4;
+				graphics.setColor(Color.red);
+				graphics.drawString("In Progress", GUIConstants.scaleX(textX), GUIConstants.scaleY(textY));
+			}
+
+			
+        // Draw the image only if not finished
+    	} else {
+
+		
+			
+			graphics.setFont(new Font("Arial", Font.BOLD, 20));
+			graphics.setColor(Color.black);
+
+			// Draw character centered
+			int textWidth = graphics.getFontMetrics().stringWidth(spellingBeeAnswer);
+			int textHeight = graphics.getFontMetrics().getAscent();
+			int textX = (getWidth() - textWidth) / 2;
+			int textY = (getHeight() + textHeight) / 2 - 4;
+
+			graphics.drawString(spellingBeeAnswer, GUIConstants.scaleX(textX), GUIConstants.scaleY(textY));
+		}
+    }
+
+	public SpellingBeeGamePanel getSpellingBeeInstance() {
+		return this.spellingBeeInstance;
+	}
+	public void setFinished(String spellingBeeAnswer) {
+		this.spellingBeeAnswer = spellingBeeAnswer;
+		finished = true;
+		removeMouseListener(this);
+	}
 }

@@ -11,56 +11,38 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import graphics.utils.PanelAttributes;
+import java.awt.event.MouseAdapter;
 import kalisz.KaliszTimes;
 
-public class TitleScreenPanel extends JPanel implements PanelAttributes, MouseListener {
-	BufferedImage background;
+public class TitleScreenPanel extends JPanel implements PanelAttributes {
 	
 	public TitleScreenPanel() {
 		this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));
-		 loadImages();
+		 this.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
+					System.out.println("Next panel");
+					KaliszTimes.getGraphicsHandler().jump("Connections Start Panel");
+	}		
+		 });
 		 
-		 
-		 this.addMouseListener(this);
+	
 		 repaint();
 	}
 	public void paintComponent(Graphics g) {
 		Graphics2D graphics = (Graphics2D) g;
 		super.paintComponent(g);
 		
-		graphics.drawImage(background, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT, this);
+		graphics.drawImage(GUIConstants.title_screen_background_image, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT, this);
 		
 
 	}
 	@Override
-	public void loadImages() {
-		try {
-			background = ImageIO.read(getClass().getResourceAsStream("resources/TitleScreenBackground.png"));
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		System.out.println("Next panel");
-		KaliszTimes.getGraphicsHandler().nextPanel();
-	}
-	@Override
-	public void mousePressed(MouseEvent e) {
-	}
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		
-	}
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		
-	}
-	@Override
-	public void mouseExited(MouseEvent e) {
-		
+	public void focus() {
+		setFocusable(true);
+    	SwingUtilities.invokeLater(() -> requestFocusInWindow());
 	}
 }

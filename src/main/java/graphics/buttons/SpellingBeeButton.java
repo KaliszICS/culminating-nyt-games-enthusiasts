@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import graphics.GUIConstants;
+import graphics.SpellingBeeGamePanel;
 import logic.events.EventHandler;
 import logic.events.KeyboardClickEvent;
 
@@ -14,9 +15,11 @@ import logic.events.KeyboardClickEvent;
 
 public class SpellingBeeButton extends Button {
     char letter;
-    public SpellingBeeButton(BufferedImage image, char letter, int x, int y) {
+    SpellingBeeGamePanel panel;
+    public SpellingBeeButton(BufferedImage image, char letter, int x, int y, SpellingBeeGamePanel panel) {
         super(image);
         this.letter = letter;
+        this.panel = panel;
         this.setBounds(x, y, GUIConstants.scaleX(image.getWidth()), GUIConstants.scaleY(image.getHeight()));
         
     }
@@ -24,7 +27,7 @@ public class SpellingBeeButton extends Button {
     @Override
     public void mousePressed(MouseEvent e) {
         System.out.println("Mouse clicked");
-		EventHandler.fireSpellingBeeClickEvent(this, letter, KeyboardClickEvent.NORMAL_KEY);
+		EventHandler.fireSpellingBeeClickEvent(panel, letter, KeyboardClickEvent.NORMAL_KEY);
 		
 	}
 
@@ -45,5 +48,8 @@ public class SpellingBeeButton extends Button {
 
     public char getLetter() {
         return this.letter;
+    }
+    public void setLetter(char letter) {
+        this.letter = letter;
     }
 }

@@ -9,7 +9,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
+import graphics.buttons.BackButton;
 import graphics.buttons.Button;
 import graphics.utils.PanelAttributes;
 import kalisz.KaliszTimes;
@@ -19,41 +21,13 @@ public class SpellingBeeWinPanel extends JPanel implements PanelAttributes {
 	
 	public SpellingBeeWinPanel() {
 		this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));
-		 loadImages();
+		
 		 setLayout(null);
 		 
 		 
-		 Button backButton = new Button(backButtonImage);
-		 backButton.setLocation(41, 35);
-		 backButton.setSize(74, 59);
+		add(new BackButton(GUIConstants.backButtonImage));
 		
 
-
-		 
-		 
-		 
-		 backButton.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				System.out.println("Back button pressed");
-				KaliszTimes.getGraphicsHandler().previousPanel();
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {}
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-			@Override
-			public void mouseEntered(MouseEvent e) {}
-			@Override
-			public void mouseExited(MouseEvent e) {	}
-			 
-		 });
-		 
-		 
-		 add(backButton);
-		 
 		 
 		 
 		 
@@ -61,7 +35,7 @@ public class SpellingBeeWinPanel extends JPanel implements PanelAttributes {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				KaliszTimes.getGraphicsHandler().nextPanel();
+				//KaliszTimes.getGraphicsHandler().nextPanel();
 			}
 
 			@Override
@@ -100,14 +74,9 @@ public class SpellingBeeWinPanel extends JPanel implements PanelAttributes {
 
 	}
 	@Override
-	public void loadImages() {
-		try {
-			background = ImageIO.read(getClass().getResourceAsStream("resources/SpellingBeeWinScreen.png"));
-			backButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/Back Button.jpg"));
-			playButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/Play Button.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void focus() {
+		setFocusable(true);
+    	SwingUtilities.invokeLater(() -> requestFocusInWindow());
 	}
     
 	

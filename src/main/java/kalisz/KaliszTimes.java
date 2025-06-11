@@ -5,6 +5,9 @@ import graphics.GraphicsHandler;
 import logic.AIHandler;
 import logic.AudioHandler;
 import java.awt.Toolkit;
+
+import javax.swing.JOptionPane;
+
 import java.awt.Dimension;
 
 public class KaliszTimes {
@@ -33,6 +36,9 @@ public class KaliszTimes {
 	}
 	public static AudioHandler getAudioHandler() {
 		return audioHandler;
+	}
+	public static void popup(String message) {
+		JOptionPane.showMessageDialog(null, message, "Information!", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 }

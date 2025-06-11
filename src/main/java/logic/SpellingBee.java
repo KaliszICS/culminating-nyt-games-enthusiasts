@@ -21,12 +21,19 @@ public class SpellingBee {
     private boolean win;
 
     public SpellingBee(String keyword, char goldenLetter) {
-        this.keyword = keyword.toLowerCase();
+        this.keyword = keyword.toUpperCase();
+        this.goldenLetter = Character.toUpperCase(goldenLetter);
         this.letters = new ArrayList<Character>();
         for (int letterIndex = 0; letterIndex < this.keyword.length(); ++letterIndex) {
-            if (!this.letters.contains(this.keyword.charAt(letterIndex))) this.letters.add(this.keyword.charAt(letterIndex)); // if letters doesn't have it yet, add it
+            if (!this.letters.contains(this.keyword.charAt(letterIndex))) {
+                if(this.keyword.charAt(letterIndex) != this.goldenLetter) {
+                    this.letters.add(this.keyword.charAt(letterIndex)); // if letters doesn't have it yet, add it as long as it's not the golden letter.
+                 
+                }
+            }
         }
-        this.goldenLetter = Character.toLowerCase(goldenLetter);
+     
+        
         this.currentWord = "";
         this.score = 0;
         this.wordsFound = new ArrayList<String>();
@@ -36,10 +43,15 @@ public class SpellingBee {
     public SpellingBee(String keyword, char goldenLetter, String currentWord, int score, ArrayList<String> wordsFound) {
         this.keyword = keyword;
         this.letters = new ArrayList<Character>(); 
+        this.goldenLetter = Character.toUpperCase(goldenLetter);
         for (int letterIndex = 0; letterIndex < this.keyword.length(); ++letterIndex) {
-            if (!this.letters.contains(this.keyword.charAt(letterIndex))) this.letters.add(this.keyword.charAt(letterIndex)); // if letters doesn't have it yet, add it
+            if (!this.letters.contains(this.keyword.charAt(letterIndex))) {
+                if(this.keyword.charAt(letterIndex) != this.goldenLetter) {
+                    this.letters.add(this.keyword.charAt(letterIndex)); // if letters doesn't have it yet, add it as long as it's not the golden letter.
+                 
+                }
+            }
         }
-        this.goldenLetter = Character.toLowerCase(goldenLetter);
         this.currentWord = currentWord;
         this.score = score;
         this.wordsFound = wordsFound;
@@ -82,9 +94,10 @@ public class SpellingBee {
      */
 
     public int inputLetter(char letter) {
-        if (!this.letters.contains(letter) || !Character.isLetter(letter)) return -1;
+        letter = Character.toUpperCase(letter);
+        if (!(this.letters.contains(letter) || letter == this.goldenLetter) || !Character.isLetter(letter)) return -1;
         if (this.currentWord.length() == 19) return 0;
-        this.currentWord += Character.toLowerCase(letter);
+        this.currentWord += letter;
         return 1;
     }
 
@@ -127,10 +140,22 @@ public class SpellingBee {
 
     public int submitWord() {
         DictionaryChecker dictionaryChecker = new DictionaryChecker();
-        if (this.currentWord.length() < 4) return -3;
-        if (!this.currentWord.contains(String.valueOf(this.goldenLetter))) return -2;
-        if (!dictionaryChecker.checkWord(this.currentWord)) return -1;
-        if (this.wordsFound.contains(this.currentWord)) return 0;
+        if (this.currentWord.length() < 4) {
+            this.currentWord = "";
+            return -3;
+        } 
+        if (!this.currentWord.contains(String.valueOf(this.goldenLetter))){
+            this.currentWord = "";
+            return -2;
+        } 
+        if (!dictionaryChecker.checkWord(this.currentWord)){
+            this.currentWord = "";
+            return -1;
+        } 
+        if (this.wordsFound.contains(this.currentWord)){
+            this.currentWord = "";
+            return 0;
+        } 
         // below here assumes it is a valid word
         this.wordsFound.add(this.currentWord);
         if (this.currentWord.equals(keyword)) this.win = true; // set this.win to true if current word is the keyword

@@ -1,7 +1,13 @@
 package graphics;
 import java.awt.CardLayout;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Stack;
 
 import javax.swing.*;
+
+import graphics.buttons.SpellingBeeEnterButton;
+import graphics.buttons.WordleButton;
 
 public class GraphicsHandler {
 	
@@ -9,7 +15,14 @@ public class GraphicsHandler {
 	private static JFrame frame = null;
 	private static CardLayout layout = null;
 	private static JPanel mainPanel = null;
+    public static HashMap<WordleButton, WordleGamePanel> activeWordleInstances = new HashMap<>();
+    public static HashMap<SpellingBeeEnterButton, SpellingBeeGamePanel> activeSpellingBeeInstances = new HashMap<>();
 
+
+    private static ConnectionsPanel connectionsPanel;
+    public static String currentPanel;
+    private static Stack<String> panelHistory = new Stack<>();
+   
     public void initiate() {
         frame = new JFrame(GUIConstants.gameName + " " + GUIConstants.gameVersion);
         frame.setSize(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT);
@@ -22,40 +35,45 @@ public class GraphicsHandler {
         
         TitleScreenPanel titlePanel = new TitleScreenPanel();
         
-        GameSelectionPanel selectionPanel = new GameSelectionPanel();
+       GameSelectionPanel selectionPanel = new GameSelectionPanel();
         
-        ConnectionsPanel connectionsPanel = new ConnectionsPanel();
+        connectionsPanel = new ConnectionsPanel();
         
       //  WordleStartPanel wordleStartPanel = new WordleStartPanel();
         
-        WordleGamePanel wordleGamePanel = new WordleGamePanel();
+      //  WordleGamePanel wordleGamePanel = new WordleGamePanel();
         
       //  WordleWinPanel wordleWinPanel = new WordleWinPanel();
         
        // SpellingBeeStartPanel sbStartPanel = new SpellingBeeStartPanel();
         
-       // SpellingBeeGamePanel sbGamePanel = new  SpellingBeeGamePanel();
+        //SpellingBeeGamePanel sbGamePanel = new  SpellingBeeGamePanel();
         
        // SpellingBeeWinPanel sbWinPanel = new  SpellingBeeWinPanel();
         
-       //temp mainPanel.add(titlePanel);
-        mainPanel.add(selectionPanel);
-        mainPanel.add(connectionsPanel);
+        mainPanel.add(titlePanel, "Title Screen Panel");
+        
+        mainPanel.add(selectionPanel, "Connections Start Panel");
+       
+        mainPanel.add(connectionsPanel, "Connections Panel");
+    
+
+       
       //  mainPanel.add(wordleStartPanel);
-        mainPanel.add(wordleGamePanel);
+      //  mainPanel.add(wordleGamePanel);
       //  mainPanel.add(wordleWinPanel);
       //  mainPanel.add(sbStartPanel);
-      //  mainPanel.add(sbGamePanel);
+       // mainPanel.add(sbGamePanel);
       //  mainPanel.add(sbWinPanel);
         
         
         
         
-        frame.add(mainPanel);
-        
-        
-        
-        frame.setVisible(true);
+        currentPanel = "Title Screen Panel";
+        layout.show(mainPanel, currentPanel);
+
+         frame.add(mainPanel);
+         frame.setVisible(true);
     }
     
     public JFrame getFrame() {
@@ -65,20 +83,36 @@ public class GraphicsHandler {
     public JPanel getPanel() {
     	return mainPanel;
     }
-    public void nextPanel() {
-    	layout.next(getPanel());
+    public void goBack() {
+        if (!panelHistory.isEmpty()) {
+        String previousPanel = panelHistory.pop();
+         System.out.println("Current Panel: " + currentPanel + " Previous Panel: " + previousPanel);
+        layout.show(mainPanel, previousPanel);
+        currentPanel = previousPanel;
+       
+        }
     }
-    public void previousPanel() {
-    	layout.previous(getPanel());
-    }
-    public void jumpToRecentlyAdded() {
-        layout.last(getPanel());
+
+    public void jump(String panelName) {
+        if (!panelName.equals(currentPanel)) {
+            panelHistory.push(currentPanel); // Save current panel before switching
+            layout.show(mainPanel, panelName);
+              System.out.println("Jumping from " + currentPanel + " to " + panelName);
+            currentPanel = panelName;
+           
+     }
     }
     public void reloadFrame() {
-        frame.add(getPanel());
-        frame.revalidate(); //reload frame??
+          frame.revalidate();
+          frame.repaint();
     }
-    public void addToPanel(JComponent newItem) {
-        getPanel().add(newItem);
+    public void addPanel(JPanel newPanel, String name) {
+        mainPanel.add(newPanel, name);
+        reloadFrame();
+        jump(name);
+    }
+  
+    public ConnectionsPanel getConnectionsPanel() {
+        return connectionsPanel;
     }
 }

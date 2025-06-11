@@ -31,7 +31,12 @@ public class GUIConstants {
     normal_letter_image, golden_letter_image,
     spelling_bee_delete_button_image,
     spelling_bee_enter_button_image,
-    spelling_bee_shuffle_button_image;
+    spelling_bee_shuffle_button_image,
+    connections_start_background_image,
+    wordle_start_background_image,
+    title_screen_background_image,
+    spelling_bee_start_background_image,
+    wordle_win_background_image;
 
     public GUIConstants() {
 
@@ -77,6 +82,11 @@ public class GUIConstants {
             spelling_bee_delete_button_image= ImageIO.read(getClass().getResourceAsStream("resources/spelling_bee_delete_button.png"));
             spelling_bee_enter_button_image= ImageIO.read(getClass().getResourceAsStream("resources/spelling_bee_enter_button.png"));
             spelling_bee_shuffle_button_image= ImageIO.read(getClass().getResourceAsStream("resources/spelling_bee_shuffle_button.png"));
+            connections_start_background_image = ImageIO.read(getClass().getResourceAsStream("resources/connections_start_background.png"));
+            wordle_start_background_image = ImageIO.read(getClass().getResourceAsStream("resources/wordle_start_background.png"));
+            title_screen_background_image = ImageIO.read(getClass().getResourceAsStream("resources/title_screen_background.png"));
+            spelling_bee_start_background_image = ImageIO.read(getClass().getResourceAsStream("resources/spelling_bee_start_background.png"));
+             wordle_win_background_image = ImageIO.read(getClass().getResourceAsStream("resources/wordle_win_background.png"));
 
 
 

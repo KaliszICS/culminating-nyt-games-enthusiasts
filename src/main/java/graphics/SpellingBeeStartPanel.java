@@ -9,82 +9,25 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
+import graphics.buttons.BackButton;
 import graphics.buttons.Button;
 import graphics.utils.PanelAttributes;
 import kalisz.KaliszTimes;
 
 public class SpellingBeeStartPanel extends JPanel implements PanelAttributes {
-	BufferedImage background, backButtonImage, playButtonImage;
+
 	
 	public SpellingBeeStartPanel() {
 		this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));
-		 loadImages();
+		
 		 setLayout(null);
 		 
 		 
-		 Button backButton = new Button(backButtonImage);
-		 backButton.setLocation(41, 35);
-		 backButton.setSize(74, 59);
+		 add( new BackButton(GUIConstants.backButtonImage));
 		
-
-
-		 
-		 
-		 
-		 backButton.addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				System.out.println("Back button pressed");
-				KaliszTimes.getGraphicsHandler().previousPanel();
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {}
-			@Override
-			public void mouseReleased(MouseEvent e) {}
-			@Override
-			public void mouseEntered(MouseEvent e) {}
-			@Override
-			public void mouseExited(MouseEvent e) {	}
-			 
-		 });
-		 
-		 
-		 add(backButton);
-		 
-		 
-		 
-		 
-		 addMouseListener(new MouseListener() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				KaliszTimes.getGraphicsHandler().nextPanel();
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				
-			}
-			 
-		 });
+		
 		 
 		 repaint();
 	}
@@ -95,19 +38,14 @@ public class SpellingBeeStartPanel extends JPanel implements PanelAttributes {
 		
 		
 		int SHIFT_UP = 25;
-		graphics.drawImage(background, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT - SHIFT_UP, this);
+		graphics.drawImage(GUIConstants.spelling_bee_start_background_image, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT - SHIFT_UP, this);
 		
 
 	}
 	@Override
-	public void loadImages() {
-		try {
-			background = ImageIO.read(getClass().getResourceAsStream("resources/SpellingBeeStartScreen.png"));
-			backButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/Back Button.jpg"));
-			playButtonImage = ImageIO.read(getClass().getResourceAsStream("resources/Play Button.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void focus() {
+		setFocusable(true);
+    	SwingUtilities.invokeLater(() -> requestFocusInWindow());
 	}
     
 	

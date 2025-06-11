@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 
 import graphics.GUIConstants;
+import graphics.WordleGamePanel;
 import logic.events.EventHandler;
 import logic.events.KeyboardClickEvent;
 import logic.events.KeyboardClickEventListener;
@@ -20,10 +21,12 @@ public class KeyboardButton extends Button {
    private char character;
     int x, y;
     int clickType;
+    private WordleGamePanel panel;
     
-    public KeyboardButton(BufferedImage image, char character, int x, int y, int clickType) {
+    public KeyboardButton(BufferedImage image, char character, int x, int y, int clickType, WordleGamePanel panel) {
         super(image);
        
+        this.panel = panel;
         this.x = x;
         this.y = y;
         this.clickType = clickType;
@@ -38,8 +41,9 @@ public class KeyboardButton extends Button {
 
     }
     //Enter / backspace buttons
-     public KeyboardButton(BufferedImage image, int x, int y, int clickType) {
+     public KeyboardButton(BufferedImage image, int x, int y, int clickType, WordleGamePanel panel) {
         super(image);
+        this.panel = panel;
         this.x = x;
         this.y = y;
         this.character = ' ';
@@ -73,7 +77,7 @@ public class KeyboardButton extends Button {
 
     @Override
 	public void mousePressed(MouseEvent e) {
-		 EventHandler.fireWordleClickEvent(this, this.character, this.clickType);
+		 EventHandler.fireWordleClickEvent(panel, this.character, this.clickType);
 	}
     public char getCharacter() {
         return this.character;

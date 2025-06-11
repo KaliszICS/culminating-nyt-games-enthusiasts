@@ -18,8 +18,6 @@ public class BackButton extends Button  {
 
 		setBounds(GUIConstants.scaleX(refX), GUIConstants.scaleY(refY), GUIConstants.scaleX(refWidth), GUIConstants.scaleY(refHeight));
 
-		addMouseListener(this);
-
 
     }
     	 
@@ -27,7 +25,7 @@ public class BackButton extends Button  {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		System.out.println("Back button pressed");
-			KaliszTimes.getGraphicsHandler().previousPanel();
+			KaliszTimes.getGraphicsHandler().goBack();
 	}
 			 
 		

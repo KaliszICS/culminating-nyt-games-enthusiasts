@@ -1,6 +1,7 @@
 package graphics;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -23,6 +24,7 @@ import graphics.buttons.BackButton;
 import graphics.buttons.Button;
 import graphics.buttons.Image;
 import graphics.buttons.KeyboardButton;
+import graphics.buttons.WordleButton;
 import graphics.utils.PanelAttributes;
 //import javafx.scene.text.Font;
 import kalisz.KaliszTimes;
@@ -32,10 +34,11 @@ import logic.events.EventHandler;
 import logic.events.KeyboardClickEvent;
 import logic.events.KeyboardClickEventListener;
 
-public class WordleGamePanel extends JPanel implements KeyListener {
+public class WordleGamePanel extends JPanel implements KeyListener, PanelAttributes {
 	
+	WordleButton origin;
 	ArrayList<KeyboardButton> keyboardButtons = new ArrayList<KeyboardButton>();
-	private static final ArrayList<KeyboardClickEventListener> listeners = new ArrayList<KeyboardClickEventListener>();
+	private final ArrayList<KeyboardClickEventListener> listeners = new ArrayList<KeyboardClickEventListener>();
 
 	private String[][] grid = new String[GUIConstants.WORDLE_NUM_OF_ROWS][GUIConstants.WORDLE_NUM_OF_COLUMNS];
 	private String[][] gridColours = new String[GUIConstants.WORDLE_NUM_OF_ROWS][GUIConstants.WORDLE_NUM_OF_COLUMNS];
@@ -45,21 +48,15 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 	private int rowNumber = 0; //Will change every time user clicks enter.
 	
 
-	private Wordle wordleGame;
+	public Wordle wordleGame;
 	
-	public WordleGamePanel() {
+	public WordleGamePanel(WordleButton origin) {
+		this.origin = origin;
 		this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));
 		 
 		 setLayout(null);
-		addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if(wordleGame.getWin()) //Only if user has won, allow user to click to go back to the previous panel.
-					KaliszTimes.getGraphicsHandler().previousPanel();
-			}
-		});
 		 
 		 
-		
 		 add(new BackButton(GUIConstants.backButtonImage));
 
 		  //Add KaliszGames Logo
@@ -78,11 +75,10 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 		
 		 //Adds physical keyboard compatibility 
 		addKeyListener(this);
-		setFocusable(true);
-    	SwingUtilities.invokeLater(() -> requestFocusInWindow());
+		
 
 		//Implement Franklin's Wordle Game 
-		this.wordleGame = new Wordle("PANIC");
+		this.wordleGame = new Wordle("MAGMA");
 
 
 
@@ -128,44 +124,60 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 						wordleGame.deleteLetter();
 					}
 					//If queue is full, give user the ability to submit their word to verify each individual letter.
-					if(lettersInQueue.size() == 5 && e.getClickType() == KeyboardClickEvent.ENTER) {
-						
-						int result = wordleGame.submitGuess();
-						System.out.println("Guess submitted");
-						for(char c : lettersInQueue) {
-							System.out.println(c);
+					if(e.getClickType() == KeyboardClickEvent.ENTER) {
+						if(lettersInQueue.size() == 5) {
+							int result = wordleGame.submitGuess();
+							System.out.println("Guess submitted");
+							for(char c : lettersInQueue) {
+								System.out.println(c);
+							}
+							if (result == 1) { // guess submitted successfully
+								String[] guessResult = wordleGame.getGuessData(); // e.g., ["green", "grey", "yellow", ...]
+
+								for (int i = 0; i < 5; i++) {
+									String color = guessResult[i];
+									// Apply coloring to your GUI (this depends on how you want to show feedback: background color, etc.)
+									// You could store this color in a parallel 2D array like String[][] gridColors;
+									// and draw it in your paintComponent() with colored rectangles.
+									gridColours[rowNumber][i] = color;
+									
+
+									System.out.println(color);
+									repaint();
+				}
+							//Clear queue, go to next row number.
+							lettersInQueue.clear();
+							//wordleGame.clearGuess();
+							rowNumber++;
+
+
+						if(wordleGame.getWin()) {
+							KaliszTimes.popup("Congratulations! " + wordleGame.getWord() + " was the correct word!");
+							origin.setFinished(wordleGame.getWord());
+							origin.repaint();
+
+								// Properly remove panel from parent
+							getPanel().setFocusable(false);
+							getPanel().setVisible(false);
+							
+
+								Container parent = getPanel().getParent();
+								if (parent != null) {
+									parent.remove(getPanel());
+									parent.revalidate();
+									parent.repaint();
+								}
+
+								GraphicsHandler.activeWordleInstances.remove(origin); // cleanup
+								KaliszTimes.getGraphicsHandler().goBack(); // navigate
+							
+
+
 						}
-						if (result == 1) { // guess submitted successfully
-							String[] guessResult = wordleGame.getGuessData(); // e.g., ["green", "grey", "yellow", ...]
-
-							for (int i = 0; i < 5; i++) {
-								String color = guessResult[i];
-								// Apply coloring to your GUI (this depends on how you want to show feedback: background color, etc.)
-								// You could store this color in a parallel 2D array like String[][] gridColors;
-								// and draw it in your paintComponent() with colored rectangles.
-								gridColours[rowNumber][i] = color;
-								
-
-								System.out.println(color);
-								repaint();
-        	}
-						//Clear queue, go to next row number.
-						lettersInQueue.clear();
-						//wordleGame.clearGuess();
-						rowNumber++;
-
-
-					if(wordleGame.getWin()) {
-						System.out.println("You win!");
-						//KaliszTimes.getGraphicsHandler().previousPanel();
-						
-
-
-
 					}
 
 			}else {
-				System.out.println("Guess invalid!");
+					KaliszTimes.popup("Your guess is invalid!");
 				}
 
 						
@@ -259,7 +271,7 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 
 			int refX =  466 + (i * 99);
 			int refY = 639;
-			KeyboardButton button = new KeyboardButton(GUIConstants.keyboardButtonImage, topRow[i], refX, refY, KeyboardClickEvent.NORMAL_KEY);
+			KeyboardButton button = new KeyboardButton(GUIConstants.keyboardButtonImage, topRow[i], refX, refY, KeyboardClickEvent.NORMAL_KEY, this);
 			keyboardButtons.add(button);
 		}
 		
@@ -268,7 +280,7 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 			
 			int refX = 512 + (i * 100);
 			int refY = 772;
-			KeyboardButton button = new KeyboardButton(GUIConstants.keyboardButtonImage, middleRow[i], refX, refY, KeyboardClickEvent.NORMAL_KEY);
+			KeyboardButton button = new KeyboardButton(GUIConstants.keyboardButtonImage, middleRow[i], refX, refY, KeyboardClickEvent.NORMAL_KEY, this);
 			keyboardButtons.add(button);
 		}
 
@@ -276,18 +288,18 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 		for(int i = 0; i < 7; i++) {
 			int refX = 610 + (i * 100);
 			int refY = 900;
-			KeyboardButton button = new KeyboardButton(GUIConstants.keyboardButtonImage, bottomRow[i], refX, refY, KeyboardClickEvent.NORMAL_KEY); 
+			KeyboardButton button = new KeyboardButton(GUIConstants.keyboardButtonImage, bottomRow[i], refX, refY, KeyboardClickEvent.NORMAL_KEY, this); 
 			keyboardButtons.add(button);
 		}
 		//Enter and backwards buttons
 		int refX = 467;
 		int refY = 900;
-		KeyboardButton enterButton = new KeyboardButton(GUIConstants.keyboard_enter_button_image, refX, refY, KeyboardClickEvent.ENTER); 
+		KeyboardButton enterButton = new KeyboardButton(GUIConstants.keyboard_enter_button_image, refX, refY, KeyboardClickEvent.ENTER, this); 
 			keyboardButtons.add(enterButton);
 
 		int refX2 = 1318;
 		int refY2 = 900;
-		KeyboardButton backspaceButton = new KeyboardButton(GUIConstants.keyboard_backspace_button_image, refX2, refY2, KeyboardClickEvent.BACKSPACE); 
+		KeyboardButton backspaceButton = new KeyboardButton(GUIConstants.keyboard_backspace_button_image, refX2, refY2, KeyboardClickEvent.BACKSPACE, this); 
 			keyboardButtons.add(backspaceButton);
 
 		//Add all keyboard buttons to panel.
@@ -304,7 +316,7 @@ public class WordleGamePanel extends JPanel implements KeyListener {
     public void removeKeyboardListener(KeyboardClickEventListener listener) {
         listeners.remove(listener);
     }
-	public static ArrayList<KeyboardClickEventListener> getListeners() {
+	public ArrayList<KeyboardClickEventListener> getListeners() {
 		return listeners;
 	}
 
@@ -371,5 +383,12 @@ public class WordleGamePanel extends JPanel implements KeyListener {
 			//graphics.fillRect(, i, i, i);
 		}
 	}
-	
+	public WordleGamePanel getPanel() {
+		return this;
+	}
+	@Override
+	public void focus() {
+		setFocusable(true);
+    	SwingUtilities.invokeLater(() -> requestFocusInWindow());
+	}
 }

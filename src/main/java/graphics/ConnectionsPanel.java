@@ -8,9 +8,11 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import graphics.buttons.BackButton;
 import graphics.buttons.Button;
@@ -21,12 +23,14 @@ import graphics.utils.PanelAttributes;
 import kalisz.KaliszTimes;
 
 public class ConnectionsPanel extends JPanel implements PanelAttributes {
-	ArrayList<Button> wordleButtons = new ArrayList<Button>();
+	ArrayList<WordleButton> wordleButtons = new ArrayList<WordleButton>();
+	
+
 	ArrayList<Button> spellingBeeButtons = new ArrayList<Button>();
 	
 	public ConnectionsPanel() {
 		this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));
-		 loadImages();
+		 
 		 setLayout(null);
 		 
 		 
@@ -62,7 +66,7 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 		 //8 tiles
 
 		 for(int i = 0; i < 8; i++) {
-			Button wordleButton = new WordleButton(GUIConstants.wordleButtonImage);
+			WordleButton wordleButton = new WordleButton(GUIConstants.wordleButtonImage, i);
 
 			int refX = 695 + ( (i / 2) < 2 ? i * 153 : (i - 4) * 153);
 			int refY = 250 + ( (i / 2) >= 2 ? 153 : 0);
@@ -85,7 +89,7 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 
 		 //Add Spelling Bee Buttons
 		  for(int i = 0; i < 8; i++) {
-			Button spellingBeeButton = new SpellingBeeEnterButton(GUIConstants.spellingBeeButtonImage);
+			Button spellingBeeButton = new SpellingBeeEnterButton(GUIConstants.spellingBeeButtonImage, i);
 			int refX = 695 + ( (i / 2) < 2 ? i * 153 : (i - 4) * 153);
 			int refY = 550 + ( (i / 2) >= 2 ? 153 : 0);
 			int refWidth = GUIConstants.DEFAULT_BUTTON_WIDTH;
@@ -115,10 +119,13 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 		
 
 	}
-	@Override
-	public void loadImages() {
-		
+	public ArrayList<WordleButton> getWordleButtons() {
+		return this.wordleButtons;
 	}
     
-	
+	@Override
+	public void focus() {
+		setFocusable(true);
+    	SwingUtilities.invokeLater(() -> requestFocusInWindow());
+	}
 }

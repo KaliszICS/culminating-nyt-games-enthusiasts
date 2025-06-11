@@ -24,6 +24,8 @@ public class Player {
     private int wordleAttempts, connectionsAttempts; // total games played for both
     private Scanner sc; // scanner to scan from passwords and user files
     private PrintWriter pw; // printwriter to write onto passwords and user files
+    final String filepath = "src/main/java/logic/user files/"; // filepath for user files
+    final String passwordsFilename = "passwords.txt"; // filename for passwords file
 
     /**
      * Default constructor to be ran upon launching the program.
@@ -34,7 +36,7 @@ public class Player {
     public Player() {
         this.passwords = new HashMap<String, String>();
         try {
-            this.sc = new Scanner(new BufferedReader(new FileReader("src/main/java/logic/passwords.txt")));
+            this.sc = new Scanner(new BufferedReader(new FileReader(this.filepath + this.passwordsFilename)));
             while (this.sc.hasNext()) this.passwords.put(this.sc.next(), this.sc.next()); // read "username password" over and over again
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -93,9 +95,18 @@ public class Player {
 
     public void saveLoginInfo(String username, String password) {
         try {
-            this.pw = new PrintWriter(new FileWriter("src/main/java/logic/passwords.txt", true));
+            this.pw = new PrintWriter(new FileWriter(this.filepath + this.passwordsFilename, true));
             this.pw.printf("%s %s\n", username, password); // write username and password onto passwords.txt
             this.passwords.put(username, password); // store user username and password in hashmap
+            // initialize all instance variables for user (like a default constructor)
+            this.wordleStats = new int[6];
+            this.connectionsStats = new int[4];
+            this.spellingBeeStats = new ArrayList<Integer>();
+            this.wordleAttempts = 0;
+            this.connectionsAttempts = 0;
+            File userFile = new File(this.filepath + this.username + ".txt");
+            userFile.createNewFile(); // initialize empty user file at filepath
+            saveUserData(); // save empty data to user file
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -117,28 +128,14 @@ public class Player {
             this.username = username; // user is now logged in (instance variables set equal to whatever the user provided here)
             this.password = password;
             try {
-                File userFile = new File("src/main/java/logic/" + this.username + ".txt");
-                if (userFile.createNewFile()) { // if user file didn't already exist (one was just created), initialize all instance variables (like a default constructor)
-                    this.wordleStats = new int[6];
-                    this.connectionsStats = new int[4];
-                    this.spellingBeeStats = new ArrayList<Integer>();
-                    this.wordleAttempts = 0;
-                    this.connectionsAttempts = 0;
-                    saveUserData(); // initialize empty user file
-                } else {
-                    try {
-                        this.sc = new Scanner(new BufferedReader(new FileReader("src/main/java/logic/" + this.username + ".txt")));
-                        this.wordleStats = new int[]{this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt()}; // first 6 integers of user file should be the wordle stats
-                        this.connectionsStats = new int[]{this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt()}; // next 4 integers should be connections stats
-                        this.wordleAttempts = this.sc.nextInt(); // next integer should be wordle attempts
-                        this.connectionsAttempts = this.sc.nextInt(); // next integer should be connections attempts
-                        this.spellingBeeStats = new ArrayList<Integer>(); // initialize stats arraylist before adding scores
-                        while (this.sc.hasNext()) this.spellingBeeStats.add(this.sc.nextInt()); // since spelling bee scores can vary, remaining integers should all be added to spelling bee stats
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            } catch (IOException e) {
+                this.sc = new Scanner(new BufferedReader(new FileReader(this.filepath + this.username + ".txt")));
+                this.wordleStats = new int[]{this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt()}; // first 6 integers of user file should be the wordle stats
+                this.connectionsStats = new int[]{this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt()}; // next 4 integers should be connections stats
+                this.wordleAttempts = this.sc.nextInt(); // next integer should be wordle attempts
+                this.connectionsAttempts = this.sc.nextInt(); // next integer should be connections attempts
+                this.spellingBeeStats = new ArrayList<Integer>(); // initialize stats arraylist before adding scores
+                while (this.sc.hasNext()) this.spellingBeeStats.add(this.sc.nextInt()); // since spelling bee scores can vary, remaining integers should all be added to spelling bee stats
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return 1;
@@ -234,7 +231,7 @@ public class Player {
     public int saveUserData() {
         if (this.username == null) return 0; // user doesn't exist
         try {
-            File userFile = new File("src/main/java/logic/" + this.username + ".txt"), tempUserFile = new File("src/main/java/logic/temp.txt");
+            File userFile = new File(this.filepath + this.username + ".txt"), tempUserFile = new File(this.filepath + "temp.txt");
             this.pw = new PrintWriter(new FileWriter(tempUserFile, true));
             this.pw.printf("%d %d %d %d %d %d\n", this.wordleStats[0], this.wordleStats[1], this.wordleStats[2], this.wordleStats[3], this.wordleStats[4], this.wordleStats[5]);
             this.pw.printf("%d %d %d %d\n", this.connectionsStats[0], this.connectionsStats[1], this.connectionsStats[2], this.connectionsStats[3]);
@@ -244,6 +241,7 @@ public class Player {
             this.pw.println();
             userFile.delete(); // delete original user file, if it existed
             tempUserFile.renameTo(userFile); // rename temp file to original user file's name
+            tempUserFile.delete();
             return 1; // successfully saved
         } catch (IOException e) {
             e.printStackTrace();

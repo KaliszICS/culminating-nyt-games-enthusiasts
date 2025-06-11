@@ -22,6 +22,13 @@ import javax.swing.JOptionPane;
 
 import java.awt.Dimension;
 
+/**
+ * Entry point for the Kalisz Times game.
+ * Initializes game data, constants, and graphics. Handles ad video popups and general popups.
+ * 
+ * This class integrates both JavaFX and Swing components to manage UI alerts and media playback.
+ */
+
 public class KaliszTimes {
 	
 	private static GraphicsHandler handler = null;
@@ -55,19 +62,38 @@ public class KaliszTimes {
 		
 		//System.out.println(AIHandler.chatGPT("Generate me a list of words for wordle, without any other text. Just the raw words with a space in between").split(" "));
 	}
-
+    /**
+     * Gets the global graphics handler for the application.
+     *
+     * @return the GraphicsHandler instance
+     */
 	public static GraphicsHandler getGraphicsHandler() {
 		return handler;
 	}
-	
+	/**
+     * Displays a simple informational popup message using Swing.
+     *
+     * @param message the message to display in the dialog
+     */
 	public static void popup(String message) {
 		JOptionPane.showMessageDialog(null, message, "Information!", JOptionPane.INFORMATION_MESSAGE);
 	}
+	/**
+     * Displays an ad revival popup message using Swing.
+     *
+     * @param message the message prompting the user to watch an ad
+     */
 	public static void adPopup(String message) {
 		JOptionPane.showMessageDialog(null, message, "Watch an ad to revive!", JOptionPane.INFORMATION_MESSAGE);
 	}
 
-
+	/**
+     * Displays a modal video popup that plays a 30-second ad.
+     * Blocks the user from interacting with the main application until the video finishes.
+     * 
+     * @param videoFilePath the path to the video file to be played
+     * @param onVideoEnd a Runnable that is executed when the video finishes
+     */
 	public static void showVideoPopup(String videoFilePath, Runnable onVideoEnd) {
         Stage popupStage = new Stage();
         popupStage.initModality(Modality.APPLICATION_MODAL); // blocks other windows until closed

@@ -1,18 +1,21 @@
 package logic;
-
-/**
- * A class to store local scores for players.
- * Writes local scores for each user to their own text file. Stores usernames/passwords in a text file as well (I don't know how to encrypt text files).
- * 
- * @author @FranklinZhu1
- */
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+// file i/o
 import java.io.*;
-import java.io.File; // file i/o
-import java.io.IOException;
+/**
+ * A class to store and manage local game statistics for players.
+ * Stores usernames and passwords in a text file, and user-specific game data in separate files.
+ * Supports Wordle, Connections, and Spelling Bee statistics.
+ * 
+ * Note: Passwords are stored in plaintext and not encrypted.
+ * 
+ * @author @FranklinZhu1
+ * @author @elliot-chan-ics4u1-2-2025
+ * @author @julie-lin-ics4u1-2-2025
+ * @author aksayan-nirmalan-ics4u1-2-2025
+ */
 
 public class Player {
 
@@ -28,11 +31,9 @@ public class Player {
     final String passwordsFilename = "passwords.txt"; // filename for passwords file
 
     /**
-     * Default constructor to be ran upon launching the program.
-     * Attempts to copy all username/password pairs from passwords.txt to the passwords hashmap.
-     * Doesn't assign any instance variables (they are all assigned under login).
+     * Default constructor to initialize the passwords map from file.
+     * Loads all existing username-password pairs from passwords.txt.
      */
-
     public Player() {
         this.passwords = new HashMap<String, String>();
         try {
@@ -42,11 +43,16 @@ public class Player {
             e.printStackTrace();
         }
     }
-
+    /**
+     * @return the username of the currently logged-in user, or null if logged out
+     */
     public String getUsername() {
         return this.username;
     }
 
+    /**
+     * @return the password of the currently logged-in user, or null if logged out
+     */
     public String getPassword() {
         return this.password;
     }
@@ -55,31 +61,38 @@ public class Player {
      * Returns this.wordleStats if the user is logged in.
      * OTHER GETTERS BELOW THIS ONE ARE CODED LIKEWISE.
      * 
-     * @return null if the user is logged out, this.wordleStats if user is logged in
+     * @return the Wordle statistics of the logged-in user, or null if logged out
      */
-
     public int[] getWordleStats() {
         if (username == null) return null;
         return this.wordleStats;
     }
-
+    /**
+     * @return the Connections statistics of the logged-in user, or null if logged out
+     */
     public int[] getConnectionsStats() {
         if (username == null) return null;
         return this.connectionsStats;
     }
-
+    /**
+     * @return the list of Spelling Bee scores for the logged-in user, or null if logged out
+     */
     public ArrayList<Integer> getSpellingBeeStats() {
         if (username == null) return null;
         return this.spellingBeeStats;
     }
 
     // Next two getters return -1 instead of null if the user is logged out.
-
+    /**
+     * @return the total number of Wordle games played, or -1 if logged out
+     */
     public int getWordleAttempts() {
         if (username == null) return -1;
         return this.wordleAttempts;
     }
-
+    /**
+     * @return the total number of Connections games played, or -1 if logged out
+     */
     public int getConnectionsAttempts() {
         if (username == null) return -1;
         return this.connectionsAttempts;
@@ -187,7 +200,12 @@ public class Player {
     }
 
     // score is number of MISTAKES - if user failed, this should be -1
-
+    /**
+     * Adds a Connections attempt to the user's statistics.
+     * 
+     * @param score number of mistakes made (0-3), or -1 if failed
+     * @return true if successfully recorded, false if not logged in
+     */
     public boolean addConnectionsAttempt(int score) {
         if (username == null) return false;
         ++this.connectionsAttempts; // increase user's connections attempts by 1
@@ -197,7 +215,12 @@ public class Player {
     }
 
     // score is NUMBER OF POINTS OBTAINED PER BOARD. there is no fail condition; the lowest score is 0
-
+    /**
+     * Adds a Spelling Bee attempt score to the user's statistics.
+     * 
+     * @param score the score achieved (0+)
+     * @return true if successfully recorded, false if not logged in
+     */
     public boolean addSpellingBeeAttempt(int score) {
         if (username == null) return false;
         this.spellingBeeStats.add(score); // add the score to the spelling bee hashmap

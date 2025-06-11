@@ -1,17 +1,26 @@
 package logic;
 
-/**
- * Class for the Connections game.
- * Contains getters for some variables and methods to help run the game (selecting words, submitting guesses, etc.).
- * All words to set up the game are hidden by default. Whether or not they have been revealed is tracked using the "revealed" hashmap.
- * Does not currently have a win boolean. Wins should be tracked based on the return value of submitGuess and the number of categories completed.
- * 
- * @author @FranklinZhu1
- */
-
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.HashMap;
+
+
+/**
+ * Class for managing the Connections game.
+ * Handles game state, word selections, guesses, and category checking.
+ * Words are grouped into 4 color-based categories (yellow, green, blue, purple).
+ * Each group contains 4 words that can be revealed through other games (Wordle, Spelling Bee).
+ * 
+ * The board is shuffled at the start. Players submit guesses of 4 words. 
+ * A guess is correct if all 4 words belong to the same category.
+ * 
+ * Tracks revealed words, categories completed, number of guesses left, and game result stats.
+ * 
+ * @author @FranklinZhu1
+ * @author @elliot-chan-ics4u1-2-2025
+ * @author @julie-lin-ics4u1-2-2025
+ * @author aksayan-nirmalan-ics4u1-2-2025
+ */
 
 public class Connections {
 
@@ -105,39 +114,77 @@ public class Connections {
         this.results = results;
         this.revealed = revealed;
     }
-
+    
+    /**
+    * Gets the array of yellow category words.
+     *
+    * @return an array of 4 yellow words
+    */
     public String[] getYellowWords() {
         return this.yellowWords;
     }
-
+    /**
+    * Gets the name of the yellow category.
+     *
+    * @return the yellow category name
+    */
     public String getYellowCategory() {
         return this.yellowCategory;
     }
-
+     /**
+    * Gets the array of green category words.
+     *
+    * @return an array of 4 greem words
+    */
     public String[] getGreenWords() {
         return this.greenWords;
     }
-
+    /**
+    * Gets the name of the green category.
+     *
+    * @return the green category name
+    */
     public String getGreenCategory() {
         return this.greenCategory;
     }
-
+    /**
+    * Gets the array of blue category words.
+    *
+    * @return an array of 4 blue words
+    */
     public String[] getBlueWords() {
         return this.blueWords;
     }
-
+    /**
+    * Gets the name of the blue category.
+     *
+    * @return the blue category name
+    */
     public String getBlueCategory() {
         return this.blueCategory;
     }
-
+    /**
+    * Gets the array of purple category words.
+    *
+    * @return an array of 4 purple words
+    */
     public String[] getPurpleWords() {
         return this.purpleWords;
     }
-
+    /**
+    * Gets the name of the purple category.
+    *
+    * @return the purple category name
+    */
     public String getPurpleCategory() {
         return this.purpleCategory;
     }
-    
+    /**
+    * Gets the list of guess results.
+    * Each element is an array of 4 category strings submitted in a guess.
+    *
+    * @return an ArrayList of submitted guess category results
+    */
     public ArrayList<String[]> getResults() {
         return this.results;
     }
@@ -153,14 +200,13 @@ public class Connections {
         this.board = shuffledBoard; // assign shuffledBoard to this.board
     }
 
-    /**
-     * Selects or deselects a word for the current guess.
-     * Returns the word itself if it hasn't been revealed yet.
+   /**
+     * Selects or deselects a word at the given index.
+     * Does not allow more than 4 selections.
      * 
-     * @param index index of word to be selected
-     * @return the word to be revealed through Wordle or Spelling Bee, null if already revealed
+     * @param index index of the word to toggle in the guess
+     * @return null (future use could return the word if unrevealed)
      */
-
     public String selectWord(int index) {// 
        // you can't do this. + redundant if (!this.revealed.get(this.board.get(index))) return this.board.get(index); // if not revealed, return the word to be wordled/spelling beed
         if (this.currentGuess.contains(index)) this.currentGuess.remove(Integer.valueOf(index)); // deselects index if already in guess //can't do this

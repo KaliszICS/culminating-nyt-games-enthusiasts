@@ -12,6 +12,9 @@ import java.util.Arrays;
  * Edited to take in strings, edit back to char array to match GUI 
  * 
  * @author @FranklinZhu1
+ * @author @elliot-chan-ics4u1-2-2025
+ * @author @julie-lin-ics4u1-2-2025
+ * @author aksayan-nirmalan-ics4u1-2-2025
  */
 
 public class Wordle {

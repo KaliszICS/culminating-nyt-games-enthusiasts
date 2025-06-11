@@ -9,6 +9,9 @@ import java.util.Random;
  * Currently takes in a keyword of any length to be used on the board, as long as it is at LEAST 4 letters long. (Below that breaks the scoring system.)
  * 
  * @author @FranklinZhu1
+ * @author @elliot-chan-ics4u1-02-25
+ * @author @julie-lin-ics4u1-02-25
+ * @author aksayan-nirmalan-ics4u1-2-2025
  */
 
 public class SpellingBee {

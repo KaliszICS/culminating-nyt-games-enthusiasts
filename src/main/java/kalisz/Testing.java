@@ -34,13 +34,14 @@ public class Testing {
                 username = sc.nextLine();
                 password = sc.nextLine();
                 int loginCode = player.login(username, password);
-                while (loginCode < 1) {
-                    System.out.println(((loginCode == -1) ? "Username not registered. " : "Wrong password. ") + "Please input your credentials again (or input \"hell naw\" to exit):");
+                while (loginCode != 1) {
+                    System.out.println(((loginCode == -1) ? "Username not registered. " : "Wrong password. ") + "Please input your credentials again (or input \"hell\" \"naw\" to exit):");
                     username = sc.nextLine();
                     password = sc.nextLine();
                     if ((username + password).equals("hellnaw")) break;
                     loginCode = player.login(username, password);
                 }
+                System.out.println("Login successful! (If you didn't type hell naw!)");
                 break;
         }
 
@@ -83,7 +84,7 @@ public class Testing {
                     System.out.println("Guess is now " + wordle.getCurrentGuess());
                     break;
             }
-            if (!done) inputString = sc.nextLine();
+            if (!done && guesses < 6) inputString = sc.nextLine();
         }
         if (wordle.getWin()) System.out.println("You won! Congrats!");
         else System.out.println("Better luck next time!");
@@ -94,8 +95,19 @@ public class Testing {
             }
             System.out.println();
         }
-
-
+        if (player.addWordleAttempt((wordle.getWin()) ? guesses : -1)) System.out.println("Score saved to profile!");
+        else System.out.println("User not logged in. Score not saved.");
+        switch (player.saveUserData()) {
+            case -1:
+                System.out.println("Uh oh! The save files are corrupted; the save did not go through.");
+                break;
+            case 0:
+                System.out.println("Save failed since you are not logged in. :(");
+                break;
+            case 1:
+                System.out.println("Save successful!");
+        }
+        
     }
 
 }

@@ -200,13 +200,12 @@ public class Connections {
         this.results.add(new String[]{category1, category2, category3, category4}); // add the stats of the submitted guess to the results
         this.currentGuess.sort(null); // so that the indexes of the guess are in order to remove properly
         if (category1.equals(category2) && category2.equals(category3) && category3.equals(category4)) { // if a category is completed
-            String categoryCompleted = this.wordToCategory.get(this.board.get(this.currentGuess.get(0))); //(category successfully guessed)
             this.board.remove((int) this.currentGuess.get(3));
             this.board.remove((int) this.currentGuess.get(2));
             this.board.remove((int) this.currentGuess.get(1));
             this.board.remove((int) this.currentGuess.get(0));
-            this.categoriesCompleted.add(categoryCompleted);
-            return categoryCompleted;
+            this.categoriesCompleted.add(category1); // category successfully guessed
+            return category1;
         }
         if (--this.guessesLeft == 0) return "game over"; // if the player has no guesses left and fails the game (-- decrements the amount of guesses left)
         return "wrong"; // player didn't fail the game since the above line didn't run

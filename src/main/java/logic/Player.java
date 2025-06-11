@@ -132,6 +132,7 @@ public class Player {
                         this.connectionsStats = new int[]{this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt(), this.sc.nextInt()}; // next 4 integers should be connections stats
                         this.wordleAttempts = this.sc.nextInt(); // next integer should be wordle attempts
                         this.connectionsAttempts = this.sc.nextInt(); // next integer should be connections attempts
+                        this.spellingBeeStats = new ArrayList<Integer>(); // initialize stats arraylist before adding scores
                         while (this.sc.hasNext()) this.spellingBeeStats.add(this.sc.nextInt()); // since spelling bee scores can vary, remaining integers should all be added to spelling bee stats
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -182,6 +183,7 @@ public class Player {
         if (username == null) return false;
         ++this.wordleAttempts; // increase user's wordle attempts by 1
         if (score != -1) ++this.wordleStats[score - 1]; // if user passed wordle, grab the array from the hashmap and increment it at the appropriate index
+        saveUserData(); // autosave user data
         return true;
     }
 
@@ -191,6 +193,7 @@ public class Player {
         if (username == null) return false;
         ++this.connectionsAttempts; // increase user's connections attempts by 1
         if (score != -1) ++this.connectionsStats[score]; // if user passed connections, grab the array from the hashmap and increment it at the appropriate index
+        saveUserData(); // autosave user data
         return true;
     }
 
@@ -200,6 +203,7 @@ public class Player {
         if (username == null) return false;
         this.spellingBeeStats.add(score); // add the score to the spelling bee hashmap
         this.spellingBeeStats.sort(null); // sort the hashmap
+        saveUserData(); // autosave user data
         return true;
     }
 
@@ -223,9 +227,12 @@ public class Player {
     /**
      * Writes all user data to the user file.
      * Writes user data by creating a temporary file, writing it there, then renaming that temp file to the user file.
+     * 
+     * @return -1 if file I/O error occurred, 0 if user doesn't exist, 1 otherwise
      */
 
-    public void saveUserData() {
+    public int saveUserData() {
+        if (this.username == null) return 0; // user doesn't exist
         try {
             File userFile = new File("src/main/java/logic/" + this.username + ".txt"), tempUserFile = new File("src/main/java/logic/temp.txt");
             this.pw = new PrintWriter(new FileWriter(tempUserFile, true));
@@ -237,8 +244,10 @@ public class Player {
             this.pw.println();
             userFile.delete(); // delete original user file, if it existed
             tempUserFile.renameTo(userFile); // rename temp file to original user file's name
+            return 1; // successfully saved
         } catch (IOException e) {
             e.printStackTrace();
+            return -1; // save failed
         } finally {
             if (this.pw != null) this.pw.close();
         }

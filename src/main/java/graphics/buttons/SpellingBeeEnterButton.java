@@ -17,9 +17,19 @@ import graphics.GraphicsHandler;
 import graphics.SpellingBeeGamePanel;
 import graphics.SpellingBeeGamePanel;
 
-
-
 import kalisz.KaliszTimes;
+
+/**
+ * Represents a button that launches or resumes a {@link SpellingBeeGamePanel} when clicked.
+ * Initially, this button starts a new game instance or resumes an existing one tied to the button.
+ * Once marked as "finished", clicking it will instead pass the result (spelling bee answer) to the
+ * {@link ConnectionsPanel} for selection.
+ *
+ * @see Button
+ * @see SpellingBeeGamePanel
+ * @see GraphicsHandler
+ * @see ConnectionsPanel
+ */
 
 public class SpellingBeeEnterButton extends Button {
     private SpellingBeeGamePanel spellingBeeInstance;
@@ -28,6 +38,13 @@ public class SpellingBeeEnterButton extends Button {
 	private String spellingBeeAnswer;
 	private int uniqueID;
 
+    /**
+     * Constructs a new Spelling Bee Enter button.
+     *
+     * @param image             the image used as the background of the button
+     * @param uniqueID          the ID of this button in the Connections game
+     * @param spellingBeeAnswer the answer word revealed upon completion
+     */
     public SpellingBeeEnterButton(BufferedImage image, int uniqueID, String spellingBeeAnswer) {
         super(image);
 		this.uniqueID = uniqueID + SPELLING_BEE_BOARD_OFFSET;
@@ -35,7 +52,12 @@ public class SpellingBeeEnterButton extends Button {
 		
     }
     
-
+    /**
+     * Handles mouse press events. If the spelling bee instance hasn't started yet, a new one is created
+     * and tracked in the {@link GraphicsHandler}. If already present, it resumes the game panel.
+     *
+     * @param e the mouse event triggering the press
+     */
 	@Override
 	public void mousePressed(MouseEvent e) {
 		//Generate a new SpellingBee instance
@@ -50,19 +72,23 @@ public class SpellingBeeEnterButton extends Button {
 			
 		}
 		spellingBeeInstance.focus();
-
-
-        
-        
-
      
 	}
-	
+    /**
+     * Updates the cursor to a hand when the mouse hovers over the button.
+     *
+     * @param e the mouse event triggering the hover
+     */
 	@Override
 	public void mouseEntered(MouseEvent e) { //overrides, so it can disable? might change this
 		this.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		
 	}
+	/**
+     * Custom paint method that handles drawing the background, status messages, and final answer.
+     *
+     * @param g the graphics context used for painting
+     */
 	 @Override
     protected void paintComponent(Graphics g) {
 		Graphics2D graphics = (Graphics2D) g;
@@ -101,7 +127,11 @@ public class SpellingBeeEnterButton extends Button {
 			graphics.drawString(spellingBeeAnswer, GUIConstants.scaleX(textX), GUIConstants.scaleY(textY));
 		}
     }
-
+	/**
+     * Returns the instance of the spelling bee game panel associated with this button.
+     *
+     * @return the {@link SpellingBeeGamePanel} instance
+     */
 	public SpellingBeeGamePanel getSpellingBeeInstance() {
 		return this.spellingBeeInstance;
 	}
@@ -123,6 +153,11 @@ public class SpellingBeeEnterButton extends Button {
 			}
 		});
 	}
+	    /**
+     * Gets the keyword (correct spelling bee answer) associated with this button.
+     *
+     * @return the solution word
+     */
     public String getKeyWord() {
         return this.spellingBeeAnswer;
     }

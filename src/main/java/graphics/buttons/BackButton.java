@@ -6,8 +6,27 @@ import java.awt.image.BufferedImage;
 import graphics.GUIConstants;
 import kalisz.KaliszTimes;
 
+
+/**
+ * A custom button that handles the "Back" functionality in the Kalisz Times game.
+ * 
+ * When clicked, this button navigates to the previous screen via {@code GraphicsHandler.goBack()},
+ * unless an advertisement is currently playing. In that case, it displays a popup message
+ * informing the user that they cannot exit the game until the ad finishes.
+ * 
+ * This class extends the {@link Button} class and is initialized with a {@link BufferedImage}
+ * used for rendering the button.
+ */
+
 public class BackButton extends Button  {
 
+
+	/**
+     * Constructs a BackButton with the specified image.
+     * Sets the scaled position and size of the button using GUI constants.
+     *
+     * @param image the image to display as the button
+     */
     public BackButton(BufferedImage image) {
         super(image);
 
@@ -21,7 +40,13 @@ public class BackButton extends Button  {
 
     }
     	 
-		
+	/**
+     * Called when the mouse is pressed on the button.
+     * If an ad is not playing, it navigates back to the previous screen.
+     * If an ad is playing, it prevents navigation and shows a popup message.
+     *
+     * @param e the MouseEvent triggered by user interaction
+     */
 	@Override
 	public void mousePressed(MouseEvent e) {
 		System.out.println("Back button pressed");

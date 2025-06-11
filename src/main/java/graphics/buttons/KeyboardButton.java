@@ -16,6 +16,15 @@ import logic.events.EventHandler;
 import logic.events.KeyboardClickEvent;
 import logic.events.KeyboardClickEventListener;
 
+
+/**
+ * A button representing a keyboard key in the Wordle game interface.
+ * This button visually displays a character and sends an event to the Wordle game panel
+ * when clicked. It is used for letter inputs as well as special keys like Enter or Backspace.
+ * @see Button
+ * @see logic.events.KeyboardClickEvent
+ * @see logic.events.EventHandler
+ */
 public class KeyboardButton extends Button {
     BufferedImage image;
    private char character;
@@ -23,6 +32,16 @@ public class KeyboardButton extends Button {
     int clickType;
     private WordleGamePanel panel;
     
+    /**
+     * Constructs a keyboard button for a letter key.
+     *
+     * @param image      the button background image
+     * @param character  the character displayed and sent on click
+     * @param x          the x-position of the button
+     * @param y          the y-position of the button
+     * @param clickType  the type of click event to send
+     * @param panel      the {@link WordleGamePanel} associated with the game
+     */
     public KeyboardButton(BufferedImage image, char character, int x, int y, int clickType, WordleGamePanel panel) {
         super(image);
        
@@ -40,7 +59,15 @@ public class KeyboardButton extends Button {
         
 
     }
-    //Enter / backspace buttons
+    /**
+     * Constructs a keyboard button for a special key (e.g., Enter, Backspace).
+     *
+     * @param image      the button background image
+     * @param x          the x-position of the button
+     * @param y          the y-position of the button
+     * @param clickType  the type of click event to send
+     * @param panel      the {@link WordleGamePanel} associated with the game
+     */
      public KeyboardButton(BufferedImage image, int x, int y, int clickType, WordleGamePanel panel) {
         super(image);
         this.panel = panel;
@@ -58,7 +85,12 @@ public class KeyboardButton extends Button {
         
 
     }
-
+    /**
+     * Paints the character onto the button.
+     * This method centers the character in the middle of the button.
+     *
+     * @param g the {@link Graphics} context
+     */
 	 @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); // paints the image from the Button class
@@ -74,11 +106,21 @@ public class KeyboardButton extends Button {
         graphics.drawString("" + character, textX, textY);
     }
     //Sends character as an event
-
+    /**
+     * Sends a {@link logic.events.KeyboardClickEvent} to the game panel
+     * when this button is clicked.
+     *
+     * @param e the mouse event that triggered the press
+     */
     @Override
 	public void mousePressed(MouseEvent e) {
 		 EventHandler.fireWordleClickEvent(panel, this.character, this.clickType);
 	}
+        /**
+     * Returns the character associated with this button.
+     *
+     * @return the button's character (or space if Enter/Backspace)
+     */
     public char getCharacter() {
         return this.character;
     }

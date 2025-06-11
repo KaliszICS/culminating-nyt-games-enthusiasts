@@ -17,12 +17,30 @@ import graphics.WordleGamePanel;
 
 import kalisz.KaliszTimes;
 
+/**
+ * A button that launches or resumes a Wordle game instance.
+ * When clicked, this button either creates a new Wordle game panel or
+ * brings an existing one to focus. Once the Wordle game linked to this button
+ * is finished, clicking the button instead sends the answer word to the
+ * Connections game for selection.
+ * 
+ * @see Button
+ * @see WordleGamePanel
+ * @see ConnectionsPanel
+ */
 public class WordleButton extends Button {
 	private WordleGamePanel wordleInstance;
 	private boolean finished = false;
 	private String wordleAnswer;
 	private int uniqueID;
 
+    /**
+     * Constructs a WordleButton with a given image, unique ID, and answer word.
+     * 
+     * @param image       The background image of the button.
+     * @param uniqueID    Unique identifier to correlate with Connections game.
+     * @param wordleAnswer The answer word revealed after the game is finished.
+     */
     public WordleButton(BufferedImage image, int uniqueID, String wordleAnswer) {
         super(image);
 		this.uniqueID = uniqueID;
@@ -30,7 +48,14 @@ public class WordleButton extends Button {
 		
     }
     
-
+    /**
+     * Handles mouse press events.
+     * If no Wordle instance is active for this button, it creates a new one,
+     * tracks it, and adds its panel to the graphics handler. Otherwise, it
+     * focuses on the existing game panel.
+     * 
+     * @param e Mouse event that triggered the press.
+     */
 	@Override
 	public void mousePressed(MouseEvent e) {
 		//Generate a new wordle instance
@@ -52,12 +77,26 @@ public class WordleButton extends Button {
 
      
 	}
-	
+    /**
+     * Changes cursor to hand cursor on mouse hover.
+     * 
+     * @param e Mouse event for entering the button area.
+     */
 	@Override
 	public void mouseEntered(MouseEvent e) { //overrides, so it can disable? might change this
 		this.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		
 	}
+    /**
+     * Paints the button.
+     * <p>
+     * When the game is in progress, shows "In Progress" text.
+     * When finished, displays the answer word centered.
+     * Also greys out the button if currently selected in the Connections game.
+     * </p>
+     * 
+     * @param g The Graphics context to draw on.
+     */
 	 @Override
     protected void paintComponent(Graphics g) {
 		Graphics2D graphics = (Graphics2D) g;
@@ -96,10 +135,18 @@ public class WordleButton extends Button {
 			graphics.drawString(wordleAnswer, GUIConstants.scaleX(textX), GUIConstants.scaleY(textY));
 		}
     }
-
+    /**
+     * Returns the Wordle game panel instance associated with this button.
+     * 
+     * @return The {@link WordleGamePanel} instance.
+     */
 	public WordleGamePanel getWordleInstance() {
 		return this.wordleInstance;
 	}
+	/**
+     * Marks this button as finished, removes the existing mouse listener,
+     * and adds a new one that will select this word in the Connections game.
+     */
 	public void setFinished() {
 		finished = true;
 		removeMouseListener(this);
@@ -111,6 +158,11 @@ public class WordleButton extends Button {
 			}
 		});
 	}
+    /**
+     * Gets the answer word for this Wordle button.
+     * 
+     * @return The answer word as a String.
+     */
 	public String getWordleAnswer() {
 		return wordleAnswer;
 	}

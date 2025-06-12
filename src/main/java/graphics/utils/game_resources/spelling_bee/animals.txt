@@ -1,1 +1,1 @@
-buffalo,dolphin,flaming,gazelle,giraffe,griffin,hammock,leopard,monkey,pelican,penguin,platypus,porcupine,raccoon,seagull,seahorse,squirrel,tarantula,toucan,turkeys,wolfish,zebrafish
+buffalo,dolphin,flamingo,gazelle,giraffe,griffin,hammock,leopard,monkey,pelican,penguin,platypus,porcupine,raccoon,seagull,seahorse,squirrel,tarantula,toucan,turkeys,wolfish,zebrafish

@@ -57,7 +57,12 @@ public class Connections {
         this.blueCategory = blueCategory;
         this.purpleWords = purpleWords;
         this.purpleCategory = purpleCategory;
+        this.board = new ArrayList<String>();
         for (int index = 0; index < 4; ++index) {
+            this.board.add(yellowWords[index]); // add each word to board
+            this.board.add(greenWords[index]);
+            this.board.add(blueWords[index]);
+            this.board.add(purpleWords[index]);
             this.wordToCategory.put(yellowWords[index], "yellow"); // assigns each word to their colour's character
             this.wordToCategory.put(greenWords[index], "green");
             this.wordToCategory.put(blueWords[index], "blue");
@@ -67,7 +72,6 @@ public class Connections {
             this.revealed.put(blueWords[index], false);
             this.revealed.put(purpleWords[index], false);
         }
-        this.board = new ArrayList<String>();
         this.categoriesCompleted = new ArrayList<String>();
         this.guessesLeft = 4;
         this.currentGuess = new ArrayList<Integer>();
@@ -102,13 +106,17 @@ public class Connections {
         this.blueCategory = blueCategory;
         this.purpleWords = purpleWords;
         this.purpleCategory = purpleCategory;
+        this.board = new ArrayList<String>();
         for (int index = 0; index < 4; ++index) {
+            this.board.add(yellowWords[index]); // add each word to board
+            this.board.add(greenWords[index]);
+            this.board.add(blueWords[index]);
+            this.board.add(purpleWords[index]);
             this.wordToCategory.put(yellowWords[index], "yellow"); // assigns each word to their colour's character
             this.wordToCategory.put(greenWords[index], "green");
             this.wordToCategory.put(blueWords[index], "blue");
             this.wordToCategory.put(purpleWords[index], "purple");
         }
-        this.board = new ArrayList<String>();
         this.categoriesCompleted = new ArrayList<String>();
         this.guessesLeft = guessesLeft;
         this.currentGuess = new ArrayList<Integer>();

@@ -1,1 +1,1 @@
-engine,mirror
+engine,mirror,mufflers,airbags

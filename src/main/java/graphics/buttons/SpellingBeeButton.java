@@ -61,7 +61,8 @@ public class SpellingBeeButton extends Button {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); // paints the image from the Button class
         Graphics2D graphics = (Graphics2D) g;
-        graphics.setFont(new Font("Arial", Font.BOLD, 25));
+        int refFontSize = 25;
+        graphics.setFont(new Font("Arial", Font.BOLD, GUIConstants.scaleFont(refFontSize)));
 
         // Draw character centered
         int textWidth = graphics.getFontMetrics().stringWidth("" + letter);

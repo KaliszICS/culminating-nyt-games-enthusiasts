@@ -54,22 +54,36 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 
 			@Override
 			public void handleClick(KeyboardClickEvent e) {
-				if(e.getClickType() == KeyboardClickEvent.ENTER) {
-					String code = connectionsGame.submitGuess();
+				int clickType = e.getClickType();
+				switch(clickType) {
+					case KeyboardClickEvent.ENTER:
+						for(int i : connectionsGame.currentGuess)
+						System.out.println(i);
+						String code = connectionsGame.submitGuess();
 
-					if(code.equals("not enough words")) {
-						KaliszTimes.popup("You have not selected enough words to make a connection!");
-					}else if(code.equals("wrong")){
-						KaliszTimes.popup("That is the incorrect connection! -1 guess!");
-					}else if(code.equals("game over")) {
-						KaliszTimes.popup("You lost :(");
-					}else{
-						KaliszTimes.popup("You successfully guessed the category: " + code);
+						if(code.equals("not enough words")) {
+							KaliszTimes.popup("You have not selected enough words to make a connection!");
+						}else if(code.equals("wrong")){
+							KaliszTimes.popup("That is the incorrect connection! -1 guess!");
+						}else if(code.equals("game over")) {
+							KaliszTimes.popup("You lost :(");
+						}else{
+							KaliszTimes.popup("You successfully guessed the category: " + code);
+						}
+						repaint();
+						break;
+					case KeyboardClickEvent.DESELECT_ALL:
+						connectionsGame.deselectAll();
+						repaint();
+						break;
 					}
 				}
-			}
 
-		 });
+				
+					
+			});
+
+		
 		
 		 
 		 //Add back button
@@ -93,7 +107,14 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 		 //Add Deselect All Button
 		int refDeselectX = 878;
 		int refDeselectY = 925;
-		add(new Button(GUIConstants.deselectAllButtonImage, GUIConstants.scaleX(refDeselectX), GUIConstants.scaleY(refDeselectY)));
+		Button deselectAllButton = new Button(GUIConstants.deselectAllButtonImage, GUIConstants.scaleX(refDeselectX), GUIConstants.scaleY(refDeselectY));
+		deselectAllButton.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				EventHandler.fireConnectionsClickEvent(getPanel(), ' ', KeyboardClickEvent.DESELECT_ALL);
+			}
+		});
+		
+		add(deselectAllButton);
 
 		//Add Submit Button
 		int refSubmitX = 1088;

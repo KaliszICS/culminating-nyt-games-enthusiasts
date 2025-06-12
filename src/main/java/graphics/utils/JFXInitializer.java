@@ -1,4 +1,4 @@
-/*ackage graphics.utils;
+package graphics.utils;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -13,4 +13,3 @@ public class JFXInitializer extends Application {
         new Thread(() -> Application.launch(JFXInitializer.class)).start();
     }
 }
-*/

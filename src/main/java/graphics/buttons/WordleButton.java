@@ -108,7 +108,9 @@ public class WordleButton extends Button {
         if (!finished) {// paints the image from the Button class
 			 super.paintComponent(g);
 			if(wordleInstance != null && wordleInstance.wordleGame != null && !wordleInstance.wordleGame.getWin()) {
-				graphics.setFont(new Font("Arial", Font.BOLD, 15));
+
+				int refFontSize = 15;
+				graphics.setFont(new Font("Arial", Font.BOLD, GUIConstants.scaleFont(refFontSize)));
 				int textWidth = graphics.getFontMetrics().stringWidth("In Progress");
 				int textHeight = graphics.getFontMetrics().getAscent();
 				int textX = (getWidth() - textWidth) / 2;
@@ -122,8 +124,8 @@ public class WordleButton extends Button {
     	} else {
 
 		
-			
-			graphics.setFont(new Font("Arial", Font.BOLD, 25));
+			int refFontSize = 25;
+			graphics.setFont(new Font("Arial", Font.BOLD, GUIConstants.scaleFont(refFontSize)));
 			graphics.setColor(Color.black);
 
 			// Draw character centered

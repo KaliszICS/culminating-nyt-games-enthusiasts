@@ -41,8 +41,8 @@ public class GUIConstants {
     public GUIConstants() {
 
         loadImages();
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    //  Dimension screenSize = new Dimension(1200, 800);
+       Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+     // Dimension screenSize = new Dimension(1020, 800);
         WINDOW_WIDTH = (int) screenSize.getWidth();
         WINDOW_HEIGHT = (int) screenSize.getHeight();
         scaleX = screenSize.getWidth() / BASE_WINDOW_WIDTH;
@@ -56,6 +56,13 @@ public class GUIConstants {
     }
      public static int scaleY(int refY) {
         return (int) (refY * scaleY);
+    }
+  //  static double SCALE_OFFSET = 1.25;
+    public static int scaleFont(int fontSize) { //Vertical scaling preferred.
+        System.out.println(scaleY);
+        
+         return (int) (fontSize * scaleY);
+
     }
 
     public void loadImages() {

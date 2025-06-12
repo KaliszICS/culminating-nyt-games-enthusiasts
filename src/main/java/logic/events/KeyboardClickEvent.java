@@ -3,9 +3,11 @@ import java.util.EventObject;
 
 public class KeyboardClickEvent extends EventObject {
     char keyClicked;
-    public static int NORMAL_KEY = 0;
-    public static int ENTER = 1;
-    public static int BACKSPACE = 2;
+    public static final int NORMAL_KEY = 0;
+    public static final int ENTER = 1;
+    public static final int BACKSPACE = 2;
+    public static final int DESELECT_ALL = 3;
+
     int clickType;
 
 

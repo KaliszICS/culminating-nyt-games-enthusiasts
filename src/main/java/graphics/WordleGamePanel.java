@@ -26,8 +26,8 @@ import graphics.buttons.Image;
 import graphics.buttons.KeyboardButton;
 import graphics.buttons.WordleButton;
 import graphics.utils.PanelAttributes;
-//import javafx.application.Platform;
-//import javafx.scene.text.Font;
+import javafx.application.Platform;
+
 import kalisz.KaliszTimes;
 import logic.DictionaryChecker;
 import logic.Wordle;
@@ -52,6 +52,9 @@ public class WordleGamePanel extends JPanel implements KeyListener, PanelAttribu
 	public Wordle wordleGame;
 	
 	public WordleGamePanel(WordleButton origin) {
+		//Debug mode
+		
+
 		this.origin = origin;
 		this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));
 		 
@@ -81,6 +84,11 @@ public class WordleGamePanel extends JPanel implements KeyListener, PanelAttribu
 		//Implement Franklin's Wordle Game 
 		this.wordleGame = new Wordle(origin.getWordleAnswer());
 
+
+		//Debug Mode
+		if(KaliszTimes.debugMode) {
+			KaliszTimes.popup(origin.getWordleAnswer());
+		}
 
 		 //Adds digital keyboard listener (ours) that will listen for special KeyboardClickEvent
 		 addKeyboardListener(new KeyboardClickEventListener() {
@@ -112,105 +120,108 @@ public class WordleGamePanel extends JPanel implements KeyListener, PanelAttribu
 					}
 					//If queue is full, give user the ability to submit their word to verify each individual letter.
 					if(e.getClickType() == KeyboardClickEvent.ENTER) {
-						if(rowNumber == 5 && !wordleGame.getCurrentGuess().equals(wordleGame.getWord())) {
-							System.out.println("Lost");
-							KaliszTimes.adPopup("Uh oh! You exceeded the max number of guesses without guessing the right word!\nWatch an ad to continue!\n(Reminder: Kalisz Times Games is a freemium model. By watching an ad, you directly support the developers of this game. We thank you for your support and contributions)");
-							/* */
-							/*Platform.runLater(() -> {
-								KaliszTimes.showVideoPopup("Ad.mp4", () -> {
-									KaliszTimes.popup("Your ad is over! You may now resume to playing the game.");
-
-
-
-									//WIN EVENT
-									origin.setFinished();
-									origin.repaint();
-
-										// Properly remove panel from parent
-									getPanel().setFocusable(false);
-									getPanel().setVisible(false);
-									
-
-										Container parent = getPanel().getParent();
-										if (parent != null) {
-											parent.remove(getPanel());
-											parent.revalidate();
-											parent.repaint();
-										}
-
-										GraphicsHandler.activeWordleInstances.remove(origin); // cleanup
-										KaliszTimes.getGraphicsHandler().goBack(); // navigate
-							
-
-
-								}
-							);
-							});
-
-							*/
-						}
-
-						if(lettersInQueue.size() == 5) {
-							int result = wordleGame.submitGuess();
-							System.out.println("Guess submitted");
-							for(char c : lettersInQueue) {
-								System.out.println(c);
-							}
-							if (result == 1) { // guess submitted successfully
-								String[] guessResult = wordleGame.getGuessData(); // e.g., ["green", "grey", "yellow", ...]
-
-								for (int i = 0; i < 5; i++) {
-									String color = guessResult[i];
-									// Apply coloring to your GUI (this depends on how you want to show feedback: background color, etc.)
-									// You could store this color in a parallel 2D array like String[][] gridColors;
-									// and draw it in your paintComponent() with colored rectangles.
-									gridColours[rowNumber][i] = color;
-									
-
-									System.out.println(color);
-									repaint();
-				}
-							//Clear queue, go to next row number.
-							lettersInQueue.clear();
-							//wordleGame.clearGuess();
-							rowNumber++;
-
-
-						if(wordleGame.getWin()) {
-							KaliszTimes.popup("Congratulations! " + wordleGame.getWord() + " was the correct word!");
-							origin.setFinished();
-							origin.repaint();
-
-								// Properly remove panel from parent
-							getPanel().setFocusable(false);
-							getPanel().setVisible(false);
-							
-
-								Container parent = getPanel().getParent();
-								if (parent != null) {
-									parent.remove(getPanel());
-									parent.revalidate();
-									parent.repaint();
-								}
-
-								GraphicsHandler.activeWordleInstances.remove(origin); // cleanup
-								KaliszTimes.getGraphicsHandler().goBack(); // navigate
-							
-
-
-						}
-					}
-
-			}else {
-					KaliszTimes.popup("Your guess is invalid!");
-				}
-
+					if(lettersInQueue.size() == 5) {
 						
-					}
+							if(rowNumber == 5 && !wordleGame.getCurrentGuess().equals(wordleGame.getWord())) {
+								System.out.println("Lost");
+								KaliszTimes.adPopup("Uh oh! You exceeded the max number of guesses without guessing the right word!\nWatch an ad to continue!\n(Reminder: Kalisz Times Games is a freemium model. By watching an ad, you directly support the developers of this game. We thank you for your support and contributions)");
+							
+								Platform.runLater(() -> {
+									KaliszTimes.showVideoPopup("Ad.mp4", () -> {
+										KaliszTimes.popup("Your ad is over! You may now resume to playing the game.");
 
+
+
+										//WIN EVENT
+										origin.setFinished();
+										origin.repaint();
+
+											// Properly remove panel from parent
+										getPanel().setFocusable(false);
+										getPanel().setVisible(false);
+										
+
+											Container parent = getPanel().getParent();
+											if (parent != null) {
+												parent.remove(getPanel());
+												parent.revalidate();
+												parent.repaint();
+											}
+
+											GraphicsHandler.activeWordleInstances.remove(origin); // cleanup
+											KaliszTimes.getGraphicsHandler().goBack(); // navigate
+								
+
+
+									}
+								);
+								});
+
+								
+							}else {
+
+							
+								int result = wordleGame.submitGuess();
+								System.out.println("Guess submitted");
+								for(char c : lettersInQueue) {
+									System.out.println(c);
+								}
+								if (result == 1) { // guess submitted successfully
+									String[] guessResult = wordleGame.getGuessData(); // e.g., ["green", "grey", "yellow", ...]
+
+									for (int i = 0; i < 5; i++) {
+										String color = guessResult[i];
+										// Apply coloring to your GUI (this depends on how you want to show feedback: background color, etc.)
+										// You could store this color in a parallel 2D array like String[][] gridColors;
+										// and draw it in your paintComponent() with colored rectangles.
+										gridColours[rowNumber][i] = color;
+										
+
+										System.out.println(color);
+										repaint();
+							}
+								//Clear queue, go to next row number.
+								lettersInQueue.clear();
+								//wordleGame.clearGuess();
+								rowNumber++;
+
+
+							if(wordleGame.getWin()) {
+								KaliszTimes.popup("Congratulations! " + wordleGame.getWord() + " was the correct word!");
+								origin.setFinished();
+								origin.repaint();
+
+									// Properly remove panel from parent
+								getPanel().setFocusable(false);
+								getPanel().setVisible(false);
+								
+
+									Container parent = getPanel().getParent();
+									if (parent != null) {
+										parent.remove(getPanel());
+										parent.revalidate();
+										parent.repaint();
+									}
+
+									GraphicsHandler.activeWordleInstances.remove(origin); // cleanup
+									KaliszTimes.getGraphicsHandler().goBack(); // navigate
+								
+
+								}
+							}else if(result == 0) { //If the result is not a word in the dictionary
+								KaliszTimes.popup("Word does not exist in our library!");
+							}
+						}
+
+				}else {
+						KaliszTimes.popup("Please submit a valid word!");
 				}
-			}
-			 
+			}		
+						}
+
+					}
+	
+				
 		 });
 		 
 		repaint();
@@ -259,8 +270,8 @@ public class WordleGamePanel extends JPanel implements KeyListener, PanelAttribu
 			}
 		}
 
-
-		graphics.setFont(new Font("Arial", Font.BOLD, GUIConstants.scaleY(40)));
+		int refFontSize = 40;
+		graphics.setFont(new Font("Arial", Font.BOLD, GUIConstants.scaleFont(refFontSize)));
 		//Draw preset strings in set positions that can be modified of the wordle grid
 		for(int row = 0; row < GUIConstants.WORDLE_NUM_OF_ROWS; row++) {
 			for(int column = 0; column < GUIConstants.WORDLE_NUM_OF_COLUMNS; column++) {

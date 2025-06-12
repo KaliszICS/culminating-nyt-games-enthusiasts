@@ -34,7 +34,7 @@ import kalisz.KaliszTimes;
 public class SpellingBeeEnterButton extends Button {
     private SpellingBeeGamePanel spellingBeeInstance;
 	private boolean finished = false;
-    int SPELLING_BEE_BOARD_OFFSET = 7;
+    int SPELLING_BEE_BOARD_OFFSET = 8;
 	private String spellingBeeAnswer;
 	private int uniqueID;
 
@@ -100,7 +100,9 @@ public class SpellingBeeEnterButton extends Button {
         if (!finished) {// paints the image from the Button class
 			 super.paintComponent(g);
 			if(spellingBeeInstance != null && spellingBeeInstance.spellingBeeGame != null && !spellingBeeInstance.spellingBeeGame.getWin()) {
-				graphics.setFont(new Font("Arial", Font.BOLD, 15));
+                
+                int refFontSize = 15;
+				graphics.setFont(new Font("Arial", Font.BOLD, GUIConstants.scaleFont(refFontSize)));
 				int textWidth = graphics.getFontMetrics().stringWidth("In Progress");
 				int textHeight = graphics.getFontMetrics().getAscent();
 				int textX = (getWidth() - textWidth) / 2;
@@ -114,8 +116,8 @@ public class SpellingBeeEnterButton extends Button {
     	} else {
 
 		
-			
-			graphics.setFont(new Font("Arial", Font.BOLD, 20));
+			int refFontSize = 20;
+			graphics.setFont(new Font("Arial", Font.BOLD, GUIConstants.scaleFont(refFontSize)));
 			graphics.setColor(Color.black);
 
 			// Draw character centered

@@ -46,6 +46,11 @@ public class SpellingBeeGamePanel extends JPanel implements KeyListener, PanelAt
 		setLayout(null);
 		 System.out.println(origin.getKeyWord());
 		spellingBeeGame = new SpellingBee(origin.getKeyWord());
+
+		//Debug Mode
+		if(KaliszTimes.debugMode) {
+			KaliszTimes.popup(origin.getKeyWord());
+		}
 		
  		//Adds physical keyboard compatibility 
 		addKeyListener(this);
@@ -239,7 +244,9 @@ public class SpellingBeeGamePanel extends JPanel implements KeyListener, PanelAt
 		
 		int SHIFT_UP = 25;
 		graphics.drawImage(GUIConstants.spellingbee_game_panel_background, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT - SHIFT_UP, this);
-		graphics.setFont(new Font("Arial", Font.BOLD, 30));
+		int reFFontSize = 30;
+		
+		graphics.setFont(new Font("Arial", Font.BOLD, GUIConstants.scaleFont(reFFontSize)));
 
 		int refX = 1920 / 4 - 150;
 		int refY = 200;
@@ -284,7 +291,8 @@ public class SpellingBeeGamePanel extends JPanel implements KeyListener, PanelAt
 			graphics.drawString(spellingBeeGame.getWordsFound().get(i), GUIConstants.scaleX(refWordListX), GUIConstants.scaleY(refWordListY + VERTICAL_OFFSET));
 		}
 		//Draws number of words found
-		graphics.setFont(new Font("Arial", Font.BOLD, 20));
+		int refFontSize = 20;
+		graphics.setFont(new Font("Arial", Font.BOLD, GUIConstants.scaleFont(refFontSize)));
 		int refNumOfWordsX = 1150;
 		int refNumOfWordsY = 210;
 		graphics.drawString("" + spellingBeeGame.getWordsFound().size(), GUIConstants.scaleX(refNumOfWordsX), GUIConstants.scaleY(refNumOfWordsY));

@@ -90,7 +90,8 @@ public class Connections {
      * @param results
      */
 
-    public Connections(String[] yellowWords, String yellowCategory, String[] greenWords, String greenCategory, String[] blueWords, String blueCategory, String[] purpleWords, String purpleCategory, int guessesLeft, ArrayList<String[]> results, HashMap<String, Boolean> revealed) {
+
+     /*    public Connections(String[] yellowWords, String yellowCategory, String[] greenWords, String greenCategory, String[] blueWords, String blueCategory, String[] purpleWords, String purpleCategory, int guessesLeft, ArrayList<String[]> results, HashMap<String, Boolean> revealed) {
         this.wordToCategory = new HashMap<>();
         this.revealed = new HashMap<>();
         this.yellowWords = yellowWords;
@@ -114,7 +115,7 @@ public class Connections {
         this.results = results;
         this.revealed = revealed;
     }
-    
+    */
     /**
     * Gets the array of yellow category words.
      *
@@ -210,7 +211,7 @@ public class Connections {
     public String selectWord(int index) {// 
        // you can't do this. + redundant if (!this.revealed.get(this.board.get(index))) return this.board.get(index); // if not revealed, return the word to be wordled/spelling beed
         if (this.currentGuess.contains(index)) this.currentGuess.remove(Integer.valueOf(index)); // deselects index if already in guess //can't do this
-        else if (this.currentGuess.size() < 4) this.currentGuess.add(index);
+        else if (this.currentGuess.size() < 4) this.currentGuess.add(Integer.valueOf(index));
         return null;
     }
     
@@ -240,6 +241,7 @@ public class Connections {
      */
 
     public String submitGuess() {
+        System.out.println("Guess size: " + currentGuess.size() + " → " + currentGuess);
         if (this.currentGuess.size() < 4) return "not enough words";
         String category1 = this.wordToCategory.get(this.board.get(this.currentGuess.get(0))), category2 = this.wordToCategory.get(this.board.get(this.currentGuess.get(1))), category3 = this.wordToCategory.get(this.board.get(this.currentGuess.get(2))), category4 = this.wordToCategory.get(this.board.get(this.currentGuess.get(3)));
         this.results.add(new String[]{category1, category2, category3, category4}); // add the stats of the submitted guess to the results

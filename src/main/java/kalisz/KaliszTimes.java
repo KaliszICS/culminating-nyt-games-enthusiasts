@@ -4,8 +4,8 @@ package kalisz;
 import graphics.GUIConstants;
 import graphics.GraphicsHandler;
 import graphics.utils.GameDataHandler;
-//import graphics.utils.JFXInitializer;
-/*
+import graphics.utils.JFXInitializer;
+
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
@@ -13,8 +13,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import logic.AIHandler;
-*/
+
 
 import java.awt.Toolkit;
 import java.io.File;
@@ -35,6 +34,7 @@ public class KaliszTimes {
 	private static GraphicsHandler handler = null;
 	
 	public static boolean inAd = false;
+	public static boolean debugMode = true;
 
 	public static void main(String args[]) {
 		new GameDataHandler(); //Initialize game data.
@@ -132,5 +132,5 @@ public class KaliszTimes {
    		 mediaPlayer.play();
 		 inAd = true;
     }
-	*/
+	
 }

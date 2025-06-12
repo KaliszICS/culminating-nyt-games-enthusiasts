@@ -39,7 +39,8 @@ public class GUIConstants {
     wordle_win_background_image,
     stats_background_image,
     stats_next_button_image
-    ,stats_prev_button_image;
+    ,stats_prev_button_image,
+    question_mark_image;
 
 
     public GUIConstants() {
@@ -61,11 +62,9 @@ public class GUIConstants {
      public static int scaleY(int refY) {
         return (int) (refY * scaleY);
     }
-  //  static double SCALE_OFFSET = 1.25;
     public static int scaleFont(int fontSize) { //Vertical scaling preferred.
-        System.out.println(scaleY);
-        
-         return (int) (fontSize * scaleY);
+       double scale = Math.min(scaleX, scaleY); 
+        return (int) (fontSize * scale);
 
     }
 
@@ -101,6 +100,7 @@ public class GUIConstants {
            stats_background_image = ImageIO.read(getClass().getResourceAsStream("resources/stats_background.png"));
              stats_next_button_image = ImageIO.read(getClass().getResourceAsStream("resources/stats_next.png"));
              stats_prev_button_image = ImageIO.read(getClass().getResourceAsStream("resources/stats_prev.png"));
+              question_mark_image= ImageIO.read(getClass().getResourceAsStream("resources/question_mark.png"));
 
 
 		} catch (IOException e) {

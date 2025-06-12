@@ -27,6 +27,7 @@ import graphics.buttons.SpellingBeeButton;
 import graphics.buttons.SpellingBeeEnterButton;
 import graphics.buttons.StatsButton;
 import kalisz.KaliszTimes;
+import logic.LeaderboardHandler;
 import logic.SpellingBee;
 import logic.events.EventHandler;
 import logic.events.KeyboardClickEvent;
@@ -48,7 +49,24 @@ public class SpellingBeeGamePanel extends TemplatePanel implements KeyListener {
 
 		//Debug Mode
 		if(KaliszTimes.debugMode) {
-			KaliszTimes.popup(origin.getKeyWord());
+			KaliszTimes.popup("Congratulations! " + spellingBeeGame.getKeyword() + " was the correct word!");
+							origin.setFinished();
+							origin.repaint();
+
+								// Properly remove panel from parent
+							getPanel().setFocusable(false);
+							getPanel().setVisible(false);
+							
+
+								Container parent = getPanel().getParent();
+								if (parent != null) {
+									parent.remove(getPanel());
+									parent.revalidate();
+									parent.repaint();
+								}
+
+								GraphicsHandler.activeSpellingBeeInstances.remove(origin); // cleanup
+								KaliszTimes.getGraphicsHandler().jump("Connections Panel"); // navigate
 		}
 		
  		//Adds physical keyboard compatibility 
@@ -201,6 +219,10 @@ public class SpellingBeeGamePanel extends TemplatePanel implements KeyListener {
 							origin.setFinished();
 							origin.repaint();
 
+							//Update stats
+							spellingBeeGame.winEvent();
+
+
 								// Properly remove panel from parent
 							getPanel().setFocusable(false);
 							getPanel().setVisible(false);
@@ -242,6 +264,15 @@ public class SpellingBeeGamePanel extends TemplatePanel implements KeyListener {
 		int SHIFT_UP = 25;
 		graphics.drawImage(GUIConstants.spellingbee_game_panel_background, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT - SHIFT_UP, this);
 		int reFFontSize = 30;
+
+		//Label text
+		String labelText = "Signed in as: " + KaliszTimes.player.getUsername();
+		int refLabelX = 250;
+		int refLabelY = 75;
+
+		graphics.setFont(new Font("SansSerif", Font.PLAIN, GUIConstants.scaleFont(20)));
+		graphics.setColor(Color.black); // or whatever color you want
+		graphics.drawString(labelText, GUIConstants.scaleX(refLabelX), GUIConstants.scaleY(refLabelY));
 		
 		graphics.setFont(new Font("Arial", Font.BOLD, GUIConstants.scaleFont(reFFontSize)));
 
@@ -251,28 +282,29 @@ public class SpellingBeeGamePanel extends TemplatePanel implements KeyListener {
 		//Draw string character by character in order to support custom colours.
 		int offsetX = 0;
 
-		char[] lettersOfWord = spellingBeeGame.getCurrentWord().toCharArray();
-		FontMetrics metrics = graphics.getFontMetrics(graphics.getFont());
+	char[] lettersOfWord = spellingBeeGame.getCurrentWord().toCharArray();
+FontMetrics metrics = graphics.getFontMetrics(graphics.getFont());
 
-		for (int i = 0; i < lettersOfWord.length; i++) {
-			char currentChar = lettersOfWord[i];
-			int charWidth = metrics.charWidth(currentChar); // precise width for this char
+for (int i = 0; i < lettersOfWord.length; i++) {
+	char currentChar = lettersOfWord[i];
 
-			// Set color
-			if (currentChar == spellingBeeGame.getGoldenLetter())
-				graphics.setColor(new Color(176, 170, 4)); // gold
-			else
-				graphics.setColor(Color.BLACK);
+	// Set color
+	if (currentChar == spellingBeeGame.getGoldenLetter())
+		graphics.setColor(new Color(176, 170, 4)); // gold
+	else
+		graphics.setColor(Color.BLACK);
 
-			// Draw the character
-			graphics.drawString(String.valueOf(currentChar),
-				GUIConstants.scaleX(refX + offsetX),
-				GUIConstants.scaleY(refY));
+	// Draw the character (refX + offsetX is UNscaled)
+	int x = refX + offsetX;
+	int y = refY;
 
-			// Increment offset by width of current char
-			offsetX += charWidth;
-		}
+	graphics.drawString(String.valueOf(currentChar),
+		GUIConstants.scaleX(x),
+		GUIConstants.scaleY(y));
 
+	// DO NOT scale charWidth
+	offsetX += metrics.charWidth(currentChar);
+}
 
 		//Draws word list
 		graphics.setColor(Color.black);
@@ -293,6 +325,9 @@ public class SpellingBeeGamePanel extends TemplatePanel implements KeyListener {
 		int refNumOfWordsX = 1150;
 		int refNumOfWordsY = 210;
 		graphics.drawString("" + spellingBeeGame.getWordsFound().size(), GUIConstants.scaleX(refNumOfWordsX), GUIConstants.scaleY(refNumOfWordsY));
+
+
+		
 	}
 	
 	  public void addKeyboardListener(KeyboardClickEventListener listener) {

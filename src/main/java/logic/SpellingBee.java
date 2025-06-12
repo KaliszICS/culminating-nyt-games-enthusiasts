@@ -3,6 +3,8 @@ package logic;
 import java.util.ArrayList;
 import java.util.Random;
 
+import kalisz.KaliszTimes;
+
 /**
  * Class for the Spelling Bee game.
  * Contains getters for most variables and methods to run the game (e.g., adding letters to the guess, submitting the guesses).
@@ -222,5 +224,15 @@ public class SpellingBee {
         this.currentWord = "";
         return pointValue;
     }
+    public void winEvent() {
+          // Update player stats
+							KaliszTimes.player.incrementSpellingBeeWins();
+							KaliszTimes.player.saveStats(); // writes to [username].txt
 
+								// Update leaderboard
+							LeaderboardHandler leaderboard = new LeaderboardHandler();
+							leaderboard.saveAllStats(); // appends to SpellingBee.txt
+
+                             KaliszTimes.getGraphicsHandler().reloadLeaderboardFrame();
+    }
 }

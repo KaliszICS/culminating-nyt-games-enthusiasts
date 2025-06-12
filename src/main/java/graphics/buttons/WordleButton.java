@@ -82,11 +82,8 @@ public class WordleButton extends Button {
      * 
      * @param e Mouse event for entering the button area.
      */
-	@Override
-	public void mouseEntered(MouseEvent e) { //overrides, so it can disable? might change this
-		this.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		
-	}
+	
+	 
     /**
      * Paints the button.
      * <p>
@@ -100,6 +97,24 @@ public class WordleButton extends Button {
 	 @Override
     protected void paintComponent(Graphics g) {
 		Graphics2D graphics = (Graphics2D) g;
+		if(ConnectionsPanel.connectionsGame.isWordRevealed(this.wordleAnswer)){
+            switch(ConnectionsPanel.connectionsGame.getWordColor(this.wordleAnswer)) {
+                case "blue":
+                    graphics.setColor(Color.blue);
+                    break;
+                case "green":
+                    graphics.setColor(Color.green);
+                    break;
+                case "yellow":
+                    graphics.setColor(Color.yellow);
+                    break;
+                case "purple":
+                    graphics.setColor(Color.magenta);
+                    break;
+            }
+            graphics.fillRect(0, 0, 100, 100);
+        
+        }
 
 		if(ConnectionsPanel.connectionsGame.currentGuess.contains(uniqueID)) {
             graphics.setColor(Color.gray);

@@ -1,5 +1,0 @@
-1 2 4 10 4 3 wordle stats
-2 3 8 7 connections stats
-40 wordle attempts
-20 connections attempts
-0 12 40 52 spelling bee stats

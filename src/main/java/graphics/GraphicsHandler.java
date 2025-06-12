@@ -20,6 +20,7 @@ public class GraphicsHandler {
 
 
     private static ConnectionsPanel connectionsPanel;
+    private static LeaderboardPanel leaderboardPanel;
     public static String currentPanel;
     private static Stack<String> panelHistory = new Stack<>();
    
@@ -38,6 +39,8 @@ public class GraphicsHandler {
        GameSelectionPanel selectionPanel = new GameSelectionPanel();
         
         connectionsPanel = new ConnectionsPanel();
+
+        InstructionsPanel instructionsPanel = new InstructionsPanel();
         
       //  WordleStartPanel wordleStartPanel = new WordleStartPanel();
         
@@ -51,7 +54,7 @@ public class GraphicsHandler {
         
        // SpellingBeeWinPanel sbWinPanel = new  SpellingBeeWinPanel();
 
-       LeaderboardPanel leaderboardPanel = new LeaderboardPanel();
+        leaderboardPanel = new LeaderboardPanel();
         
         mainPanel.add(titlePanel, "Title Screen Panel");
         
@@ -61,7 +64,7 @@ public class GraphicsHandler {
     
         mainPanel.add(leaderboardPanel, "Leaderboard Panel");
        
-      //  mainPanel.add(wordleStartPanel);
+       mainPanel.add(instructionsPanel, "Instructions Panel");
       //  mainPanel.add(wordleGamePanel);
       //  mainPanel.add(wordleWinPanel);
       //  mainPanel.add(sbStartPanel);
@@ -85,6 +88,7 @@ public class GraphicsHandler {
     public JPanel getPanel() {
     	return mainPanel;
     }
+    
     public void goBack() {
         if (!panelHistory.isEmpty()) {
         String previousPanel = panelHistory.pop();
@@ -107,6 +111,10 @@ public class GraphicsHandler {
     public void reloadFrame() {
           frame.revalidate();
           frame.repaint();
+    }
+    public void reloadLeaderboardFrame() {
+        leaderboardPanel.revalidate();
+        leaderboardPanel.repaint();
     }
     public void addPanel(JPanel newPanel, String name) {
         mainPanel.add(newPanel, name);

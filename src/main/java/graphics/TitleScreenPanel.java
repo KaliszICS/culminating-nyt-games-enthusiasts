@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import graphics.buttons.Button;
 
 import java.awt.event.MouseAdapter;
 import kalisz.KaliszTimes;
@@ -21,15 +22,28 @@ public class TitleScreenPanel extends TemplatePanel {
 	
 	public TitleScreenPanel() {
 		this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));
+
+		int refX = 150;
+		 int refY = 100;
+		 Button instructionsButton = new Button(GUIConstants.question_mark_image, GUIConstants.scaleX(refX), GUIConstants.scaleY(refY));
+		 instructionsButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				KaliszTimes.getGraphicsHandler().jump("Instructions Panel");
+			}
+		 });
+		 instructionsButton.setSize(200, 200);
+		 add(instructionsButton);
+
 		 this.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent e) {
 					System.out.println("Next panel");
-					KaliszTimes.getGraphicsHandler().jump("Connections Start Panel");
+					KaliszTimes.getGraphicsHandler().jump("Instructions Panel");
+					//KaliszTimes.getGraphicsHandler().jump("Connections Start Panel");
 	}		
 		 });
 		 
-	
 		 repaint();
 	}
 	public void paintComponent(Graphics g) {

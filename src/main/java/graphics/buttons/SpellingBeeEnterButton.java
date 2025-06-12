@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.sql.Connection;
 import java.util.Random;
 
 import graphics.ConnectionsPanel;
@@ -34,7 +35,7 @@ import kalisz.KaliszTimes;
 public class SpellingBeeEnterButton extends Button {
     private SpellingBeeGamePanel spellingBeeInstance;
 	private boolean finished = false;
-    int SPELLING_BEE_BOARD_OFFSET = 8;
+
 	private String spellingBeeAnswer;
 	private int uniqueID;
 
@@ -47,7 +48,7 @@ public class SpellingBeeEnterButton extends Button {
      */
     public SpellingBeeEnterButton(BufferedImage image, int uniqueID, String spellingBeeAnswer) {
         super(image);
-		this.uniqueID = uniqueID + SPELLING_BEE_BOARD_OFFSET;
+		this.uniqueID = uniqueID;
         this.spellingBeeAnswer = spellingBeeAnswer;
 		
     }
@@ -79,11 +80,7 @@ public class SpellingBeeEnterButton extends Button {
      *
      * @param e the mouse event triggering the hover
      */
-	@Override
-	public void mouseEntered(MouseEvent e) { //overrides, so it can disable? might change this
-		this.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		
-	}
+	
 	/**
      * Custom paint method that handles drawing the background, status messages, and final answer.
      *
@@ -92,6 +89,25 @@ public class SpellingBeeEnterButton extends Button {
 	 @Override
     protected void paintComponent(Graphics g) {
 		Graphics2D graphics = (Graphics2D) g;
+        if(ConnectionsPanel.connectionsGame.isWordRevealed(this.spellingBeeAnswer)){
+            switch(ConnectionsPanel.connectionsGame.getWordColor(this.spellingBeeAnswer)) {
+                case "blue":
+                    graphics.setColor(Color.blue);
+                    break;
+                case "green":
+                    graphics.setColor(Color.green);
+                    break;
+                case "yellow":
+                    graphics.setColor(Color.yellow);
+                    break;
+                case "purple":
+                    graphics.setColor(Color.magenta);
+                    break;
+            }
+            graphics.fillRect(0, 0, 100, 100);
+        
+        }
+
         if(ConnectionsPanel.connectionsGame.currentGuess.contains(uniqueID)) {
             graphics.setColor(Color.gray);
             graphics.fillRect(0, 0, 100, 100);

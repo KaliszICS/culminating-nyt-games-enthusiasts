@@ -3,6 +3,7 @@ package kalisz;
 
 import graphics.GUIConstants;
 import graphics.GraphicsHandler;
+import graphics.player.PlayerLoginGUI;
 import graphics.utils.GameDataHandler;
 import graphics.utils.JFXInitializer;
 
@@ -13,12 +14,13 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
+import logic.Player;
 
 import java.awt.Toolkit;
 import java.io.File;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import java.awt.Dimension;
 
@@ -34,10 +36,12 @@ public class KaliszTimes {
 	private static GraphicsHandler handler = null;
 	
 	public static boolean inAd = false;
-	public static boolean debugMode = true;
+	public static boolean debugMode = false;
+	public static Player player;
 
 	public static void main(String args[]) {
 		new GameDataHandler(); //Initialize game data.
+
 
 
 		System.out.println(GameDataHandler.yellowCategory + " YELLOW");
@@ -57,11 +61,19 @@ public class KaliszTimes {
 
 		//KaliszTimes.getAudioHandler().playSound("/button_sound.wav"); //work on this
 		handler = new GraphicsHandler();
-		handler.initiate();
+
+
+		SwingUtilities.invokeLater(() -> new PlayerLoginGUI());
+		
 
 		
 		
 		//System.out.println(AIHandler.chatGPT("Generate me a list of words for wordle, without any other text. Just the raw words with a space in between").split(" "));
+	}
+
+	public static void initiateGame(Player player) {
+		KaliszTimes.player = player;
+		handler.initiate();
 	}
     /**
      * Gets the global graphics handler for the application.
@@ -77,7 +89,7 @@ public class KaliszTimes {
      * @param message the message to display in the dialog
      */
 	public static void popup(String message) {
-		JOptionPane.showMessageDialog(null, message, "Information!", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(getGraphicsHandler().getFrame(), message, "Information!", JOptionPane.INFORMATION_MESSAGE);
 	}
 	/**
      * Displays an ad revival popup message using Swing.
@@ -85,7 +97,7 @@ public class KaliszTimes {
      * @param message the message prompting the user to watch an ad
      */
 	public static void adPopup(String message) {
-		JOptionPane.showMessageDialog(null, message, "Watch an ad to revive!", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(getGraphicsHandler().getFrame(), message, "Watch an ad to revive!", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	/**

@@ -3,6 +3,8 @@ package logic;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import kalisz.KaliszTimes;
+
 /**
  * Class for the Wordle game.
  * The class includes getters for some variables and methods to run the game (adding letters, submitting guesses, etc.).
@@ -26,6 +28,7 @@ public class Wordle {
     private boolean win;
     private int[] wordLetterCount; // will have size 26
     private ArrayList<String[]> results; // for the ascii results you copy paste after a game
+  
 
     /**
      * Default constructor to make new Wordle game with every stat at default.
@@ -35,6 +38,7 @@ public class Wordle {
 
     public Wordle(String word) {
         this.word = word;
+       
         this.guessCount = 0;
         this.guessData = new String[this.word.length()];
         this.overallGuessData = new String[26];
@@ -48,28 +52,7 @@ public class Wordle {
         this.results = new ArrayList<String[]>();
     }
 
-    /**
-     * Constructor to initialize an already-started game which assigns each variable.
-     * 
-     * @param word solution word
-     * @param guessCount the number of guesses already made
-     * @param overallGuessData the data for each letter already discovered
-     */
-
-    public Wordle(String word, int guessCount, String[] overallGuessData) {
-        this.word = word;
-        this.guessCount = guessCount;
-        this.guessData = new String[this.word.length()];
-        this.overallGuessData = overallGuessData;
-        Arrays.fill(this.overallGuessData, "");
-        this.currentGuess = "";
-        this.win = false;
-        for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
-            ++wordLetterCount[this.word.charAt(letterIndex) - 'A']; // {1, 0, 0, 1, 2, 0, 0, 0, 0...}
-        }
-        this.results = new ArrayList<String[]>();
-    }
-
+   
     /**
      * Gets the word to be guessed.
      * 
@@ -220,5 +203,16 @@ public class Wordle {
         this.results.add(guessData); // add submitted guess to results
         this.currentGuess = ""; // clear guess after submission
         return 1;
+    }
+    public void winEvent() {
+         // Update player stats
+								KaliszTimes.player.incrementWordleWins();
+								KaliszTimes.player.saveStats(); // writes to [username].txt
+
+								// Update leaderboard
+								LeaderboardHandler leaderboard = new LeaderboardHandler();
+								leaderboard.saveAllStats(); // appends to wordle.txt
+
+                                KaliszTimes.getGraphicsHandler().reloadLeaderboardFrame();
     }
 }

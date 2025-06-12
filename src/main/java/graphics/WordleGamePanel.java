@@ -31,6 +31,7 @@ import javafx.application.Platform;
 
 import kalisz.KaliszTimes;
 import logic.DictionaryChecker;
+import logic.LeaderboardHandler;
 import logic.Wordle;
 import logic.events.EventHandler;
 import logic.events.KeyboardClickEvent;
@@ -86,7 +87,26 @@ public class WordleGamePanel extends TemplatePanel implements KeyListener {
 
 		//Debug Mode
 		if(KaliszTimes.debugMode) {
-			KaliszTimes.popup(origin.getWordleAnswer());
+				KaliszTimes.popup("Congratulations! " + wordleGame.getWord() + " was the correct word!");
+								origin.setFinished();
+								origin.repaint();
+
+									// Properly remove panel from parent
+								getPanel().setFocusable(false);
+								getPanel().setVisible(false);
+								
+
+									Container parent = getPanel().getParent();
+									if (parent != null) {
+										parent.remove(getPanel());
+										parent.revalidate();
+										parent.repaint();
+									}
+
+									GraphicsHandler.activeWordleInstances.remove(origin); // cleanup
+									KaliszTimes.getGraphicsHandler().jump("Connections Panel"); // navigate
+
+									
 		}
 
 		 //Adds digital keyboard listener (ours) that will listen for special KeyboardClickEvent
@@ -186,7 +206,11 @@ public class WordleGamePanel extends TemplatePanel implements KeyListener {
 
 
 							if(wordleGame.getWin()) {
-								KaliszTimes.popup("Congratulations! " + wordleGame.getWord() + " was the correct word!");
+								KaliszTimes.popup("Congratulations! " + wordleGame.getWord() + " was the correct word!\nYou did it in " + wordleGame.getGuessCount() + " attempt" + (wordleGame.getGuessCount() == 1 ? "!" : "s!"));
+							 
+								//Update stats
+								wordleGame.winEvent();
+
 								origin.setFinished();
 								origin.repaint();
 
@@ -234,7 +258,14 @@ public class WordleGamePanel extends TemplatePanel implements KeyListener {
 		
 		int SHIFT_UP = 25;
 		graphics.drawImage(GUIConstants.wordle_game_panel_background, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT - SHIFT_UP, this);
-		
+		//Label text
+		String labelText = "Signed in as: " + KaliszTimes.player.getUsername();
+		int refLabelX = 250;
+		int refLabelY = 75;
+
+		graphics.setFont(new Font("SansSerif", Font.PLAIN, GUIConstants.scaleFont(20)));
+		graphics.setColor(Color.black); // or whatever color you want
+		graphics.drawString(labelText, GUIConstants.scaleX(refLabelX), GUIConstants.scaleY(refLabelY));
 		//Set colours in wordle grid
 		
 		for(int row = 0; row < GUIConstants.WORDLE_NUM_OF_ROWS; row++) {
@@ -293,6 +324,7 @@ public class WordleGamePanel extends TemplatePanel implements KeyListener {
 			}
 		}
        
+
 	}
 	
 

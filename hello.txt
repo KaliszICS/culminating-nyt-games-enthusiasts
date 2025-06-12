@@ -1,0 +1,4 @@
+password: 123
+wordle_wins: 1
+spelling_bee_wins: 0
+connections_wins: 0

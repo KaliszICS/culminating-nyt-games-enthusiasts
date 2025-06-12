@@ -1,10 +1,11 @@
+/* */
 /**
  * A class to run the game without graphics for now.
  * No input validation because lkasjd;goiaehrg[0wutf09wufpowrjgt
  * 
  * @author @FranklinZhu1
  */
-
+/* 
 package kalisz;
 
 import java.util.Scanner;
@@ -111,3 +112,4 @@ public class Testing {
     }
 
 }
+*/

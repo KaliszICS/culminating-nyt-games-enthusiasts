@@ -88,14 +88,14 @@ public class GameDataHandler {
         String completeString = "";
         String URL_CONSTANT = "src/main/java/graphics/utils/game_resources/";
         for(String word : readWordsFromFile(URL_CONSTANT + url)) {
-            completeString+=word;
+            completeString+=word.toUpperCase();
         }
         wordList = completeString.split(",");
         //Filter word list for any non 5 or 7 character words.
         ArrayList<String> filteredWordList = new ArrayList<>();
         for(String word : wordList) {
             if(word.length() == 5 || word.length() == 7)
-                filteredWordList.add(word);
+                filteredWordList.add(word.toUpperCase());
         }
 
         return filteredWordList.toArray(new String[0]);

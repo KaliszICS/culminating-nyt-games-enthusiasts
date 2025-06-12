@@ -1,7 +1,11 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
+
+import kalisz.KaliszTimes;
+
 import java.util.HashMap;
 
 
@@ -24,14 +28,15 @@ import java.util.HashMap;
 
 public class Connections {
 
-    private ArrayList<String> board, categoriesCompleted;
+    public ArrayList<String> board, categoriesCompleted;
     public ArrayList<Integer> currentGuess; // takes indexes from the board array
     private String[] yellowWords, greenWords, blueWords, purpleWords;
     private int guessesLeft;
     private String yellowCategory, greenCategory, blueCategory, purpleCategory; // yellowCategory = "Rooms in rekugjhselkfgj seg"
     private HashMap<String, String> wordToCategory; // wordToCategory.get("hall") -> "yellow"
     private ArrayList<String[]> results; // for the ascii results you copy paste after a game
-    private HashMap<String, Boolean> revealed; // .get("hall") -> false .......... true
+    public ArrayList<String> revealed; //word will be in here if it is revealed
+    private boolean win;
 
     /**
      * Constructor for new game. Takes in data about each category.
@@ -47,8 +52,9 @@ public class Connections {
      */
 
     public Connections(String[] yellowWords, String yellowCategory, String[] greenWords, String greenCategory, String[] blueWords, String blueCategory, String[] purpleWords, String purpleCategory) {
+        this.win = false;
         this.wordToCategory = new HashMap<>();
-        this.revealed = new HashMap<>();
+        this.revealed = new ArrayList<>();
         this.yellowWords = yellowWords;
         this.yellowCategory = yellowCategory;
         this.greenWords = greenWords;
@@ -67,10 +73,6 @@ public class Connections {
             this.wordToCategory.put(greenWords[index], "green");
             this.wordToCategory.put(blueWords[index], "blue");
             this.wordToCategory.put(purpleWords[index], "purple");
-            this.revealed.put(yellowWords[index], false); // assigns each word as unrevealed
-            this.revealed.put(greenWords[index], false);
-            this.revealed.put(blueWords[index], false);
-            this.revealed.put(purpleWords[index], false);
         }
         this.categoriesCompleted = new ArrayList<String>();
         this.guessesLeft = 4;
@@ -202,6 +204,16 @@ public class Connections {
      * Shuffles the board.
      */
 
+     /**
+         * Returns the color category of a given word
+         * 
+         * @param word The word to look up
+         * @return The color category ("yellow", "green", "blue", or "purple"), 
+         *         or null if the word isn't found
+         */
+        public String getWordColor(String word) {
+            return wordToCategory.get(word);
+        }
     public void shuffle() {
         ArrayList<String> shuffledBoard = new ArrayList<String>(); // initialize empty shuffled board
         Random random = new Random();
@@ -218,11 +230,28 @@ public class Connections {
      */
     public String selectWord(int index) {// 
        // you can't do this. + redundant if (!this.revealed.get(this.board.get(index))) return this.board.get(index); // if not revealed, return the word to be wordled/spelling beed
-        if (this.currentGuess.contains(index)) this.currentGuess.remove(Integer.valueOf(index)); // deselects index if already in guess //can't do this
-        else if (this.currentGuess.size() < 4) this.currentGuess.add(Integer.valueOf(index));
+        if (this.currentGuess.contains(index)) 
+            this.currentGuess.remove(Integer.valueOf(index)); // deselects index if already in guess //can't do this
+        else if (this.currentGuess.size() < 4 && !revealed.contains(board.get(index))) 
+            this.currentGuess.add(Integer.valueOf(index));
         return null;
     }
     
+
+    public String convertCategoryColorToName(String color) {
+        switch(color) {
+            case "blue":
+                return getBlueCategory();
+            case "yellow":
+                return getYellowCategory();
+            case "green":
+                return getGreenCategory();
+            case "purple":
+                return getPurpleCategory();
+            default:
+                return color;
+        }
+    }
     /**
      * Update the revealed hashmap to reveal a word that was successfully revealed through Wordle or Spelling Bee.
      * 
@@ -230,7 +259,7 @@ public class Connections {
      */
 
     public void revealWord(String word) {
-        this.revealed.replace(word, true);
+        this.revealed.add(word);
     }
 
     /**
@@ -248,16 +277,26 @@ public class Connections {
      * @return "not enough words" if not enough words in guess, "game over" if wrong and game-ending (no guesses left), "wrong" if wrong but not game-ending, name of category matched otherwise
      */
 
-    public String submitGuess() {
+/*    public String submitGuess() {
         System.out.println("Guess size: " + currentGuess.size() + " → " + currentGuess);
         if (this.currentGuess.size() < 4) return "not enough words";
-        String category1 = this.wordToCategory.get(this.board.get(this.currentGuess.get(0))), category2 = this.wordToCategory.get(this.board.get(this.currentGuess.get(1))), category3 = this.wordToCategory.get(this.board.get(this.currentGuess.get(2))), category4 = this.wordToCategory.get(this.board.get(this.currentGuess.get(3)));
+        String category1 = this.wordToCategory.get(this.board.get(this.currentGuess.get(0))), 
+        category2 = this.wordToCategory.get(this.board.get(this.currentGuess.get(1))), 
+        category3 = this.wordToCategory.get(this.board.get(this.currentGuess.get(2))), 
+        category4 = this.wordToCategory.get(this.board.get(this.currentGuess.get(3)));
         this.results.add(new String[]{category1, category2, category3, category4}); // add the stats of the submitted guess to the results
         this.currentGuess.sort(null); // so that the indexes of the guess are in order to remove properly
         if (category1.equals(category2) && category2.equals(category3) && category3.equals(category4)) { // if a category is completed
+            revealWord(this.board.get(currentGuess.get(3)));
             this.board.remove((int) this.currentGuess.get(3));
+
+             revealWord(this.board.get(currentGuess.get(2)));
             this.board.remove((int) this.currentGuess.get(2));
+
+             revealWord(this.board.get(currentGuess.get(1)));
             this.board.remove((int) this.currentGuess.get(1));
+
+             revealWord(this.board.get(currentGuess.get(0)));
             this.board.remove((int) this.currentGuess.get(0));
             this.categoriesCompleted.add(category1); // category successfully guessed
             return category1;
@@ -265,5 +304,71 @@ public class Connections {
         if (--this.guessesLeft == 0) return "game over"; // if the player has no guesses left and fails the game (-- decrements the amount of guesses left)
         return "wrong"; // player didn't fail the game since the above line didn't run
     }
+        */
+    public ArrayList<String> getBoard() {
+        return board;
+    }
+
+ public String submitGuess() {
+    System.out.println("Guess size: " + currentGuess.size() + " → " + currentGuess);
+    if (this.currentGuess.size() < 4) return "not enough words";
     
+    // Validate indices
+    for (int index : currentGuess) {
+        if (index < 0 || index >= board.size()) {
+            currentGuess.clear();
+            return "invalid selection";
+        }
+    }
+    
+    // Get categories
+    String category1 = wordToCategory.get(board.get(currentGuess.get(0))); 
+    String category2 = wordToCategory.get(board.get(currentGuess.get(1)));
+    String category3 = wordToCategory.get(board.get(currentGuess.get(2)));
+    String category4 = wordToCategory.get(board.get(currentGuess.get(3)));
+    
+    results.add(new String[]{category1, category2, category3, category4});
+    
+    // Check if all categories match
+    if (category1.equals(category2) && category2.equals(category3) && category3.equals(category4)) {
+        // Mark words as revealed but DON'T remove from board
+        for (int index : currentGuess) {
+            String word = board.get(index);
+            revealWord(word);
+        }
+        
+        categoriesCompleted.add(category1);
+        currentGuess.clear();
+
+        //Check to see if # of revealed words is equal to the total number of spots on board
+        if(revealed.size() == board.size())
+            win = true;
+
+        return category1;
+    }
+    
+    if (--guessesLeft == 0) return "game over";
+    currentGuess.clear();
+    return "wrong";
+}
+public boolean isWordRevealed(String word) {
+    if(revealed.contains(word))
+        return true;
+    return false;
+}
+    public boolean getWin() {
+        return win;
+    }
+
+    public void winEvent() {
+          // Update player stats
+							KaliszTimes.player.incrementConnectionsWins();
+							KaliszTimes.player.saveStats(); // writes to [username].txt
+
+								// Update leaderboard
+							LeaderboardHandler leaderboard = new LeaderboardHandler();
+							leaderboard.saveAllStats(); // appends to Connections.txt
+
+                             KaliszTimes.getGraphicsHandler().reloadLeaderboardFrame();
+    }
 }

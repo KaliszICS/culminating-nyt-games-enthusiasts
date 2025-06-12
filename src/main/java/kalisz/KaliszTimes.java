@@ -50,7 +50,7 @@ public class KaliszTimes {
     /**
      * Enables or disables debug mode for additional logging and diagnostics.
      */
-    public static boolean debugMode = true;
+    public static boolean debugMode = false;
     
     /**
      * When true, disables all advertisements (for example, premium or debug mode).

@@ -77,6 +77,16 @@ public class GameDataHandler {
         listOfCategories.add(buildMap("food.txt"));
         listOfCategories.add(buildMap("tools.txt"));
         listOfCategories.add(buildMap("transportation.txt"));
+        listOfCategories.add(buildMap("things found in a school.txt"));
+        listOfCategories.add(buildMap("writing.txt"));
+        listOfCategories.add(buildMap("stress.txt"));
+        listOfCategories.add(buildMap("pet names.txt"));
+        listOfCategories.add(buildMap("parts of a car.txt"));
+        listOfCategories.add(buildMap("music.txt"));
+        listOfCategories.add(buildMap("electricity terms.txt"));
+        listOfCategories.add(buildMap("computer science.txt"));
+        listOfCategories.add(buildMap("coins.txt"));
+        listOfCategories.add(buildMap("hide or reveals.txt"));
 
         // Shuffle the list to randomize category selection
         Collections.shuffle(listOfCategories);

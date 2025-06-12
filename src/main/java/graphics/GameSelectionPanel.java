@@ -16,10 +16,10 @@ import javax.swing.SwingUtilities;
 import graphics.buttons.BackButton;
 import graphics.buttons.Button;
 import graphics.buttons.Image;
-import graphics.utils.PanelAttributes;
+import graphics.buttons.StatsButton;
 import kalisz.KaliszTimes;
 
-public class GameSelectionPanel extends JPanel implements PanelAttributes {
+public class GameSelectionPanel extends TemplatePanel {
 
 	
 	public GameSelectionPanel() {
@@ -37,9 +37,7 @@ public class GameSelectionPanel extends JPanel implements PanelAttributes {
 		 add(new Image(GUIConstants.kaliszGamesLogoImage, GUIConstants.scaleX(refKaliszX), GUIConstants.scaleY(refKaliszY)));
 
 		 //Add View Stats Button
-		 int refStatsX = 1600;
-		 int refStatsY = 20;
-		 add(new Button(GUIConstants.viewStatsButtonImage, GUIConstants.scaleX(refStatsX), GUIConstants.scaleY(refStatsY)));
+		add(new StatsButton(GUIConstants.viewStatsButtonImage));
 
 
 		 //Play button

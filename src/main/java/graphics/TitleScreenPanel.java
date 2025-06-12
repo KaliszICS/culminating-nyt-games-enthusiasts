@@ -13,11 +13,11 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import graphics.utils.PanelAttributes;
+
 import java.awt.event.MouseAdapter;
 import kalisz.KaliszTimes;
 
-public class TitleScreenPanel extends JPanel implements PanelAttributes {
+public class TitleScreenPanel extends TemplatePanel {
 	
 	public TitleScreenPanel() {
 		this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));

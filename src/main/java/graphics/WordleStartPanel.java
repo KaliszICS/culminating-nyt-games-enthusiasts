@@ -14,10 +14,10 @@ import javax.swing.SwingUtilities;
 
 import graphics.buttons.BackButton;
 import graphics.buttons.Button;
-import graphics.utils.PanelAttributes;
+
 import kalisz.KaliszTimes;
 
-public class WordleStartPanel extends JPanel implements PanelAttributes {
+public class WordleStartPanel extends TemplatePanel {
 	
 		
 		

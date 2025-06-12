@@ -21,16 +21,17 @@ import graphics.buttons.BackButton;
 import graphics.buttons.Button;
 import graphics.buttons.Image;
 import graphics.buttons.SpellingBeeEnterButton;
+import graphics.buttons.StatsButton;
 import graphics.buttons.WordleButton;
 import graphics.utils.GameDataHandler;
-import graphics.utils.PanelAttributes;
+
 import kalisz.KaliszTimes;
 import logic.Connections;
 import logic.events.EventHandler;
 import logic.events.KeyboardClickEvent;
 import logic.events.KeyboardClickEventListener;
 
-public class ConnectionsPanel extends JPanel implements PanelAttributes {
+public class ConnectionsPanel extends TemplatePanel {
 	ArrayList<WordleButton> wordleButtons = new ArrayList<WordleButton>();
 	private final ArrayList<KeyboardClickEventListener> listeners = new ArrayList<KeyboardClickEventListener>();
 
@@ -95,9 +96,7 @@ public class ConnectionsPanel extends JPanel implements PanelAttributes {
 		 add(new Image(GUIConstants.kaliszGamesLogoImage, GUIConstants.scaleX(refKaliszX), GUIConstants.scaleY(refKaliszY)));
 
 		 //Add View Stats Button
-		 int refStatsX = 1600;
-		 int refStatsY = 20;
-		 add(new Button(GUIConstants.viewStatsButtonImage, GUIConstants.scaleX(refStatsX), GUIConstants.scaleY(refStatsY)));
+		add(new StatsButton(GUIConstants.viewStatsButtonImage));
 
 		 //Add Shuffle Button
 		 int refShuffleX = 720;

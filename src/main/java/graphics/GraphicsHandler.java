@@ -50,6 +50,8 @@ public class GraphicsHandler {
         //SpellingBeeGamePanel sbGamePanel = new  SpellingBeeGamePanel();
         
        // SpellingBeeWinPanel sbWinPanel = new  SpellingBeeWinPanel();
+
+       LeaderboardPanel leaderboardPanel = new LeaderboardPanel();
         
         mainPanel.add(titlePanel, "Title Screen Panel");
         
@@ -57,7 +59,7 @@ public class GraphicsHandler {
        
         mainPanel.add(connectionsPanel, "Connections Panel");
     
-
+        mainPanel.add(leaderboardPanel, "Leaderboard Panel");
        
       //  mainPanel.add(wordleStartPanel);
       //  mainPanel.add(wordleGamePanel);

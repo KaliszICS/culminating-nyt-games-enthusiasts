@@ -25,15 +25,14 @@ import graphics.buttons.Button;
 import graphics.buttons.Image;
 import graphics.buttons.SpellingBeeButton;
 import graphics.buttons.SpellingBeeEnterButton;
-import graphics.utils.PanelAttributes;
-
+import graphics.buttons.StatsButton;
 import kalisz.KaliszTimes;
 import logic.SpellingBee;
 import logic.events.EventHandler;
 import logic.events.KeyboardClickEvent;
 import logic.events.KeyboardClickEventListener;
 
-public class SpellingBeeGamePanel extends JPanel implements KeyListener, PanelAttributes {
+public class SpellingBeeGamePanel extends TemplatePanel implements KeyListener {
 	private final ArrayList<KeyboardClickEventListener> listeners = new ArrayList<KeyboardClickEventListener>();
 	private ArrayList<Button> letterButtons = new ArrayList<Button>();
 	
@@ -65,9 +64,7 @@ public class SpellingBeeGamePanel extends JPanel implements KeyListener, PanelAt
 		 add(new Image(GUIConstants.kaliszGamesLogoImage, GUIConstants.scaleX(refKaliszX), GUIConstants.scaleY(refKaliszY)));
 
 		 //Add View Stats Button
-		 int refStatsX = 1600;
-		 int refStatsY = 20;
-		 add(new Button(GUIConstants.viewStatsButtonImage, GUIConstants.scaleX(refStatsX), GUIConstants.scaleY(refStatsY)));
+		add(new StatsButton(GUIConstants.viewStatsButtonImage));
 
 		 //Add Delete Button
 		int refDeleteX = 337;

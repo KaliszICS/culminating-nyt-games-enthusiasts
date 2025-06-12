@@ -24,8 +24,9 @@ import graphics.buttons.BackButton;
 import graphics.buttons.Button;
 import graphics.buttons.Image;
 import graphics.buttons.KeyboardButton;
+import graphics.buttons.StatsButton;
 import graphics.buttons.WordleButton;
-import graphics.utils.PanelAttributes;
+
 import javafx.application.Platform;
 
 import kalisz.KaliszTimes;
@@ -35,7 +36,7 @@ import logic.events.EventHandler;
 import logic.events.KeyboardClickEvent;
 import logic.events.KeyboardClickEventListener;
 
-public class WordleGamePanel extends JPanel implements KeyListener, PanelAttributes {
+public class WordleGamePanel extends TemplatePanel implements KeyListener {
 	
 	WordleButton origin;
 	ArrayList<KeyboardButton> keyboardButtons = new ArrayList<KeyboardButton>();
@@ -69,9 +70,7 @@ public class WordleGamePanel extends JPanel implements KeyListener, PanelAttribu
 		 add(new Image(GUIConstants.kaliszGamesLogoImage, GUIConstants.scaleX(refKaliszX), GUIConstants.scaleY(refKaliszY)));
 
 		 //Add View Stats Button
-		 int refStatsX = 1600;
-		 int refStatsY = 20;
-		 add(new Button(GUIConstants.viewStatsButtonImage, GUIConstants.scaleX(refStatsX), GUIConstants.scaleY(refStatsY)));
+		add(new StatsButton(GUIConstants.viewStatsButtonImage));
 
 		
 		 //Loads keyboard

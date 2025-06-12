@@ -13,10 +13,10 @@ import javax.swing.SwingUtilities;
 
 import graphics.buttons.BackButton;
 import graphics.buttons.Button;
-import graphics.utils.PanelAttributes;
+
 import kalisz.KaliszTimes;
 
-public class SpellingBeeStartPanel extends JPanel implements PanelAttributes {
+public class SpellingBeeStartPanel extends TemplatePanel {
 
 	
 	public SpellingBeeStartPanel() {

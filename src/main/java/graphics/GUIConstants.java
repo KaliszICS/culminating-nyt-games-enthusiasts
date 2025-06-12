@@ -36,7 +36,11 @@ public class GUIConstants {
     wordle_start_background_image,
     title_screen_background_image,
     spelling_bee_start_background_image,
-    wordle_win_background_image;
+    wordle_win_background_image,
+    stats_background_image,
+    stats_next_button_image
+    ,stats_prev_button_image;
+
 
     public GUIConstants() {
 
@@ -94,7 +98,9 @@ public class GUIConstants {
             title_screen_background_image = ImageIO.read(getClass().getResourceAsStream("resources/title_screen_background.png"));
             spelling_bee_start_background_image = ImageIO.read(getClass().getResourceAsStream("resources/spelling_bee_start_background.png"));
              wordle_win_background_image = ImageIO.read(getClass().getResourceAsStream("resources/wordle_win_background.png"));
-
+           stats_background_image = ImageIO.read(getClass().getResourceAsStream("resources/stats_background.png"));
+             stats_next_button_image = ImageIO.read(getClass().getResourceAsStream("resources/stats_next.png"));
+             stats_prev_button_image = ImageIO.read(getClass().getResourceAsStream("resources/stats_prev.png"));
 
 
 		} catch (IOException e) {

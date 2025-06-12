@@ -17,7 +17,7 @@ import java.util.Random;
 public class SpellingBee {
     
     private String keyword, currentWord; // keyword is the pangram that the user needs to get to progress the connections board
-    private ArrayList<Character> letters;
+    private ArrayList<Character> letters; // goldenLetter should be at index 0 of this arraylist
     private char goldenLetter;
     private int score;
     private ArrayList<String> wordsFound;
@@ -35,7 +35,7 @@ public class SpellingBee {
         this.goldenLetter = Character.toUpperCase(keyword.charAt(0));
         this.letters = new ArrayList<Character>();
         for (int letterIndex = 0; letterIndex < this.keyword.length(); ++letterIndex) {
-            this.letters.add(this.keyword.charAt(letterIndex)); //Golden letter is always at index 0.
+            /*if (!this.letters.contains(this.keyword.charAt(letterIndex)))*/ this.letters.add(this.keyword.charAt(letterIndex)); // add letter to letters if not already in letters
         }
         this.currentWord = "";
         this.score = 0;
@@ -59,7 +59,7 @@ public class SpellingBee {
         this.letters = new ArrayList<Character>(); 
         this.goldenLetter = Character.toUpperCase(keyword.charAt(0));
         for (int letterIndex = 0; letterIndex < this.keyword.length(); ++letterIndex) {
-            this.letters.add(this.keyword.charAt(letterIndex));     
+            /*if (!this.letters.contains(this.keyword.charAt(letterIndex)))*/ this.letters.add(this.keyword.charAt(letterIndex)); // add letter to letters if not already in letters    
         }
         this.currentWord = currentWord;
         this.score = score;

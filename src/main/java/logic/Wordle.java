@@ -14,7 +14,7 @@ import java.util.Arrays;
  * @author @FranklinZhu1
  * @author @elliot-chan-ics4u1-2-2025
  * @author @julie-lin-ics4u1-2-2025
- * @author aksayan-nirmalan-ics4u1-2-2025
+ * @author @aksayan-nirmalan-ics4u1-2-2025
  */
 
 public class Wordle {

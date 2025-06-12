@@ -2,43 +2,40 @@ package logic;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import kalisz.KaliszTimes;
 
 /**
  * Class for the Wordle game.
- * The class includes getters for some variables and methods to run the game (adding letters, submitting guesses, etc.).
- * Currently takes in a word of any length to be guessed. Always gives the user 6 guesses (words of length 3 or below not recommended).
- * 
- * CURRENTLY USES UpperCase (change to uppercase for Elliot)
- * Edited to take in strings, edit back to char array to match GUI 
- * 
- * @author @FranklinZhu1
- * @author @elliot-chan-ics4u1-2-2025
- * @author @julie-lin-ics4u1-2-2025
- * @author aksayan-nirmalan-ics4u1-2-2025
+ * Handles input, guess submission, win tracking, and per-letter result calculation for the game.
+ * Designed to handle words of any length (though lengths shorter than 4 are not recommended).
+ * This implementation assumes all input and solution words are uppercase.
+ *
+ * <p>Authors:
+ * <ul>
+ *   <li>@FranklinZhu1</li>
+ *   <li>@elliot-chan-ics4u1-2-2025</li>
+ *   <li>@julie-lin-ics4u1-2-2025</li>
+ *   <li>@aksayan-nirmalan-ics4u1-2-2025</li>
+ * </ul>
+ *
  */
-
 public class Wordle {
 
     private String word;
     private String currentGuess;
-    private String[] guessData, overallGuessData; // guessData is local to each guess, overallGuessData is a 26 length array for each character to track overall (think of the on-screen keyboard)
+    private String[] guessData, overallGuessData;
     private int guessCount;
     private boolean win;
-    private int[] wordLetterCount; // will have size 26
-    private ArrayList<String[]> results; // for the ascii results you copy paste after a game
-  
+    private int[] wordLetterCount;
+    private ArrayList<String[]> results;
 
     /**
-     * Default constructor to make new Wordle game with every stat at default.
-     * 
-     * @param word solution word
+     * Constructs a new Wordle game.
+     *
+     * @param word The target solution word (must be in uppercase)
      */
-
     public Wordle(String word) {
         this.word = word;
-       
         this.guessCount = 0;
         this.guessData = new String[this.word.length()];
         this.overallGuessData = new String[26];
@@ -46,97 +43,58 @@ public class Wordle {
         this.currentGuess = "";
         this.win = false;
         this.wordLetterCount = new int[26];
-        for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
-            ++wordLetterCount[this.word.charAt(letterIndex) - 'A'];
+        for (int i = 0; i < word.length(); ++i) {
+            ++wordLetterCount[word.charAt(i) - 'A'];
         }
-        this.results = new ArrayList<String[]>();
+        this.results = new ArrayList<>();
     }
 
-   
-    /**
-     * Gets the word to be guessed.
-     * 
-     * @return The word to be guessed
-     */
-
+    /** @return the target word to be guessed */
     public String getWord() {
         return this.word;
     }
 
-    /**
-     * Gets the length of the word to be guessed.
-     * @return The length of the word to be guessed
-     */
-
+    /** @return the length of the target word */
     public int getWordLength() {
         return this.word.length();
     }
 
-    /**
-     * Gets the number of guesses the user has already made.
-     * @return The number of guesses the user has already made
-     */
-
+    /** @return the number of guesses the player has used */
     public int getGuessCount() {
         return this.guessCount;
     }
 
-    /**
-     * Gets the data from the last guess the user made.
-     * 
-     * @return The data from the last guess the user made
-     */
-
+    /** @return the most recent guess result array (green/yellow/grey) */
     public String[] getGuessData() {
         return this.guessData;
     }
 
-    /**
-     * Get the overall guess data (colours shown on the on-screen keyboard).
-     * @return The overall guess data (colours shown on the on-screen keyboard)
-     */
-
+    /** @return the current global keyboard guess state for each letter */
     public String[] getOverallGuessData() {
         return this.overallGuessData;
     }
 
-    /**
-     * Gets the current guess the player is typing.
-     * 
-     * @return The current guess the player is typing
-     */
-
+    /** @return the currently typed (incomplete) guess */
     public String getCurrentGuess() {
         return this.currentGuess;
     }
 
-    /**
-     * Gets the win boolean, which indicates if the player has won or not.
-     * 
-     * @return The win boolean
-     */
-
+    /** @return true if the player has correctly guessed the word */
     public boolean getWin() {
         return this.win;
     }
 
-    /**
-     * Gets the results of the player's finished game, which tracks the data of all of their guesses.
-     * 
-     * @return The results of the player's finished game
-     */
-
+    /** @return list of all guess result arrays from each submitted guess */
     public ArrayList<String[]> getResults() {
         return this.results;
     }
 
     /**
-     * Types a letter into the current guess.
-     * 
-     * @param letter
-     * @return false if too many letters
+     * Appends a letter to the current guess if it doesn't exceed word length.
+     *
+     * @param letter The letter to add
+     * @return true if the letter was added, false if invalid or too long
      */
-
     public boolean inputLetter(char letter) {
         if (this.currentGuess.length() >= this.word.length() || !Character.isLetter(letter)) return false;
         this.currentGuess += Character.toUpperCase(letter);
@@ -144,75 +102,78 @@ public class Wordle {
     }
 
     /**
-     * Deletes the last letter from the current guess. Doesn't do anything if the guess is empty.
+     * Deletes the last letter from the current guess.
+     * Does nothing if the guess is empty.
      */
-
     public void deleteLetter() {
-        if (this.currentGuess.length() > 0) this.currentGuess = this.currentGuess.substring(0, this.currentGuess.length() - 1);
+        if (this.currentGuess.length() > 0)
+            this.currentGuess = this.currentGuess.substring(0, this.currentGuess.length() - 1);
     }
 
     /**
-     * Submits the current guess and tracks the guess data.
-     * CAN CHANGE this.win, charAtWin() SHOULD ALWAYS BE RAN AFTER USING THIS METHOD.
-     * 
-     * @return -1 if not enough letters to guess, 0 if guess is not a word, 1 if the guess went through
+     * Submits the current guess for evaluation.
+     * Compares letters to the solution and updates guess data.
+     * Updates win condition and keyboard color state.
+     *
+     * @return -1 if guess too short, 0 if not a word, 1 if valid submission
      */
-
-     public int submitGuess() {
+    public int submitGuess() {
         DictionaryChecker dictionaryChecker = new DictionaryChecker();
         if (this.currentGuess.length() < this.word.length()) {
-            this.currentGuess = ""; // clear guess after submission
+            this.currentGuess = "";
             return -1;
         }
         if (!dictionaryChecker.checkWord(this.currentGuess)) {
-            this.currentGuess = ""; // clear guess after submission
+            this.currentGuess = "";
             return 0;
         }
-        // Below here logs the word as a guess and tracks the stats
+
         this.guessData = new String[this.word.length()];
-        Arrays.fill(this.guessData, ""); // reset guessData to empty strings 
-        this.win = true; // assume the player wins first
-        int[] lettersUsed = Arrays.copyOf(this.wordLetterCount, 26); // copy of word letter count to track how many letters have been used (e.g., what if letters repeat?)
-        for (int letterIndex = 0; letterIndex < 5; ++letterIndex) {
-            int letterCode = this.currentGuess.charAt(letterIndex) - 'A'; // 0 = 'a', 1 = 'b', etc.
-            if (this.word.charAt(letterIndex) == this.currentGuess.charAt(letterIndex)) { // green case
-                if (lettersUsed[letterCode] == 0) { // letter already marked yellow previously
-                    for (int revIndex = this.word.length() - 1; revIndex >= 0; --revIndex) { // search backwards through guessData to find the last yellow
-                        if (this.guessData[revIndex].equals("yellow")) {
-                            this.guessData[revIndex] = "grey"; // turn it grey instead
+        Arrays.fill(this.guessData, "");
+        this.win = true;
+        int[] lettersUsed = Arrays.copyOf(this.wordLetterCount, 26);
+
+        for (int i = 0; i < this.word.length(); ++i) {
+            int code = this.currentGuess.charAt(i) - 'A';
+            if (this.word.charAt(i) == this.currentGuess.charAt(i)) {
+                if (lettersUsed[code] == 0) {
+                    for (int j = this.word.length() - 1; j >= 0; --j) {
+                        if (this.guessData[j].equals("yellow")) {
+                            this.guessData[j] = "grey";
                             break;
                         }
                     }
-                } else --lettersUsed[letterCode]; // otherwise "use up" another letter
-                this.guessData[letterIndex] = "green"; // nth letter marked green
-                this.overallGuessData[letterCode] = "green"; // letter green on keyboard
-            }
-            else if (lettersUsed[letterCode] > 0) { // yellow case (if there are two Es in the word and this iteration assesses a third, this clause will not run)
-                --lettersUsed[letterCode];
-                this.win = false; // the player has not won
-                this.guessData[letterIndex] = "yellow"; // nth letter marked yellow
-                if (this.overallGuessData[letterCode] != "green") this.overallGuessData[letterCode] = "yellow"; // if it's not already green on that character, mark it yellow
-            }
-            else { // grey case
-                this.win = false; // the player has not won
-                this.guessData[letterIndex] = "grey";
-                if (this.overallGuessData[letterCode].equals("")) this.overallGuessData[letterCode] = "grey"; // if there's no colour on that character (EMPTY STRING IN ARRAY), mark it grey
+                } else --lettersUsed[code];
+                this.guessData[i] = "green";
+                this.overallGuessData[code] = "green";
+            } else if (lettersUsed[code] > 0) {
+                --lettersUsed[code];
+                this.guessData[i] = "yellow";
+                this.win = false;
+                if (!"green".equals(this.overallGuessData[code])) this.overallGuessData[code] = "yellow";
+            } else {
+                this.guessData[i] = "grey";
+                this.win = false;
+                if ("".equals(this.overallGuessData[code])) this.overallGuessData[code] = "grey";
             }
         }
-        ++guessCount; // one more guess was made
-        this.results.add(guessData); // add submitted guess to results
-        this.currentGuess = ""; // clear guess after submission
+
+        ++guessCount;
+        this.results.add(this.guessData);
+        this.currentGuess = "";
         return 1;
     }
+
+    /**
+     * Handles logic to be run on win condition (saving player data and refreshing leaderboard).
+     */
     public void winEvent() {
-         // Update player stats
-								KaliszTimes.player.incrementWordleWins();
-								KaliszTimes.player.saveStats(); // writes to [username].txt
+        KaliszTimes.player.incrementWordleWins();
+        KaliszTimes.player.saveStats();
 
-								// Update leaderboard
-								LeaderboardHandler leaderboard = new LeaderboardHandler();
-								leaderboard.saveAllStats(); // appends to wordle.txt
+        LeaderboardHandler leaderboard = new LeaderboardHandler();
+        leaderboard.saveAllStats();
 
-                                KaliszTimes.getGraphicsHandler().reloadLeaderboardFrame();
+        KaliszTimes.getGraphicsHandler().reloadLeaderboardFrame();
     }
 }

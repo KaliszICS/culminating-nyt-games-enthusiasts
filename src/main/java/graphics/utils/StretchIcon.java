@@ -3,6 +3,16 @@ package graphics.utils;
  * @(#)StretchIcon.java	1.0 03/27/12
  */
 //package darrylbu.icon;
+/*
+ * NOTE: This StretchIcon class is used as a dependency in this project.
+ *       It was originally written by Darryl (version 1.0, dated 03/27/12)
+ *       and is included here for convenience and functionality.
+ *       I did NOT author this code.
+ *       
+ *       Original source or author information should be preserved if
+ *       redistributed or modified.
+ */
+
 
 import java.awt.Component;
 import java.awt.Container;

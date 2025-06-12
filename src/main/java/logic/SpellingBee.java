@@ -6,62 +6,77 @@ import java.util.Random;
 import kalisz.KaliszTimes;
 
 /**
- * Class for the Spelling Bee game.
- * Contains getters for most variables and methods to run the game (e.g., adding letters to the guess, submitting the guesses).
- * Currently takes in a keyword of any length to be used on the board, as long as it is at LEAST 4 letters long. (Below that breaks the scoring system.)
+ * Manages the logic for the Spelling Bee game.
+ * 
+ * A keyword (pangram) is used to generate the letter board. Players must submit valid words using the letters,
+ * always including the golden letter (first character of the keyword).
+ * 
+ * Words must be at least 4 letters long, and scoring is based on word length with bonuses for pangrams.
+ * 
+ * This class handles inputting letters, validating words, tracking score, and triggering win events.
  * 
  * @author @FranklinZhu1
  * @author @elliot-chan-ics4u1-02-25
  * @author @julie-lin-ics4u1-02-25
  * @author aksayan-nirmalan-ics4u1-2-2025
  */
-
 public class SpellingBee {
     
-    private String keyword, currentWord; // keyword is the pangram that the user needs to get to progress the connections board
+    /** The keyword (pangram) required to win the game */
+    private String keyword;
+
+    /** The current word the player is constructing */
+    private String currentWord;
+
+    /** List of all letters available for forming words (includes golden letter) */
     private ArrayList<Character> letters;
+
+    /** The central letter that must appear in every submitted word */
     private char goldenLetter;
+
+    /** Total score the player has accumulated */
     private int score;
+
+    /** List of valid words the player has found so far */
     private ArrayList<String> wordsFound;
+
+    /** Indicates whether the player has found the keyword and won */
     private boolean win;
 
     /**
-     * A default constructor for a new game.
-     * Takes in the keyword that the player needs to guess, sets the golden letter to the first character, and gives all other instance variables default values.
+     * Constructs a new game with a keyword.
+     * Golden letter is automatically set as the first letter of the keyword.
      * 
-     * @param keyword Keyword that the player needs to guess
+     * @param keyword the keyword (pangram) that the player needs to find
      */
-
     public SpellingBee(String keyword) {
         this.keyword = keyword.toUpperCase();
         this.goldenLetter = Character.toUpperCase(keyword.charAt(0));
-        this.letters = new ArrayList<Character>();
-        for (int letterIndex = 0; letterIndex < this.keyword.length(); ++letterIndex) {
-            this.letters.add(this.keyword.charAt(letterIndex)); //Golden letter is always at index 0.
+        this.letters = new ArrayList<>();
+        for (int i = 0; i < this.keyword.length(); ++i) {
+            this.letters.add(this.keyword.charAt(i));
         }
         this.currentWord = "";
         this.score = 0;
-        this.wordsFound = new ArrayList<String>();
+        this.wordsFound = new ArrayList<>();
         this.win = false;
     }
 
     /**
-     * Constructor for game in progress.
-     * Sets instance variables equal to parameters.
+     * Constructs a Spelling Bee game in progress.
+     * Used when loading a game with saved state.
      * 
-     * @param keyword Keyword that the player needs to guess
-     * @param goldenLetter Letter that the player needs to include in each of their guesses
-     * @param currentWord Current guess that the player has typed
-     * @param score Score that the player has achieved thus far
-     * @param wordsFound Number of words that the player has found thus far
+     * @param keyword the keyword being used
+     * @param currentWord the current word the user is typing
+     * @param score the score so far
+     * @param wordsFound list of words found so far
      */
-
     public SpellingBee(String keyword, String currentWord, int score, ArrayList<String> wordsFound) {
         this.keyword = keyword;
-        this.letters = new ArrayList<Character>(); 
+        this.letters = new ArrayList<>();
         this.goldenLetter = Character.toUpperCase(keyword.charAt(0));
-        for (int letterIndex = 0; letterIndex < this.keyword.length(); ++letterIndex) {
-            this.letters.add(this.keyword.charAt(letterIndex));     
+        for (int i = 0; i < this.keyword.length(); ++i) {
+            this.letters.add(this.keyword.charAt(i));
         }
         this.currentWord = currentWord;
         this.score = score;
@@ -69,83 +84,47 @@ public class SpellingBee {
         this.win = false;
     }
 
-    /**
-     * Gets the keyword to be guessed.
-     * 
-     * @return Keyword to be guessed
-     */
-
+    /** @return the keyword to be found */
     public String getKeyword() {
         return this.keyword;
     }
 
-    /**
-     * Gets the list of letters available to use.
-     * 
-     * @return The list of letters available to use
-     */
-
+    /** @return list of letters available to use */
     public ArrayList<Character> getLetters() {
         return this.letters;
     }
 
-    /**
-     * Gets the golden letter to be used in guesses.
-     * 
-     * @return The golden letter to be used in guesses
-     */
-
+    /** @return the golden letter that must appear in every word */
     public char getGoldenLetter() {
         return this.goldenLetter;
     }
 
-    /**
-     * Gets the current word that the user has typed.
-     * 
-     * @return The current word that the user has typed
-     */
-
+    /** @return the current word being typed */
     public String getCurrentWord() {
         return this.currentWord;
     }
-    
-    /**
-     * Gets the score that the user has currently achieved.
-     * 
-     * @return The score that the user has currently achieved
-     */
 
+    /** @return the player's current score */
     public int getScore() {
         return this.score;
     }
 
-    /**
-     * Gets the list of words found by the user thus far.
-     * 
-     * @return The list of words found by the user thus far
-     */
-
+    /** @return list of valid words found so far */
     public ArrayList<String> getWordsFound() {
         return this.wordsFound;
     }
 
-    /**
-     * Gets the win boolean, which indicates if the player has won or not (gotten the keyword or not).
-     * 
-     * @return The win boolean
-     */
-
+    /** @return whether the player has found the keyword and won */
     public boolean getWin() {
         return this.win;
     }
 
     /**
-     * Input a letter into the current word.
+     * Attempts to add a letter to the current word.
      * 
-     * @param letter letter to be inputted
-     * @return -1 if not a valid letter/not a letter at all, 0 if too long (>19 characters), 1 if successful
+     * @param letter the character to input
+     * @return 1 if successful, 0 if word length limit reached, -1 if invalid letter
      */
-
     public int inputLetter(char letter) {
         letter = Character.toUpperCase(letter);
         if (!(this.letters.contains(letter) || letter == this.goldenLetter) || !Character.isLetter(letter)) return -1;
@@ -155,84 +134,91 @@ public class SpellingBee {
     }
 
     /**
-     * Deletes the last letter from the current word. Doesn't do anything if the word is empty.
+     * Deletes the last letter from the current word.
+     * Does nothing if the current word is already empty.
      */
-
     public void deleteLetter() {
-        if (this.currentWord.length() > 0) this.currentWord = this.currentWord.substring(0, this.currentWord.length() - 1);
+        if (this.currentWord.length() > 0)
+            this.currentWord = this.currentWord.substring(0, this.currentWord.length() - 1);
     }
 
     /**
-     * Shuffles the letters.
+     * Randomly shuffles the available letters.
      */
-
     public void shuffle() {
         Random random = new Random();
         for (int i = this.letters.size() - 1; i > 0; i--) {
-            int j = random.nextInt(i + 1); // random index from 0 to i
-            // Swap letters[i] and letters[j]
+            int j = random.nextInt(i + 1);
             char temp = this.letters.get(i);
             this.letters.set(i, this.letters.get(j));
             this.letters.set(j, temp);
         }
     }
 
-    // public void shuffle() {
-    //     ArrayList<Character> shuffledLetters = new ArrayList<Character>(); // initialize empty shuffled letters
-    //     Random random = new Random();
-    //     while (this.letters.size() > 0) shuffledLetters.add(this.letters.remove(random.nextInt(this.letters.size()))); // keep adding elements from newLetters to shuffledLetters at random indexes, removing from newLetters each time
-    //     this.letters = shuffledLetters; // assign shuffledLetters to this.letters
-    // }
-
     /**
-     * Submits the current word.
-     * Calculates the points value if the word is valid and adds it to this.score.
-     * If keyword is reached, this.win is set to true.
+     * Attempts to submit the current word.
      * 
-     * @return -3 if too short, -2 if missing center letter, -1 if not a word, 0 if word already found, points value if otherwise valid
+     * Validates word length, presence of golden letter, dictionary existence, and uniqueness.
+     * Calculates points based on length and pangram status.
+     * 
+     * @return point value if valid, or a negative code:
+     *         -3 = too short, -2 = missing golden letter, -1 = not in dictionary, 0 = already found
      */
-
     public int submitWord() {
         DictionaryChecker dictionaryChecker = new DictionaryChecker();
+
         if (this.currentWord.length() < 4) {
             this.currentWord = "";
             return -3;
         }
+
         if (!this.currentWord.contains(String.valueOf(this.goldenLetter))) {
             this.currentWord = "";
             return -2;
         }
+
         if (!dictionaryChecker.checkWord(this.currentWord)) {
             this.currentWord = "";
             return -1;
         }
+
         if (this.wordsFound.contains(this.currentWord)) {
             this.currentWord = "";
             return 0;
         }
-        // below here assumes it is a valid word
+
+        // Word is valid
         this.wordsFound.add(this.currentWord);
-        if (this.currentWord.equals(keyword)) this.win = true; // set this.win to true if current word is the keyword
-        int pointValue = (this.currentWord.length() == 4) ? 1 : this.currentWord.length(); // if the word has 4 letters, the point value is 1, otherwise it's the number of the word's letters
-        ArrayList<Character> uniqueLetters = new ArrayList<Character>(); // for checking if the word is a pangram
-        for (int letterIndex = 0; letterIndex < this.currentWord.length(); ++letterIndex) {
-            char c = this.currentWord.charAt(letterIndex);
-            if (!uniqueLetters.contains(c)) uniqueLetters.add(c); // if uniqueLetters doesn't have it yet, add it
+        if (this.currentWord.equals(keyword)) this.win = true;
+
+        int pointValue = (this.currentWord.length() == 4) ? 1 : this.currentWord.length();
+
+        // Bonus if it's a pangram
+        ArrayList<Character> uniqueLetters = new ArrayList<>();
+        for (int i = 0; i < this.currentWord.length(); ++i) {
+            char c = this.currentWord.charAt(i);
+            if (!uniqueLetters.contains(c)) uniqueLetters.add(c);
         }
-        if (uniqueLetters.size() == this.letters.size()) pointValue += this.letters.size(); // if word is a pangram, add extra score
+        if (uniqueLetters.size() == this.letters.size()) pointValue += this.letters.size();
+
         this.score += pointValue;
         this.currentWord = "";
         return pointValue;
     }
+
+    /**
+     * Triggers the win event logic after the player wins:
+     * - Updates player stats
+     * - Updates leaderboard
+     * - Refreshes leaderboard UI
+     */
     public void winEvent() {
-          // Update player stats
-							KaliszTimes.player.incrementSpellingBeeWins();
-							KaliszTimes.player.saveStats(); // writes to [username].txt
+        KaliszTimes.player.incrementSpellingBeeWins();
+        KaliszTimes.player.saveStats();
 
-								// Update leaderboard
-							LeaderboardHandler leaderboard = new LeaderboardHandler();
-							leaderboard.saveAllStats(); // appends to SpellingBee.txt
+        LeaderboardHandler leaderboard = new LeaderboardHandler();
+        leaderboard.saveAllStats();
 
-                             KaliszTimes.getGraphicsHandler().reloadLeaderboardFrame();
+        KaliszTimes.getGraphicsHandler().reloadLeaderboardFrame();
     }
 }

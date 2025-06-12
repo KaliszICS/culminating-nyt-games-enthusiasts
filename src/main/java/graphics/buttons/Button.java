@@ -1,154 +1,152 @@
 package graphics.buttons;
 
-import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import graphics.GUIConstants;
 import graphics.utils.StretchIcon;
-import kalisz.KaliszTimes;
 
 /**
- * The base button class for the Kalisz Times game UI.
+ * A base class for image-based buttons in the Kalisz Times game UI.
+ *
+ * <p>This class extends {@link JLabel} and implements {@link MouseListener}
+ * to create scalable, interactive buttons with hover cursor behavior.
+ * Buttons are displayed using {@link StretchIcon} to allow resolution-independent scaling.</p>
+ *
+ * <p>This class is intended to be subclassed for buttons that implement custom behavior
+ * on mouse events such as clicks or presses.</p>
+ *
+ * <p>Supports multiple constructors for positioning and optional action commands
+ * (currently unused).</p>
  * 
- * This class extends {@link JLabel} and implements {@link MouseListener} to provide
- * visual components that behave like interactive buttons using custom images.
- * 
- * The button supports scaling, custom cursor changes on hover, and can be subclassed
- * to add specific behaviors on mouse interaction.
+ * @author @FranklinZhu1
+ * @author @elliot-chan-ics4u1-2-2025
+ * @author @julie-lin-ics4u1-2-2025
+ * @author aksayan-nirmalan-ics4u1-2-2025
  */
 public class Button extends JLabel implements MouseListener {
-	private BufferedImage image;
-	private int x, y;
-	
-	/**
-     * Constructs a new Button using the given image.
-     * The button will be sized to the image and displayed with a stretchable icon.
+    private BufferedImage image;
+    private int x, y;
+
+    /**
+     * Creates a button with the given image.
+     * Automatically sets the size to match the image dimensions.
      *
-     * @param image the image used for the button's appearance
+     * @param image the image to use for this button
      */
-	public Button(BufferedImage image) {
-		this.image = image;
-		this.setSize(image.getWidth(), image.getHeight());
-		this.setIcon(new StretchIcon(image, true));
-		this.addMouseListener(this);
-	}
+    public Button(BufferedImage image) {
+        this.image = image;
+        this.setSize(image.getWidth(), image.getHeight());
+        this.setIcon(new StretchIcon(image, true));
+        this.addMouseListener(this);
+    }
 
-	/**
-     * Constructs a new Button with the given image and position.
-     * Uses {@link GUIConstants} to scale the size according to the GUI resolution.
+    /**
+     * Creates a button with the given image and screen position.
+     * Scales the image dimensions based on {@link GUIConstants}.
      *
-     * @param image the image used for the button's appearance
-     * @param x     the x-coordinate for the button's position
-     * @param y     the y-coordinate for the button's position
+     * @param image the image to use for this button
+     * @param x the x-coordinate of the button
+     * @param y the y-coordinate of the button
      */
-	public Button(BufferedImage image, int x, int y) {
-		this.image = image;
-		
-		this.x = x;
-		this.y = y;
-		
+    public Button(BufferedImage image, int x, int y) {
+        this.image = image;
+        this.x = x;
+        this.y = y;
 
-		this.setBounds(x, y, GUIConstants.scaleX(image.getWidth()), GUIConstants.scaleY(image.getHeight()));
-		this.setIcon(new StretchIcon(image, true));
-		this.addMouseListener(this);
-	}
+        this.setBounds(x, y, GUIConstants.scaleX(image.getWidth()), GUIConstants.scaleY(image.getHeight()));
+        this.setIcon(new StretchIcon(image, true));
+        this.addMouseListener(this);
+    }
 
-	/**
-     * Constructs a new Button using the given image and associates an action command.
-     * Currently the action command is unused, but can be useful for future expansion.
+    /**
+     * Creates a button with the given image and optional action command.
+     * Currently, the action command is unused but can support future features.
      *
-     * @param image          the image used for the button's appearance
-     * @param actionCommand  an optional string command identifier
+     * @param image the image to use for this button
+     * @param actionCommand a string identifier for button actions
      */
-	public Button(BufferedImage image, String actionCommand) {
-		this.image = image;
-		this.setSize(image.getWidth(), image.getHeight());
-		this.setIcon(new StretchIcon(image, true));
-		this.addMouseListener(this);
-	}
+    public Button(BufferedImage image, String actionCommand) {
+        this.image = image;
+        this.setSize(image.getWidth(), image.getHeight());
+        this.setIcon(new StretchIcon(image, true));
+        this.addMouseListener(this);
+    }
 
-	/**
-     * Returns the image used for this button.
+    /**
+     * Returns the current image used by this button.
      *
      * @return the button's image
      */
-	public BufferedImage getImage() {
-		return image;
-	}
+    public BufferedImage getImage() {
+        return image;
+    }
 
-	/**
-     * Updates the image used by this button and sets a new icon.
+    /**
+     * Sets a new image for this button and updates the icon.
      *
-     * @param image the new image to display
+     * @param image the new image to use
      */
-	public void setImage(BufferedImage image) {
-		this.image = image;
-		this.setIcon(new StretchIcon(image, true));
-	}
+    public void setImage(BufferedImage image) {
+        this.image = image;
+        this.setIcon(new StretchIcon(image, true));
+    }
 
-	/**
-     * Invoked when the mouse has been clicked on the button.
-     * Currently contains commented-out audio functionality.
+    /**
+     * Called when the mouse is clicked on this button.
+     * Default implementation does nothing.
      *
      * @param e the mouse event
      */
-	@Override
-	public void mouseClicked(MouseEvent e) {
-	//	KaliszTimes.getAudioHandler().playSound("resources/button_sound.wav");
-	}
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        // No default action
+    }
 
-	/**
-     * Invoked when the mouse is pressed down on the button.
+    /**
+     * Called when the mouse is pressed down on this button.
      * Intended to be overridden by subclasses.
      *
      * @param e the mouse event
      */
-	@Override
-	public void mousePressed(MouseEvent e) {
-		
-	}
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // To be overridden by subclass
+    }
 
-	/**
-     * Invoked when the mouse is released after a press on the button.
-     * Currently does nothing by default.
+    /**
+     * Called when the mouse is released on this button.
+     * Default implementation does nothing.
      *
      * @param e the mouse event
      */
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		
-	}
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        // No default action
+    }
 
-	/**
-     * Invoked when the mouse enters the button area.
+    /**
+     * Called when the mouse enters the button area.
      * Changes the cursor to a hand to indicate interactivity.
      *
      * @param e the mouse event
      */
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		this.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		
-	}
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
 
-	/**
-     * Invoked when the mouse exits the button area.
-     * Currently does nothing by default.
+    /**
+     * Called when the mouse exits the button area.
+     * Default implementation does nothing.
      *
      * @param e the mouse event
      */
-	@Override
-	public void mouseExited(MouseEvent e) {
-		
-	}
-	
-	
+    @Override
+    public void mouseExited(MouseEvent e) {
+        // No default action
+    }
 }

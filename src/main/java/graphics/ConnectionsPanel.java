@@ -7,18 +7,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.imageio.ImageIO;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import graphics.buttons.BackButton;
@@ -28,315 +20,325 @@ import graphics.buttons.SpellingBeeEnterButton;
 import graphics.buttons.StatsButton;
 import graphics.buttons.WordleButton;
 import graphics.utils.GameDataHandler;
-
+import javafx.application.Platform;
 import kalisz.KaliszTimes;
 import logic.Connections;
-import logic.LeaderboardHandler;
 import logic.events.EventHandler;
 import logic.events.KeyboardClickEvent;
 import logic.events.KeyboardClickEventListener;
 
+/**
+ * Panel for the "Connections" game UI. 
+ * This panel manages all the visual elements including buttons,
+ * word tiles, event handling, and the game state display.
+ * 
+ * <p>It handles displaying Wordle and Spelling Bee buttons, user interactions,
+ * and communicates with the underlying game logic.</p>
+ * 
+ * <p>Extends {@link TemplatePanel} for shared layout and styling.</p>
+ * 
+ * @author @elliot-chan-ics4u1-2-2025
+ */
 public class ConnectionsPanel extends TemplatePanel {
-	ArrayList<WordleButton> wordleButtons = new ArrayList<WordleButton>();
-	private final ArrayList<KeyboardClickEventListener> listeners = new ArrayList<KeyboardClickEventListener>();
 
-	ArrayList<SpellingBeeEnterButton> spellingBeeButtons = new ArrayList<SpellingBeeEnterButton>();
+    /** List of WordleButton objects representing 5-letter word tiles */
+    ArrayList<WordleButton> wordleButtons = new ArrayList<>();
 
-	static GameDataHandler data;
-	public static Connections connectionsGame;
-	
-	public ConnectionsPanel() {
-		this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));
-		 
-		 setLayout(null);
-		 
-		
-		
-		 //RUN CONNECTIONS
-		 connectionsGame = new Connections(GameDataHandler.yellowWords, GameDataHandler.yellowCategory,
-		 GameDataHandler.greenWords, GameDataHandler.greenCategory, GameDataHandler.blueWords, GameDataHandler.blueCategory, GameDataHandler.purpleWords, GameDataHandler.purpleCategory);
+    /** List of SpellingBeeEnterButton objects representing 7-letter word tiles */
+    ArrayList<SpellingBeeEnterButton> spellingBeeButtons = new ArrayList<>();
 
-		//ADD EVENT HANDLER
-		 addKeyboardListener(new KeyboardClickEventListener() {
+    /** List of keyboard click event listeners registered to this panel */
+    private final ArrayList<KeyboardClickEventListener> listeners = new ArrayList<>();
 
-			@Override
-			public void handleClick(KeyboardClickEvent e) {
-				int clickType = e.getClickType();
-				switch(clickType) {
-					case KeyboardClickEvent.ENTER:
-						
-						String code = connectionsGame.submitGuess();
+    /** Game data handler for accessing persistent game data */
+    static GameDataHandler data;
 
-						if(code.equals("not enough words")) {
-							KaliszTimes.popup("You have not selected enough words to make a connection!");
-						}else if(code.equals("wrong")){
-							KaliszTimes.popup("That is the incorrect connection! -1 guess!");
-						}else if(code.equals("game over")) {
-							KaliszTimes.popup("You lost :(");
-						}else{
-							//Win the category
-							//set each word in current guess to revealed, to mark as green (handled in gui)
+    /** The main Connections game logic instance */
+    public static Connections connectionsGame;
 
-							KaliszTimes.popup("You successfully guessed the category: " + connectionsGame.convertCategoryColorToName(code));
+    /**
+     * Constructs a new ConnectionsPanel.
+     * Sets up the UI components, initializes the game,
+     * registers event listeners, and lays out the buttons.
+     */
+    public ConnectionsPanel() {
+        this.setPreferredSize(new Dimension(GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT));
+        setLayout(null);
 
-							//Update all buttons to reflect changes
-							for(WordleButton wordleButton : wordleButtons)
-								wordleButton.repaint();
-							for(SpellingBeeEnterButton spellingBeeEnterButton : spellingBeeButtons) {
-								spellingBeeEnterButton.repaint();
-							}
+        // Initialize the connections game with categories and words from GameDataHandler
+        connectionsGame = new Connections(
+            GameDataHandler.yellowWords, GameDataHandler.yellowCategory,
+            GameDataHandler.greenWords, GameDataHandler.greenCategory,
+            GameDataHandler.blueWords, GameDataHandler.blueCategory,
+            GameDataHandler.purpleWords, GameDataHandler.purpleCategory
+        );
 
-							if(connectionsGame.getWin()) {
-								
-								KaliszTimes.popup("You have successfully completed today's The Kalisz Times Game!\nCongratulations!\nFeel free to see your stats in the leaderboard.");
-								connectionsGame.winEvent();
-							}
-						}
-						connectionsGame.deselectAll();
-						repaint();
-						
-						break;
-					case KeyboardClickEvent.DESELECT_ALL:
-						connectionsGame.deselectAll();
-						repaint();
-						break;
-					}
-				}
+        // Add keyboard event listener for handling Enter and Deselect All actions
+        addKeyboardListener(new KeyboardClickEventListener() {
+            @Override
+            public void handleClick(KeyboardClickEvent e) {
+                int clickType = e.getClickType();
+                switch(clickType) {
+                    case KeyboardClickEvent.ENTER:
+                        String code = connectionsGame.submitGuess();
+                        if(code.equals("not enough words")) {
+                            KaliszTimes.popup("You have not selected enough words to make a connection!");
+                        } else if(code.equals("wrong")){
+                            KaliszTimes.popup("That is the incorrect connection! -1 guess!");
+                        } else if(code.equals("game over")) {
+                            KaliszTimes.popup("You lost :(");
+                            KaliszTimes.adPopup("To receive 3 more guesses, please watch this ad!\nReminder: Kalisz Time Games is a freemium service. By watching this ad, you directly support the developers.\nWe appreciate your support truly.");
+                            Platform.runLater(() -> {
+                                KaliszTimes.showVideoPopup("Ad.mp4", () -> {});
+                            });
+                            connectionsGame.guessesLeft += 3;
+                        } else {
+                            // Successful guess: mark words as revealed and update UI
+                            KaliszTimes.popup("You successfully guessed the category: " + connectionsGame.convertCategoryColorToName(code));
+                            for(WordleButton wordleButton : wordleButtons)
+                                wordleButton.repaint();
+                            for(SpellingBeeEnterButton spellingBeeEnterButton : spellingBeeButtons)
+                                spellingBeeEnterButton.repaint();
 
-				
-					
-			});
+                            if(connectionsGame.getWin()) {
+                                KaliszTimes.popup("You have successfully completed today's The Kalisz Times Game!\nCongratulations!\nFeel free to see your stats in the leaderboard.");
+                                connectionsGame.winEvent();
+                            }
+                        }
+                        connectionsGame.deselectAll();
+                        repaint();
+                        break;
 
-		
-		
-		 
-		 //Add back button
-		 add(new BackButton(GUIConstants.backButtonImage));
+                    case KeyboardClickEvent.DESELECT_ALL:
+                        connectionsGame.deselectAll();
+                        repaint();
+                        break;
+                }
+            }
+        });
 
-		  //Username Label
-		
+        // Add navigation and control buttons
+        add(new BackButton(GUIConstants.backButtonImage));
 
+        int refKaliszX = 1920 / 2 - 250;
+        int refKaliszY = 10;
+        add(new Image(GUIConstants.kaliszGamesLogoImage, GUIConstants.scaleX(refKaliszX), GUIConstants.scaleY(refKaliszY)));
 
-		 //Add KaliszGames Logo
-		 int refKaliszX = 1920 / 2 - 250;
-		 int refKaliszY = 10;
-		 add(new Image(GUIConstants.kaliszGamesLogoImage, GUIConstants.scaleX(refKaliszX), GUIConstants.scaleY(refKaliszY)));
+        add(new StatsButton(GUIConstants.viewStatsButtonImage));
 
-		 //Add View Stats Button
-		add(new StatsButton(GUIConstants.viewStatsButtonImage));
+        Button shuffleButton = new Button(GUIConstants.shuffleButtonImage, GUIConstants.scaleX(720), GUIConstants.scaleY(925));
+        shuffleButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                KaliszTimes.popup("Shuffled connections board!");
+                shuffleBoardUI();
+            }
+        });
+        add(shuffleButton);
 
-		 //Add Shuffle Button
-		 int refShuffleX = 720;
-		 int refShuffleY = 925;
-		 Button shuffleButton = new Button(GUIConstants.shuffleButtonImage, GUIConstants.scaleX(refShuffleX), GUIConstants.scaleY(refShuffleY));
-		 shuffleButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				KaliszTimes.popup("Shuffled connections board!");
-				shuffleBoardUI();
-			}
-		 });
-		 add(shuffleButton);
-		 
-		 //Add Deselect All Button
-		int refDeselectX = 878;
-		int refDeselectY = 925;
-		Button deselectAllButton = new Button(GUIConstants.deselectAllButtonImage, GUIConstants.scaleX(refDeselectX), GUIConstants.scaleY(refDeselectY));
-		deselectAllButton.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				EventHandler.fireConnectionsClickEvent(getPanel(), ' ', KeyboardClickEvent.DESELECT_ALL);
-			}
-		});
-		
-		add(deselectAllButton);
+        Button deselectAllButton = new Button(GUIConstants.deselectAllButtonImage, GUIConstants.scaleX(878), GUIConstants.scaleY(925));
+        deselectAllButton.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                EventHandler.fireConnectionsClickEvent(getPanel(), ' ', KeyboardClickEvent.DESELECT_ALL);
+            }
+        });
+        add(deselectAllButton);
 
-		//Add Submit Button
-		int refSubmitX = 1088;
-		int refSubmitY = 925;
-		Button submitButton = new Button(GUIConstants.submitButtonImage, GUIConstants.scaleX(refSubmitX), GUIConstants.scaleY(refSubmitY));
-		submitButton.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				EventHandler.fireConnectionsClickEvent(getPanel(), ' ', KeyboardClickEvent.ENTER);
-			}
-		});
-		add(submitButton);
+        Button submitButton = new Button(GUIConstants.submitButtonImage, GUIConstants.scaleX(1088), GUIConstants.scaleY(925));
+        submitButton.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                EventHandler.fireConnectionsClickEvent(getPanel(), ' ', KeyboardClickEvent.ENTER);
+            }
+        });
+        add(submitButton);
 
-		 //Add wordle icons and make them all clickable. Store all of these new buttons in a list.
+        // Create and position Wordle (5-letter) and Spelling Bee (7-letter) buttons
+        List<String> fullBoard = connectionsGame.getBoard();
 
-	  List<String> fullBoard = connectionsGame.getBoard();
-    
-    // Separate into Wordle (5-letter) and Spelling Bee (7-letter) words
-    // while tracking their original indices
-    List<Integer> wordleIndices = new ArrayList<>();
-    List<Integer> spellingBeeIndices = new ArrayList<>();
+        List<Integer> wordleIndices = new ArrayList<>();
+        List<Integer> spellingBeeIndices = new ArrayList<>();
 
-    for (int i = 0; i < fullBoard.size(); i++) {
-        String word = fullBoard.get(i);
-        if (word.length() == 5) {
-            wordleIndices.add(i);
-        } else if (word.length() == 7) {
-            spellingBeeIndices.add(i);
+        for (int i = 0; i < fullBoard.size(); i++) {
+            String word = fullBoard.get(i);
+            if (word.length() == 5) {
+                wordleIndices.add(i);
+            } else if (word.length() == 7) {
+                spellingBeeIndices.add(i);
+            }
         }
+
+        // Wordle buttons layout (2 rows, 4 columns)
+        for (int i = 0; i < wordleIndices.size(); i++) {
+            int boardIndex = wordleIndices.get(i);
+            String word = fullBoard.get(boardIndex);
+            WordleButton wordleButton = new WordleButton(GUIConstants.wordleButtonImage, boardIndex, word.toUpperCase());
+
+            int refX = 695 + ((i % 4) * 153);
+            int refY = 250 + ((i / 4) * 153);
+
+            wordleButton.setBounds(GUIConstants.scaleX(refX), GUIConstants.scaleY(refY),
+                GUIConstants.scaleX(GUIConstants.DEFAULT_BUTTON_WIDTH), GUIConstants.scaleY(GUIConstants.DEFAULT_BUTTON_HEIGHT));
+
+            wordleButtons.add(wordleButton);
+            add(wordleButton);
+        }
+
+        // Spelling Bee buttons layout (2 rows, 4 columns)
+        for (int i = 0; i < spellingBeeIndices.size(); i++) {
+            int boardIndex = spellingBeeIndices.get(i);
+            String word = fullBoard.get(boardIndex);
+            SpellingBeeEnterButton spellingBeeButton = new SpellingBeeEnterButton(GUIConstants.spellingBeeButtonImage, boardIndex, word.toUpperCase());
+
+            int refX = 695 + ((i % 4) * 153);
+            int refY = 550 + ((i / 4) * 153);
+
+            spellingBeeButton.setBounds(GUIConstants.scaleX(refX), GUIConstants.scaleY(refY),
+                GUIConstants.scaleX(GUIConstants.DEFAULT_BUTTON_WIDTH), GUIConstants.scaleY(GUIConstants.DEFAULT_BUTTON_HEIGHT));
+
+            spellingBeeButtons.add(spellingBeeButton);
+            add(spellingBeeButton);
+        }
+
+        shuffleBoardUI();
+        repaint();
     }
 
-    // Create Wordle buttons (5-letter words)
-    for (int i = 0; i < wordleIndices.size(); i++) {
-        int boardIndex = wordleIndices.get(i);
-        String word = fullBoard.get(boardIndex);
+    /**
+     * Paints the panel including background and text labels such as username and mistakes made.
+     * 
+     * @param g Graphics object for drawing
+     */
+    public void paintComponent(Graphics g) {
+        Graphics2D graphics = (Graphics2D) g;
+        super.paintComponent(g);
 
-        WordleButton wordleButton = new WordleButton(
-            GUIConstants.wordleButtonImage, 
-            boardIndex, // CRUCIAL: Store the original board index
-            word.toUpperCase()
-        );
+        int SHIFT_UP = 25;
+        graphics.drawImage(GUIConstants.connections_game_panel_background, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT - SHIFT_UP, this);
 
-        // Position calculation (2 rows of 4)
-        int refX = 695 + ((i % 4) * 153);
-        int refY = 250 + ((i / 4) * 153);
-        
-        wordleButton.setBounds(
-            GUIConstants.scaleX(refX), 
-            GUIConstants.scaleY(refY), 
-            GUIConstants.scaleX(GUIConstants.DEFAULT_BUTTON_WIDTH), 
-            GUIConstants.scaleY(GUIConstants.DEFAULT_BUTTON_HEIGHT)
-        );
+        // Draw user info label
+        String labelText = "Signed in as: " + KaliszTimes.player.getUsername();
+        int refLabelX = 250;
+        int refLabelY = 75;
 
-        
+        graphics.setFont(new Font("SansSerif", Font.PLAIN, GUIConstants.scaleFont(20)));
+        graphics.setColor(Color.black);
+        graphics.drawString(labelText, GUIConstants.scaleX(refLabelX), GUIConstants.scaleY(refLabelY));
 
-        wordleButtons.add(wordleButton);
-        add(wordleButton);
+        // Draw mistakes made label
+        String mistakesMadeText = "Mistakes made: " + connectionsGame.guessesLeft + "/4";
+        refLabelX = 883;
+        refLabelY = 880;
+
+        graphics.setFont(new Font("SansSerif", Font.PLAIN, GUIConstants.scaleFont(20)));
+        graphics.setColor(Color.black);
+        graphics.drawString(mistakesMadeText, GUIConstants.scaleX(refLabelX), GUIConstants.scaleY(refLabelY));
     }
 
-    // Create Spelling Bee buttons (7-letter words)
-    for (int i = 0; i < spellingBeeIndices.size(); i++) {
-        int boardIndex = spellingBeeIndices.get(i);
-        String word = fullBoard.get(boardIndex);
-
-        SpellingBeeEnterButton spellingBeeButton = new SpellingBeeEnterButton(
-            GUIConstants.spellingBeeButtonImage, 
-            boardIndex, // CRUCIAL: Store the original board index
-            word.toUpperCase()
-        );
-
-        // Position calculation (2 rows of 4)
-        int refX = 695 + ((i % 4) * 153);
-        int refY = 550 + ((i / 4) * 153);
-        
-        spellingBeeButton.setBounds(
-            GUIConstants.scaleX(refX), 
-            GUIConstants.scaleY(refY), 
-            GUIConstants.scaleX(GUIConstants.DEFAULT_BUTTON_WIDTH), 
-            GUIConstants.scaleY(GUIConstants.DEFAULT_BUTTON_HEIGHT)
-        );
-
-        // Add click handler that uses the correct board index
-        
-
-        spellingBeeButtons.add(spellingBeeButton);
-        add(spellingBeeButton);
+    /**
+     * Returns the list of Wordle buttons on the panel.
+     * 
+     * @return ArrayList of WordleButton objects
+     */
+    public ArrayList<WordleButton> getWordleButtons() {
+        return this.wordleButtons;
     }
 
+    /**
+     * Requests focus for this panel.
+     * Ensures it can receive keyboard input.
+     */
+    @Override
+    public void focus() {
+        setFocusable(true);
+        SwingUtilities.invokeLater(() -> requestFocusInWindow());
+    }
 
-
-		
-
-
-
-
-
-
-
-
-
-
-
-		 repaint();
-	}
-	public void paintComponent(Graphics g) {
-		Graphics2D graphics = (Graphics2D) g;
-		super.paintComponent(g);
-		
-		
-		
-		
-		int SHIFT_UP = 25;
-		graphics.drawImage(GUIConstants.connections_game_panel_background, 0, 0, GUIConstants.WINDOW_WIDTH, GUIConstants.WINDOW_HEIGHT - SHIFT_UP, this);
-		
-
-		//Label text
-		String labelText = "Signed in as: " + KaliszTimes.player.getUsername();
-		int refLabelX = 250;
-		int refLabelY = 75;
-
-		graphics.setFont(new Font("SansSerif", Font.PLAIN, GUIConstants.scaleFont(20)));
-		graphics.setColor(Color.black); // or whatever color you want
-		graphics.drawString(labelText, GUIConstants.scaleX(refLabelX), GUIConstants.scaleY(refLabelY));
-
-	}
-	public ArrayList<WordleButton> getWordleButtons() {
-		return this.wordleButtons;
-	}
-    
-	@Override
-	public void focus() {
-		setFocusable(true);
-    	SwingUtilities.invokeLater(() -> requestFocusInWindow());
-	}
-	 public void addKeyboardListener(KeyboardClickEventListener listener) {
+    /**
+     * Registers a KeyboardClickEventListener to receive keyboard events.
+     * 
+     * @param listener the listener to add
+     */
+    public void addKeyboardListener(KeyboardClickEventListener listener) {
         listeners.add(listener);
     }
 
+    /**
+     * Removes a KeyboardClickEventListener.
+     * 
+     * @param listener the listener to remove
+     */
     public void removeKeyboardListener(KeyboardClickEventListener listener) {
         listeners.remove(listener);
     }
-	public ArrayList<KeyboardClickEventListener> getListeners() {
-		return listeners;
-	}
-	public ConnectionsPanel getPanel() {
-		return this;
-	}
-private void shuffleBoardUI() {
 
-    // Step 1: Combine all buttons into one list
-    List<Button> allButtons = new ArrayList<>();
-    allButtons.addAll(wordleButtons);
-    allButtons.addAll(spellingBeeButtons);
-
-    // Step 2: Shuffle the combined list
-    Collections.shuffle(allButtons);
-
-    // Step 3: Reposition in a 4x4 grid layout (4 columns per row)
-    for (int i = 0; i < allButtons.size(); i++) {
-        Button button = allButtons.get(i);
-
-        int refX = 695 + ((i % 4) * 153); // column offset
-        int refY = 250 + ((i / 4) * 153); // row offset (spans both wordle + bee)
-
-        button.setBounds(
-            GUIConstants.scaleX(refX),
-            GUIConstants.scaleY(refY),
-            GUIConstants.scaleX(GUIConstants.DEFAULT_BUTTON_WIDTH),
-            GUIConstants.scaleY(GUIConstants.DEFAULT_BUTTON_HEIGHT)
-        );
+    /**
+     * Returns the list of registered KeyboardClickEventListeners.
+     * 
+     * @return list of listeners
+     */
+    public ArrayList<KeyboardClickEventListener> getListeners() {
+        return listeners;
     }
 
-    revalidate();
-    repaint();
+    /**
+     * Returns this panel instance.
+     * 
+     * @return the current ConnectionsPanel instance
+     */
+    public ConnectionsPanel getPanel() {
+        return this;
+    }
 
+    /**
+     * Shuffles the UI buttons on the board and repositions them in a 4x4 grid.
+     * This affects both Wordle and Spelling Bee buttons.
+     */
+    private void shuffleBoardUI() {
+        // Combine all buttons into one list and shuffle
+        List<Button> allButtons = new ArrayList<>();
+        allButtons.addAll(wordleButtons);
+        allButtons.addAll(spellingBeeButtons);
 
-}
-class WordWithIndex {
-		// Helper class to track words with their original board indices
-    String word;
-    int index;
-    
-    public WordWithIndex(String word, int index) {
-        this.word = word;
-        this.index = index;
+        Collections.shuffle(allButtons);
+
+        // Reposition buttons in grid layout
+        for (int i = 0; i < allButtons.size(); i++) {
+            Button button = allButtons.get(i);
+
+            int refX = 695 + ((i % 4) * 153); // column offset
+            int refY = 250 + ((i / 4) * 153); // row offset
+
+            button.setBounds(
+                GUIConstants.scaleX(refX),
+                GUIConstants.scaleY(refY),
+                GUIConstants.scaleX(GUIConstants.DEFAULT_BUTTON_WIDTH),
+                GUIConstants.scaleY(GUIConstants.DEFAULT_BUTTON_HEIGHT)
+            );
+        }
+
+        revalidate();
+        repaint();
+    }
+
+    /**
+     * Helper class to track a word and its original index on the board.
+     */
+    class WordWithIndex {
+        /** The word string */
+        String word;
+
+        /** The index of the word on the board */
+        int index;
+
+        /**
+         * Constructs a WordWithIndex instance.
+         * 
+         * @param word the word
+         * @param index the index in the board list
+         */
+        public WordWithIndex(String word, int index) {
+            this.word = word;
+            this.index = index;
+        }
     }
 }
-	}
-	
-
- 
-

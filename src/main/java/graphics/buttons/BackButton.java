@@ -6,55 +6,54 @@ import java.awt.image.BufferedImage;
 import graphics.GUIConstants;
 import kalisz.KaliszTimes;
 
-
 /**
- * A custom button that handles the "Back" functionality in the Kalisz Times game.
- * 
- * When clicked, this button navigates to the previous screen via {@code GraphicsHandler.goBack()},
- * unless an advertisement is currently playing. In that case, it displays a popup message
- * informing the user that they cannot exit the game until the ad finishes.
- * 
- * This class extends the {@link Button} class and is initialized with a {@link BufferedImage}
- * used for rendering the button.
+ * A button that navigates the user to the previous screen in the Kalisz Times game
+ * when clicked.
+ *
+ * <p>This button uses a provided image and is positioned and sized using GUIConstants
+ * scaling methods to ensure consistent layout across different screen sizes.</p>
+ *
+ * <p>When pressed, it calls {@code goBack()} on the graphics handler of the Kalisz Times
+ * game to return to the previous screen.</p>
+ *
+ * @author @FranklinZhu1
+ * @author @elliot-chan-ics4u1-2-2025
+ * @author @julie-lin-ics4u1-2-2025
+ * @author aksayan-nirmalan-ics4u1-2-2025
  */
+public class BackButton extends Button {
 
-public class BackButton extends Button  {
-
-
-	/**
-     * Constructs a BackButton with the specified image.
-     * Sets the scaled position and size of the button using GUI constants.
+    /**
+     * Creates a BackButton with the given image.
+     * The button's bounds are scaled using predefined reference values to
+     * maintain a consistent appearance across different resolutions.
      *
-     * @param image the image to display as the button
+     * @param image the image used to display the button
      */
     public BackButton(BufferedImage image) {
         super(image);
 
-		int refX = 41;
-		int refY = 35;
-		int refWidth = 74;
-		int refHeight = 59;
+        int refX = 41;
+        int refY = 35;
+        int refWidth = 74;
+        int refHeight = 59;
 
-		setBounds(GUIConstants.scaleX(refX), GUIConstants.scaleY(refY), GUIConstants.scaleX(refWidth), GUIConstants.scaleY(refHeight));
-
-
+        setBounds(
+            GUIConstants.scaleX(refX),
+            GUIConstants.scaleY(refY),
+            GUIConstants.scaleX(refWidth),
+            GUIConstants.scaleY(refHeight)
+        );
     }
-    	 
-	/**
-     * Called when the mouse is pressed on the button.
-     * If an ad is not playing, it navigates back to the previous screen.
-     * If an ad is playing, it prevents navigation and shows a popup message.
+
+    /**
+     * Called when the mouse is pressed on this button.
+     * Navigates to the previous screen using the graphics handler.
      *
-     * @param e the MouseEvent triggered by user interaction
+     * @param e the mouse event triggered when the user clicks the button
      */
-	@Override
-	public void mousePressed(MouseEvent e) {
-		System.out.println("Back button pressed");
-			if(!KaliszTimes.inAd)
-			KaliszTimes.getGraphicsHandler().goBack();
-				else
-			KaliszTimes.popup("You may not leave the game until you've finished watching the ad!\n(Reminder: Kalisz Times Games is a freemium model. By watching an ad, you directly support the developers of this game. We thank you for your support and contributions)");
-	}
-			 
-		
+    @Override
+    public void mousePressed(MouseEvent e) {
+        KaliszTimes.getGraphicsHandler().goBack();
+    }
 }

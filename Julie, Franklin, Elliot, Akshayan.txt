@@ -1,0 +1,15 @@
+not erasing the whole word in wordle after putting in an invalid work does not work
+golden letter does not line up with where it is suppose to be when typed in the wrong place
+golden letter is always the first letter?
+shuffle letters shuffles the golden letter too but does not actually change it resulting in different letters
+dhalbat/dalbhat are considered invalid words making it impossible to progress.
+Comments and Java docs are great.
+Logic works for the most part, I would advise in the future to ensure that a valid word always works before doing your check in the dictionary that way it still works if it isn't in the dictionary.
+
+
+K(30%): 100
+I(30%): 95
+C(10%): 100
+A(30%): 90
+
+95.5%

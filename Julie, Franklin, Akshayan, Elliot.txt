@@ -1,0 +1,3 @@
+A Lot of your composition arrows that you're using should either be association, or you're missing instance variables for that class that is being "composed".  Otherwise great work.
+
+90
